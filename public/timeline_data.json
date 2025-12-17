@@ -1,0 +1,263 @@
+[
+  {
+    "id": "1",
+    "title": "HON ZONE",
+    "description": "全ての始まりとされる出来事/主旋律・裏音",
+    "date": "2009-01-03",
+    "category": "technique",
+    "links": [],
+    "xOffset": 18.188479594624805
+  },
+  {
+    "id": "2",
+    "title": "Chilled Ayaya",
+    "description": "後半から本気を出す構成/ベース・アルペジオ",
+    "date": "2016-05-14",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "792fa64b-c3d3-4a54-9b62-16bae74c4681",
+        "color": "#ff0000"
+      }
+    ],
+    "url": "https://www.nicovideo.jp/watch/sm28843798",
+    "xOffset": 20.48353577253947
+  },
+  {
+    "id": "3",
+    "title": "RED WING",
+    "description": "赤羽テクニック",
+    "date": "2015-07-13",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "d2d9ab08-cfa2-476f-8042-9fa4ea79b5b4",
+        "color": "#00b700"
+      }
+    ],
+    "xOffset": 86.41372115551802
+  },
+  {
+    "id": "cfb29323-0849-4d6e-a1b6-ac81ff8c933a",
+    "title": "冷やし大島",
+    "description": "大島テクニック",
+    "date": "2015-01-15",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "3",
+        "color": "#00b700"
+      }
+    ],
+    "url": "https://www.nicovideo.jp/watch/sm25349251",
+    "xOffset": 80.14845541783619
+  },
+  {
+    "id": "d2d9ab08-cfa2-476f-8042-9fa4ea79b5b4",
+    "title": "NEW FUKUSHIMA ZONE",
+    "description": "新福島",
+    "date": "2017-04-01",
+    "category": "technique",
+    "links": [],
+    "url": "https://www.nicovideo.jp/watch/sm30961528",
+    "xOffset": 85.66909515663151
+  },
+  {
+    "id": "b06027a7-b56a-4068-ad13-9431016f56d3",
+    "title": "すーぱー牛テクニック",
+    "description": "",
+    "date": "2019-10-04",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "1cd730fd-8986-4685-9d1d-aadb9a503831",
+        "color": "#888888"
+      },
+      {
+        "targetId": "992e4d4b-8b18-42d2-98f0-60bbf82fb802",
+        "color": "#888888"
+      },
+      {
+        "targetId": "d3f01704-5bfd-4e79-8ba2-6c5b00ebe2a5",
+        "color": "#888888"
+      }
+    ],
+    "url": "https://youtu.be/nTBtCBQZMVM?si=CpUV-Owh71_E9a_U",
+    "xOffset": 57.40157480314961
+  },
+  {
+    "id": "af0c8970-3fb7-4580-8d61-c3e269e52727",
+    "title": "テンプレート3(sirogane氏)",
+    "description": "",
+    "date": "2019-01-20",
+    "category": "technique",
+    "links": [],
+    "url": "https://youtu.be/BYNKF-j4iH0?si=CFOFPrcl3s8HDujp",
+    "xOffset": 25.744305621103354
+  },
+  {
+    "id": "5ebd1acd-fab8-482c-ab25-17d5d3f6e9e3",
+    "title": "原曲不使用赤合作単品",
+    "description": "",
+    "date": "2019-03-02",
+    "category": "technique",
+    "links": [],
+    "xOffset": 62.66823153414972,
+    "url": "https://youtu.be/Ux23Jh-9GoA?si=opLtsXHt1kM6lxEH"
+  },
+  {
+    "id": "399b347d-8323-4379-acbc-ddd46699f33a",
+    "title": "YOUKAIZONE厳禁(2018)",
+    "description": "",
+    "date": "2018-05-03",
+    "category": "technique",
+    "links": [],
+    "xOffset": 36.09520024507976,
+    "url": "https://youtu.be/Vat_H2YjabU?si=-WKsfxLfoLDyfpoH"
+  },
+  {
+    "id": "f51c05e2-0f56-4ffe-9eee-17d511a0b0f5",
+    "title": "ママにYOUKAI ZONE頼まれたからコンビニ行こうっと",
+    "description": "",
+    "date": "2018-04-13",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "399b347d-8323-4379-acbc-ddd46699f33a",
+        "color": "#00b700"
+      }
+    ],
+    "xOffset": 20.341786929630643,
+    "url": "https://youtu.be/UKk8RDT5_-8?si=4pW7zgzZWyto1h6v"
+  },
+  {
+    "id": "ad131774-20ff-48a9-b817-51ebdbf7da51",
+    "title": "R_テクニック",
+    "description": "",
+    "date": "2017-10-10",
+    "category": "technique",
+    "links": [],
+    "xOffset": 46.48293963254593,
+    "url": "https://youtu.be/NQlU3pV92Jo?si=7slqWn_xccBwgUUL"
+  },
+  {
+    "id": "ef2fbcbe-ae25-4561-97b7-eedb52701a19",
+    "title": "《Video Only》誰も知らないすごいRED ZONEの味を発明しました。 ",
+    "description": "",
+    "date": "2018-03-21",
+    "category": "technique",
+    "links": [],
+    "xOffset": 87.69716088328076,
+    "url": "https://youtu.be/epnJOTzysLg?si=gcE1n0-ujE-O0Vxy"
+  },
+  {
+    "id": "792fa64b-c3d3-4a54-9b62-16bae74c4681",
+    "title": "警笛お願いします〜！！",
+    "description": "",
+    "date": "2017-02-12",
+    "category": "technique",
+    "links": [],
+    "xOffset": 20.816463399488317,
+    "url": "https://youtu.be/gW9Bsuytmes?si=3PuId4-DZjJ-uxAw"
+  },
+  {
+    "id": "1cd730fd-8986-4685-9d1d-aadb9a503831",
+    "title": "すーぱーうごメモテクニック",
+    "description": "",
+    "date": "2021-01-11",
+    "category": "technique",
+    "links": [],
+    "xOffset": 29.96845425867508,
+    "url": "https://youtu.be/xj88dPmTsKc?si=JJZ0XJ1UnZMz65rj"
+  },
+  {
+    "id": "2e978ab0-e1ac-4f64-a355-0a68f6ebbc05",
+    "title": "Level !",
+    "description": "",
+    "date": "2023-08-10",
+    "category": "technique",
+    "links": [],
+    "xOffset": 35.9621451104101,
+    "url": "https://youtu.be/jLLVOQ63_lY?si=GvI2v_gCnAZXwutQ"
+  },
+  {
+    "id": "992e4d4b-8b18-42d2-98f0-60bbf82fb802",
+    "title": "【合作単品】すーぱーレディアントテクニック",
+    "description": "",
+    "date": "2023-06-24",
+    "category": "technique",
+    "links": [],
+    "xOffset": 79.49526813880126,
+    "url": "https://youtu.be/RnK8r5PapG8?si=gzCEgRgY2ggcXzAL"
+  },
+  {
+    "id": "d3f01704-5bfd-4e79-8ba2-6c5b00ebe2a5",
+    "title": "すーぱーたまてでテクニック【単品】",
+    "description": "",
+    "date": "2021-08-09",
+    "category": "technique",
+    "links": [],
+    "xOffset": 51.0498687664042,
+    "url": "https://youtu.be/pgnaK-kr9cA?si=dJxx7jKBg1aSnuzK"
+  },
+  {
+    "id": "179806bb-f67d-45eb-a033-974254a4478f",
+    "title": "UNKORIN ZONE",
+    "description": "",
+    "date": "2025-02-11",
+    "category": "technique",
+    "links": [],
+    "xOffset": 92.74447949526814,
+    "url": "https://youtu.be/PmBP8KAI1ts?si=3K0sSNHGaKidjjtY"
+  },
+  {
+    "id": "f00da6dd-4fd0-450d-bd82-5b49fcd5bcd2",
+    "title": "Mermaid Hiori",
+    "description": "",
+    "date": "2022-11-23",
+    "category": "technique",
+    "links": [],
+    "xOffset": 50,
+    "url": "https://youtu.be/z4AnNEde3uU?si=dL5MCrlTti6823hH"
+  },
+  {
+    "id": "81c681d6-d556-4aaf-9d84-aae660d2943b",
+    "title": "ILLUSIONZONE1",
+    "description": "",
+    "date": "2022-03-30",
+    "category": "technique",
+    "links": [],
+    "xOffset": 37.01171875,
+    "url": "https://youtu.be/2PduYajJ3FU?si=cljl7G1-5sVxt3x3"
+  },
+  {
+    "id": "150140b4-84be-43e9-aabf-bd7b553053f7",
+    "title": "《日時不詳》弟者のSCARLET IT DIE",
+    "description": "正確な投稿日時不明, 日付はReUp",
+    "date": "2021-07-11",
+    "category": "technique",
+    "links": [],
+    "xOffset": 6.220472440944875,
+    "url": "https://youtu.be/mtd1E3EutJ8?si=jOw9CeiJaAecIFlU"
+  },
+  {
+    "id": "23f80c5e-73e7-4201-8462-c008765e13ea",
+    "title": "ヒカキンゾーン",
+    "description": "",
+    "date": "2024-03-21",
+    "category": "technique",
+    "links": [],
+    "xOffset": 76,
+    "url": "https://www.nicovideo.jp/watch/sm43553422"
+  },
+  {
+    "id": "859eb483-a487-464a-aa3c-9c6d0c8f14dc",
+    "title": "ハイスピードロップアウト！(RED ZONE)",
+    "description": "",
+    "date": "2019-03-20",
+    "category": "technique",
+    "links": [],
+    "xOffset": 44.69816272965879,
+    "url": "https://youtu.be/AEPMij4MpZE?si=xB_wEox2rGHt4NrJ"
+  }
+]
