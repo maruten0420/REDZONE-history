@@ -44,25 +44,33 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [hasLocalData, setHasLocalData] = useState(false);
 
+  // パス生成ヘルパー（import.metaを使わない安全な実装に変更）
+  const getJsonPath = () => {
+    // 現在のパスを見て、GitHub Pages上かローカルかを判断
+    const path = window.location.pathname;
+    const repoName = 'REDZONE-history';
+    
+    // パスにリポジトリ名が含まれていれば本番環境とみなす
+    if (path.includes(`/${repoName}/`)) {
+      return `/${repoName}/timeline_data.json`;
+    }
+    // それ以外（ローカル開発など）はルートパス
+    return '/timeline_data.json';
+  };
+
   // 初回ロード時の処理
   useEffect(() => {
     const initData = async () => {
-      // ローカルデータの存在確認だけしておく（自動読み込みはしない）
       const saved = localStorage.getItem('timeline-data');
       if (saved) setHasLocalData(true);
 
       try {
-        // パス生成の修正: import.meta.env.BASE_URL を使用して確実にアクセスする
-        const baseUrl = import.meta.env.BASE_URL;
-        // baseUrlは通常 '/' または '/repo-name/' で終わるため、連結に注意
-        const jsonPath = `${baseUrl}timeline_data.json`.replace('//', '/');
-
+        const jsonPath = getJsonPath();
         console.log('Fetching JSON from:', jsonPath);
 
         const response = await fetch(jsonPath);
         if (response.ok) {
           const data = await response.json();
-          // データ形式の補正
           const fixedData = data.map((item: any) => ({
             ...item, 
             xOffset: item.xOffset ?? 50
@@ -70,7 +78,6 @@ export default function App() {
           setEvents(fixedData);
         } else {
           console.error("JSON file not found at:", jsonPath);
-          // JSONが見つからない場合のみローカルデータを試す
           if (saved) {
             setEvents(JSON.parse(saved));
           }
@@ -199,18 +206,14 @@ export default function App() {
     e.target.value = '';
   };
 
-  // 「最新のデータを再読み込み」機能
   const handleResetToOfficial = async () => {
     if (!confirm('ローカルの変更を破棄して、サーバー(GitHub)の最新データを読み込みますか？')) return;
     
     setLoading(true);
     try {
-      const baseUrl = import.meta.env.BASE_URL;
-      const jsonPath = baseUrl.endsWith('/') 
-        ? `${baseUrl}timeline_data.json` 
-        : `${baseUrl}/timeline_data.json`;
-
+      const jsonPath = getJsonPath();
       const response = await fetch(jsonPath);
+      
       if (response.ok) {
         const data = await response.json();
         const fixedData = data.map((item: any) => ({
@@ -218,19 +221,19 @@ export default function App() {
           xOffset: item.xOffset ?? 50
         }));
         setEvents(fixedData);
-        localStorage.removeItem('timeline-data'); // ローカル保存もクリア
+        localStorage.removeItem('timeline-data'); 
         setHasLocalData(false);
+        alert('データを最新に更新しました！');
       } else {
-        alert('データが見つかりませんでした');
+        alert(`データが見つかりませんでした。\n参照先: ${jsonPath}`);
       }
     } catch (e) {
-      alert('読み込みエラー');
+      alert(`読み込みエラーが発生しました: ${e}`);
     } finally {
       setLoading(false);
     }
   };
 
-  // 手動でローカルキャッシュを復元する機能
   const handleRestoreLocal = () => {
     if (!confirm('編集中のデータ（ローカルキャッシュ）を復元しますか？\n現在の表示内容は上書きされます。')) return;
     const saved = localStorage.getItem('timeline-data');
@@ -283,7 +286,7 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-2 ml-auto">
-          {/* リセットボタン (GitHub最新データに戻す) */}
+          {/* リセットボタン */}
           <button 
             onClick={handleResetToOfficial}
             className="flex items-center gap-1 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 rounded transition-colors"
@@ -292,7 +295,7 @@ export default function App() {
             <RotateCcw size={16} />
           </button>
 
-          {/* ローカル復元ボタン (キャッシュがある時のみ表示) */}
+          {/* ローカル復元ボタン */}
           {hasLocalData && (
             <button 
               onClick={handleRestoreLocal}
@@ -613,12 +616,11 @@ const DraggableEventCard = ({
       id={`card-${event.id}`}
       className={`absolute flex flex-col items-center select-none transition-shadow touch-none ${
         isDragging ? 'cursor-grabbing z-50 scale-105' : 'cursor-grab hover:z-30 z-20'
-      } w-40 md:w-60`} // ← レスポンシブ幅指定 (スマホ:160px, PC:240px)
+      } w-40 md:w-60`} // ← レスポンシブ幅指定
       style={{ 
         top, 
         left: `${currentX}%`,
         transform: 'translateX(-50%)', 
-        // width指定を削除しクラスで制御
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
@@ -626,7 +628,7 @@ const DraggableEventCard = ({
       <div className={`card-inner w-full bg-white rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative ${
         isDragging 
           ? 'border-blue-500 shadow-xl ring-2 ring-blue-200' 
-          : 'border-slate-300 hover:border-blue-400 shadow-md hover:shadow-lg' // 視認性向上のためのクラス調整
+          : 'border-slate-300 hover:border-blue-400 shadow-md hover:shadow-lg'
       }`}>
         <div className="flex justify-between items-start mb-1.5">
           <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
@@ -654,14 +656,11 @@ const DraggableEventCard = ({
           </div>
         </div>
         
-        {/* スマホで文字サイズを少し小さく、PCで大きく */}
         <h3 className="font-bold text-slate-800 text-xs md:text-sm leading-tight mb-2 text-center whitespace-pre-wrap">{event.title || 'No Title'}</h3>
         
-        {/* Handle for explicit drag suggestion */}
         <div className="w-8 md:w-10 h-1 bg-slate-200 rounded-full mx-auto" />
       </div>
 
-      {/* Connectors (Visual dots) */}
       <div className="w-3 h-3 bg-white border-2 border-slate-400 rounded-full absolute -top-1.5 shadow-sm" />
       <div className="w-3 h-3 bg-white border-2 border-slate-400 rounded-full absolute -bottom-1.5 left-1/2 -translate-x-1/2 shadow-sm z-30 pointer-events-none" />
     </div>
