@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
-import { Plus, ZoomIn, ZoomOut, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw } from 'lucide-react';
+import { Plus, ZoomIn, ZoomOut, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock } from 'lucide-react';
 
 // --- Types ---
 
@@ -42,31 +42,27 @@ const DEFAULT_EVENTS: EventData[] = [];
 export default function App() {
   const [events, setEvents] = useState<EventData[]>(DEFAULT_EVENTS);
   const [loading, setLoading] = useState(true);
+  const [hasLocalData, setHasLocalData] = useState(false);
 
+  // 初回ロード時の処理
   useEffect(() => {
     const initData = async () => {
+      // ローカルデータの存在確認だけしておく（自動読み込みはしない）
       const saved = localStorage.getItem('timeline-data');
-      if (saved) {
-        try {
-          setEvents(JSON.parse(saved));
-          setLoading(false);
-          return;
-        } catch (e) {
-          console.error("Local data parse error", e);
-        }
-      }
+      if (saved) setHasLocalData(true);
 
       try {
+        // パス生成の修正: import.meta.env.BASE_URL を使用して確実にアクセスする
         const baseUrl = import.meta.env.BASE_URL;
-        const jsonPath = baseUrl.endsWith('/') 
-          ? `${baseUrl}timeline_data.json` 
-          : `${baseUrl}/timeline_data.json`;
+        // baseUrlは通常 '/' または '/repo-name/' で終わるため、連結に注意
+        const jsonPath = `${baseUrl}timeline_data.json`.replace('//', '/');
 
         console.log('Fetching JSON from:', jsonPath);
 
         const response = await fetch(jsonPath);
         if (response.ok) {
           const data = await response.json();
+          // データ形式の補正
           const fixedData = data.map((item: any) => ({
             ...item, 
             xOffset: item.xOffset ?? 50
@@ -74,9 +70,16 @@ export default function App() {
           setEvents(fixedData);
         } else {
           console.error("JSON file not found at:", jsonPath);
+          // JSONが見つからない場合のみローカルデータを試す
+          if (saved) {
+            setEvents(JSON.parse(saved));
+          }
         }
       } catch (error) {
         console.error("Failed to fetch timeline data:", error);
+        if (saved) {
+          setEvents(JSON.parse(saved));
+        }
       } finally {
         setLoading(false);
       }
@@ -85,9 +88,11 @@ export default function App() {
     initData();
   }, []);
 
+  // データ変更時にローカルストレージにバックアップ
   useEffect(() => {
     if (!loading && events.length > 0) {
       localStorage.setItem('timeline-data', JSON.stringify(events));
+      setHasLocalData(true);
     }
   }, [events, loading]);
 
@@ -194,6 +199,7 @@ export default function App() {
     e.target.value = '';
   };
 
+  // 「最新のデータを再読み込み」機能
   const handleResetToOfficial = async () => {
     if (!confirm('ローカルの変更を破棄して、サーバー(GitHub)の最新データを読み込みますか？')) return;
     
@@ -212,7 +218,8 @@ export default function App() {
           xOffset: item.xOffset ?? 50
         }));
         setEvents(fixedData);
-        localStorage.removeItem('timeline-data');
+        localStorage.removeItem('timeline-data'); // ローカル保存もクリア
+        setHasLocalData(false);
       } else {
         alert('データが見つかりませんでした');
       }
@@ -220,6 +227,15 @@ export default function App() {
       alert('読み込みエラー');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 手動でローカルキャッシュを復元する機能
+  const handleRestoreLocal = () => {
+    if (!confirm('編集中のデータ（ローカルキャッシュ）を復元しますか？\n現在の表示内容は上書きされます。')) return;
+    const saved = localStorage.getItem('timeline-data');
+    if (saved) {
+      setEvents(JSON.parse(saved));
     }
   };
 
@@ -267,6 +283,7 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-2 ml-auto">
+          {/* リセットボタン (GitHub最新データに戻す) */}
           <button 
             onClick={handleResetToOfficial}
             className="flex items-center gap-1 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 rounded transition-colors"
@@ -274,6 +291,18 @@ export default function App() {
           >
             <RotateCcw size={16} />
           </button>
+
+          {/* ローカル復元ボタン (キャッシュがある時のみ表示) */}
+          {hasLocalData && (
+            <button 
+              onClick={handleRestoreLocal}
+              className="flex items-center gap-1 px-3 py-2 text-sm text-amber-600 hover:bg-amber-50 rounded transition-colors border border-transparent hover:border-amber-200"
+              title="編集中のデータを復元"
+            >
+              <FileClock size={16} />
+              <span className="hidden lg:inline">復元</span>
+            </button>
+          )}
 
           <label className="flex items-center gap-1 px-3 py-2 text-sm bg-white border border-slate-300 rounded cursor-pointer hover:bg-slate-50 transition-colors shadow-sm">
             <Upload size={16} />
@@ -319,10 +348,12 @@ export default function App() {
 
           {/* Single Column Container */}
           <div className="absolute inset-0">
+            {/* Column Header */}
             <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 p-2 text-center font-bold text-slate-600 shadow-sm">
               {CATEGORIES.find(c => c.key === activeCategory)?.label}
             </div>
             
+            {/* Events */}
             {visibleEvents.map((event) => (
               <DraggableEventCard
                 key={event.id}
@@ -595,9 +626,9 @@ const DraggableEventCard = ({
       <div className={`card-inner w-full bg-white rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative ${
         isDragging 
           ? 'border-blue-500 shadow-xl ring-2 ring-blue-200' 
-          : 'border-slate-300 hover:border-blue-400 shadow-md hover:shadow-lg' 
+          : 'border-slate-300 hover:border-blue-400 shadow-md hover:shadow-lg' // 視認性向上のためのクラス調整
       }`}>
-        <div className="flex justify-between items-start mb-1">
+        <div className="flex justify-between items-start mb-1.5">
           <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
           <div className="flex gap-1">
             {event.url && (
