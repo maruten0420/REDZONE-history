@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { Plus, ZoomIn, ZoomOut, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2 } from 'lucide-react';
+import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
+import { Plus, ZoomIn, ZoomOut, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw } from 'lucide-react';
 
 // --- Types ---
 
@@ -18,6 +18,7 @@ interface EventData {
   category: Category;
   url?: string;
   links: LinkData[];
+  xOffset: number; // 0 to 100 (percentage within column)
 }
 
 // --- Constants & Helpers ---
@@ -29,59 +30,87 @@ const END_DATE = new Date(`${END_YEAR}-12-31`).getTime();
 const TOTAL_DAYS = (END_DATE - START_DATE) / (1000 * 60 * 60 * 24);
 
 const CATEGORIES: { key: Category; label: string; color: string }[] = [
-  { key: 'technique', label: 'テクニック (Technique)', color: 'bg-blue-50 border-blue-200' },
-  { key: 'author', label: '作者 (Author)', color: 'bg-green-50 border-green-200' },
-  { key: 'other', label: 'その他 (Others)', color: 'bg-gray-50 border-gray-200' },
+  { key: 'technique', label: 'テクニック', color: 'bg-blue-50 border-blue-200' },
+  { key: 'author', label: '作者', color: 'bg-green-50 border-green-200' },
+  { key: 'other', label: 'その他', color: 'bg-gray-50 border-gray-200' },
 ];
 
-const INITIAL_EVENTS: EventData[] = [
-  {
-    id: '1',
-    title: '界隈の黎明',
-    description: '全ての始まりとされる出来事。',
-    date: '2009-05-15',
-    category: 'other',
-    links: [],
-  },
-  {
-    id: '2',
-    title: '伝説的作者Aの登場',
-    description: '後のスタイルに多大な影響を与えた。',
-    date: '2010-02-10',
-    category: 'author',
-    links: [{ targetId: '1', color: '#888888' }],
-    url: 'https://example.com'
-  },
-  {
-    id: '3',
-    title: '画期的手法B',
-    description: '音声編集の常識を覆した技術。',
-    date: '2010-08-20',
-    category: 'technique',
-    links: [{ targetId: '2', color: '#ff0000' }],
-  },
-];
+const DEFAULT_EVENTS: EventData[] = [];
 
 // --- Components ---
 
 export default function App() {
-  const [events, setEvents] = useState<EventData[]>(INITIAL_EVENTS);
-  const [zoom, setZoom] = useState<number>(2); // pixels per day
+  const [events, setEvents] = useState<EventData[]>(DEFAULT_EVENTS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const initData = async () => {
+      const saved = localStorage.getItem('timeline-data');
+      if (saved) {
+        try {
+          setEvents(JSON.parse(saved));
+          setLoading(false);
+          return;
+        } catch (e) {
+          console.error("Local data parse error", e);
+        }
+      }
+
+      try {
+        const baseUrl = import.meta.env.BASE_URL;
+        const jsonPath = baseUrl.endsWith('/') 
+          ? `${baseUrl}timeline_data.json` 
+          : `${baseUrl}/timeline_data.json`;
+
+        console.log('Fetching JSON from:', jsonPath);
+
+        const response = await fetch(jsonPath);
+        if (response.ok) {
+          const data = await response.json();
+          const fixedData = data.map((item: any) => ({
+            ...item, 
+            xOffset: item.xOffset ?? 50
+          }));
+          setEvents(fixedData);
+        } else {
+          console.error("JSON file not found at:", jsonPath);
+        }
+      } catch (error) {
+        console.error("Failed to fetch timeline data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initData();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && events.length > 0) {
+      localStorage.setItem('timeline-data', JSON.stringify(events));
+    }
+  }, [events, loading]);
+
+  const [zoom, setZoom] = useState<number>(0.5);
+  const [activeCategory, setActiveCategory] = useState<Category>('technique');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<EventData | null>(null);
 
   // --- Layout Calculations ---
   
-  // Convert date string to Y position (px)
   const getDateY = (dateStr: string) => {
     const date = new Date(dateStr).getTime();
     const daysSinceStart = (date - START_DATE) / (1000 * 60 * 60 * 24);
-    return Math.max(0, daysSinceStart * zoom) + 50; // +50 for header padding
+    return Math.max(0, daysSinceStart * zoom) + 60;
   };
 
   const timelineHeight = useMemo(() => {
-    return TOTAL_DAYS * zoom + 200; // Extra padding at bottom
+    return TOTAL_DAYS * zoom + 600;
   }, [zoom]);
+
+  const visibleEvents = useMemo(() => 
+    events.filter(e => e.category === activeCategory),
+  [events, activeCategory]);
 
   // --- Handlers ---
 
@@ -95,8 +124,9 @@ export default function App() {
       title: '',
       description: '',
       date: `${new Date().getFullYear()}-01-01`,
-      category: 'technique',
+      category: activeCategory,
       links: [],
+      xOffset: 50,
     };
     setEditingEvent(newEvent);
     setIsModalOpen(true);
@@ -128,13 +158,17 @@ export default function App() {
     }
   };
 
+  const handleDragEnd = (id: string, newXOffset: number) => {
+    setEvents(prev => prev.map(e => e.id === id ? { ...e, xOffset: Math.max(0, Math.min(100, newXOffset)) } : e));
+  };
+
   const handleExport = () => {
     const dataStr = JSON.stringify(events, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `timeline_data_${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `timeline_data.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -147,7 +181,8 @@ export default function App() {
       try {
         const json = JSON.parse(event.target?.result as string);
         if (Array.isArray(json)) {
-          setEvents(json);
+          const fixedData = json.map(item => ({...item, xOffset: item.xOffset ?? 50}));
+          setEvents(fixedData);
         } else {
           alert('Invalid JSON format');
         }
@@ -159,58 +194,113 @@ export default function App() {
     e.target.value = '';
   };
 
-  // --- Rendering ---
+  const handleResetToOfficial = async () => {
+    if (!confirm('ローカルの変更を破棄して、サーバー(GitHub)の最新データを読み込みますか？')) return;
+    
+    setLoading(true);
+    try {
+      const baseUrl = import.meta.env.BASE_URL;
+      const jsonPath = baseUrl.endsWith('/') 
+        ? `${baseUrl}timeline_data.json` 
+        : `${baseUrl}/timeline_data.json`;
+
+      const response = await fetch(jsonPath);
+      if (response.ok) {
+        const data = await response.json();
+        const fixedData = data.map((item: any) => ({
+          ...item, 
+          xOffset: item.xOffset ?? 50
+        }));
+        setEvents(fixedData);
+        localStorage.removeItem('timeline-data');
+      } else {
+        alert('データが見つかりませんでした');
+      }
+    } catch (e) {
+      alert('読み込みエラー');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="h-screen flex items-center justify-center text-slate-500">Loading history...</div>;
+  }
 
   return (
-    <div className="flex flex-col h-screen bg-white text-slate-800 font-sans overflow-hidden">
-      {/* Header / Toolbar */}
-      <header className="flex-none border-b border-slate-200 bg-slate-50 p-4 flex items-center justify-between shadow-sm z-20">
-        <div className="flex items-center gap-4">
-          <h1 className="text-xl font-bold text-slate-700 tracking-tight">Chronicle Map</h1>
+    <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden">
+      {/* Page Header */}
+      <header className="flex-none border-b border-slate-200 bg-white p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-4">
+        <div className="flex items-center gap-6">
+          <h1 className="text-xl font-bold text-slate-700 tracking-tight hidden md:block">Chronicle Map</h1>
           
-          <div className="flex items-center gap-2 bg-white px-3 py-1 rounded border border-slate-300">
+          <div className="flex bg-slate-100 rounded-lg p-1 border border-slate-200 overflow-x-auto max-w-full">
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat.key}
+                onClick={() => setActiveCategory(cat.key)}
+                className={`px-3 md:px-4 py-1.5 text-xs font-bold rounded-md transition-all whitespace-nowrap ${
+                  activeCategory === cat.key
+                    ? 'bg-white text-blue-600 shadow-sm ring-1 ring-black/5'
+                    : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2 bg-slate-100 px-3 py-1 rounded border border-slate-200 hidden sm:flex">
             <ZoomOut size={16} className="text-slate-500" />
             <input
               type="range"
-              min="0.5"
-              max="10"
+              min="0.1"
+              max="2.5"
               step="0.1"
               value={zoom}
               onChange={handleZoomChange}
-              className="w-32 accent-blue-600"
+              className="w-24 md:w-32 accent-blue-600 cursor-pointer"
             />
             <ZoomIn size={16} className="text-slate-500" />
-            <span className="text-xs text-slate-500 w-12 text-right">{zoom.toFixed(1)}x</span>
+            <span className="text-xs text-slate-500 w-8 text-right hidden sm:inline-block">{zoom.toFixed(1)}x</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label className="flex items-center gap-1 px-3 py-2 text-sm bg-white border border-slate-300 rounded cursor-pointer hover:bg-slate-50 transition-colors">
+        <div className="flex items-center gap-2 ml-auto">
+          <button 
+            onClick={handleResetToOfficial}
+            className="flex items-center gap-1 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 rounded transition-colors"
+            title="GitHubの最新データに戻す"
+          >
+            <RotateCcw size={16} />
+          </button>
+
+          <label className="flex items-center gap-1 px-3 py-2 text-sm bg-white border border-slate-300 rounded cursor-pointer hover:bg-slate-50 transition-colors shadow-sm">
             <Upload size={16} />
-            <span>読込</span>
+            <span className="hidden sm:inline">読込</span>
             <input type="file" accept=".json" onChange={handleImport} className="hidden" />
           </label>
           <button
             onClick={handleExport}
-            className="flex items-center gap-1 px-3 py-2 text-sm bg-white border border-slate-300 rounded hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-1 px-3 py-2 text-sm bg-white border border-slate-300 rounded hover:bg-slate-50 transition-colors shadow-sm"
           >
             <Save size={16} />
-            <span>保存</span>
+            <span className="hidden sm:inline">保存</span>
           </button>
           <button
             onClick={handleAddEvent}
             className="flex items-center gap-1 px-4 py-2 text-sm bg-blue-600 text-white rounded font-medium hover:bg-blue-700 shadow-sm transition-colors"
           >
             <Plus size={18} />
-            新規作成
+            <span className="hidden sm:inline">新規作成</span>
           </button>
         </div>
       </header>
 
       {/* Main Timeline Area */}
-      <div className="flex-1 overflow-auto relative bg-slate-100">
+      <div className="flex-1 overflow-auto relative bg-slate-100 cursor-grab active:cursor-grabbing">
         <div 
-          className="relative min-w-[800px] w-full mx-auto bg-white shadow-xl origin-top"
+          className="relative w-full mx-auto bg-white shadow-xl origin-top min-h-full"
           style={{ height: timelineHeight }}
         >
           {/* Background Grid & Years */}
@@ -218,33 +308,29 @@ export default function App() {
             zoom={zoom} 
             startYear={START_YEAR} 
             endYear={END_YEAR} 
-            totalDays={TOTAL_DAYS}
           />
 
-          {/* Connection Lines Layer (SVG) */}
-          <ConnectionLayer events={events} getDateY={getDateY} />
+          {/* Connection Lines Layer */}
+          <ConnectionLayer 
+            events={events} 
+            visibleEvents={visibleEvents} 
+            getDateY={getDateY} 
+          />
 
-          {/* Columns Container */}
-          <div className="absolute inset-0 flex">
-            {CATEGORIES.map((cat) => (
-              <div key={cat.key} className="flex-1 relative border-r border-slate-200 last:border-r-0 group">
-                {/* Column Header */}
-                <div className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 p-2 text-center font-bold text-slate-600 shadow-sm">
-                  {cat.label}
-                </div>
-                
-                {/* Events in this column */}
-                {events
-                  .filter((e) => e.category === cat.key)
-                  .map((event) => (
-                    <EventCard
-                      key={event.id}
-                      event={event}
-                      top={getDateY(event.date)}
-                      onEdit={() => handleEditEvent(event)}
-                    />
-                  ))}
-              </div>
+          {/* Single Column Container */}
+          <div className="absolute inset-0">
+            <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 p-2 text-center font-bold text-slate-600 shadow-sm">
+              {CATEGORIES.find(c => c.key === activeCategory)?.label}
+            </div>
+            
+            {visibleEvents.map((event) => (
+              <DraggableEventCard
+                key={event.id}
+                event={event}
+                top={getDateY(event.date)}
+                onEdit={() => handleEditEvent(event)}
+                onDragEnd={handleDragEnd}
+              />
             ))}
           </div>
         </div>
@@ -266,29 +352,33 @@ export default function App() {
 
 // --- Sub Components ---
 
-const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear: number; endYear: number; totalDays: number }) => {
+const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear: number; endYear: number }) => {
   const years = [];
   for (let y = startYear; y <= endYear; y++) {
     years.push(y);
   }
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute inset-0 pointer-events-none select-none z-0">
       {years.map((year) => {
         const date = new Date(`${year}-01-01`).getTime();
         const days = (date - START_DATE) / (1000 * 60 * 60 * 24);
-        const top = Math.max(0, days * zoom) + 50;
+        const top = Math.max(0, days * zoom) + 60;
+
+        const nextDate = new Date(`${year + 1}-01-01`).getTime();
+        const nextDays = (nextDate - START_DATE) / (1000 * 60 * 60 * 24);
+        const nextTop = Math.max(0, nextDays * zoom) + 60;
+        
+        const yearHeight = nextTop - top;
 
         return (
-          <div key={year} className="absolute w-full border-t border-slate-300" style={{ top }}>
-            <span className="absolute -top-3 left-2 text-xs font-bold text-slate-400 bg-white px-1">
+          <div key={year} className="absolute w-full border-t border-slate-400" style={{ top }}>
+            <span className="absolute -top-3 left-2 text-xs font-bold text-slate-500 bg-white/80 px-1 rounded">
               {year}
             </span>
-            {/* Months (Optional, show if zoom is high enough) */}
-            {zoom > 2 && Array.from({ length: 11 }).map((_, m) => {
-              // Approximate months for visual grid
-              const mTop = top + ((365 / 12) * (m + 1)) * zoom;
-               return <div key={m} className="absolute w-full border-t border-slate-100" style={{ top: mTop }} />;
+            {zoom > 0.1 && Array.from({ length: 11 }).map((_, m) => {
+              const mTop = (yearHeight / 12) * (m + 1);
+               return <div key={m} className="absolute w-full border-t border-slate-200" style={{ top: mTop }} />;
             })}
           </div>
         );
@@ -297,39 +387,103 @@ const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear:
   );
 };
 
-const ConnectionLayer = ({ events, getDateY }: { events: EventData[]; getDateY: (d: string) => number }) => {
-  const getX = (cat: Category) => {
-    switch(cat) {
-      case 'technique': return '16.66%';
-      case 'author': return '50%';
-      case 'other': return '83.33%';
-    }
+const ConnectionLayer = ({ 
+  events, 
+  visibleEvents,
+  getDateY 
+}: { 
+  events: EventData[]; 
+  visibleEvents: EventData[];
+  getDateY: (d: string) => number 
+}) => {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [width, setWidth] = useState(0);
+  const [cardHeights, setCardHeights] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (svgRef.current) {
+        setWidth(svgRef.current.clientWidth);
+      }
+    };
+    updateWidth();
+    const observer = new ResizeObserver(updateWidth);
+    if (svgRef.current) observer.observe(svgRef.current);
+    window.addEventListener('resize', updateWidth);
+    return () => {
+      window.removeEventListener('resize', updateWidth);
+      observer.disconnect();
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const updateHeights = () => {
+      const newHeights: Record<string, number> = {};
+      visibleEvents.forEach(event => {
+        const el = document.getElementById(`card-${event.id}`);
+        if (el) {
+          const inner = el.querySelector('.card-inner');
+          if (inner) {
+             newHeights[event.id] = inner.clientHeight;
+          }
+        }
+      });
+      setCardHeights(newHeights);
+    };
+
+    updateHeights();
+    const observer = new ResizeObserver(updateHeights);
+    visibleEvents.forEach(event => {
+      const el = document.getElementById(`card-${event.id}`);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [visibleEvents, width]);
+
+  const getX = (xOffset: number) => {
+    if (width === 0) return 0;
+    return width * (xOffset / 100);
   };
 
-  return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-      {events.map(event => (
-        event.links.map((link, i) => {
-          const target = events.find(e => e.id === link.targetId);
-          if (!target) return null;
+  const isVisible = (id: string) => visibleEvents.some(e => e.id === id);
 
-          const y1 = getDateY(event.date) + 20;
-          const y2 = getDateY(target.date) + 20;
-          const x1 = getX(event.category);
-          const x2 = getX(target.category);
+  return (
+    <svg ref={svgRef} className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
+      {visibleEvents.map(event => (
+        event.links.map((link, i) => {
+          if (!isVisible(link.targetId)) return null;
+
+          const target = events.find(e => e.id === link.targetId);
+          if (!target || width === 0) return null;
+
+          const sourceHeight = cardHeights[event.id] || 50;
+          const y1 = getDateY(event.date) + sourceHeight; 
+          const y2 = getDateY(target.date) - 6;
           
+          const x1 = getX(event.xOffset);
+          const x2 = getX(target.xOffset);
+          
+          const distY = Math.abs(y2 - y1);
+          const handleOffset = Math.max(50, distY * 0.4); 
+
+          const cp1y = y1 + handleOffset;
+          const cp2y = y2 - handleOffset;
+
+          const d = `M ${x1} ${y1} C ${x1} ${cp1y}, ${x2} ${cp2y}, ${x2} ${y2}`;
+
           return (
-            <line
-              key={`${event.id}-${link.targetId}-${i}`}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke={link.color || '#cbd5e1'}
-              strokeWidth="2"
-              strokeDasharray="4"
-              opacity="0.6"
-            />
+            <g key={`${event.id}-${link.targetId}-${i}`}>
+              <path
+                d={d}
+                fill="none"
+                stroke={link.color || '#cbd5e1'}
+                strokeWidth="3"
+                strokeOpacity="0.8"
+                strokeLinecap="round"
+                style={{ vectorEffect: 'non-scaling-stroke' }}
+              />
+            </g>
           );
         })
       ))}
@@ -337,25 +491,148 @@ const ConnectionLayer = ({ events, getDateY }: { events: EventData[]; getDateY: 
   );
 };
 
-const EventCard = ({ event, top, onEdit }: { event: EventData; top: number; onEdit: () => void }) => {
+const DraggableEventCard = ({ 
+  event, 
+  top, 
+  onEdit, 
+  onDragEnd,
+}: { 
+  event: EventData; 
+  top: number; 
+  onEdit: () => void; 
+  onDragEnd: (id: string, x: number) => void;
+}) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [currentX, setCurrentX] = useState(event.xOffset);
+  const startXRef = useRef<number>(0);
+  const startOffsetRef = useRef<number>(0);
+  const colWidthRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (!isDragging) {
+      setCurrentX(event.xOffset);
+    }
+  }, [event.xOffset, isDragging]);
+
+  const handleStart = (clientX: number) => {
+    const cardElement = document.getElementById(`card-${event.id}`);
+    const parentColumn = cardElement?.parentElement;
+    
+    if (parentColumn) {
+      colWidthRef.current = parentColumn.clientWidth;
+    }
+
+    setIsDragging(true);
+    startXRef.current = clientX;
+    startOffsetRef.current = currentX;
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation(); 
+    e.preventDefault(); 
+    handleStart(e.clientX);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    handleStart(e.touches[0].clientX);
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMove = (clientX: number) => {
+      if (colWidthRef.current <= 0) return;
+      const deltaXPixels = clientX - startXRef.current;
+      const deltaPercent = (deltaXPixels / colWidthRef.current) * 100;
+      const newOffset = Math.min(100, Math.max(0, startOffsetRef.current + deltaPercent));
+      setCurrentX(newOffset);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      e.preventDefault(); 
+      handleMove(e.clientX);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      handleMove(e.touches[0].clientX);
+    };
+
+    const handleUp = () => {
+      setIsDragging(false);
+      onDragEnd(event.id, currentX);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleUp);
+    
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleUp);
+    };
+  }, [isDragging, event.id, onDragEnd, currentX]);
+
   return (
     <div
-      onClick={onEdit}
-      className={`absolute left-4 right-4 p-3 rounded border shadow-sm cursor-pointer hover:shadow-md transition-all hover:scale-[1.02] bg-white border-slate-200 group z-10`}
-      style={{ top }}
+      id={`card-${event.id}`}
+      className={`absolute flex flex-col items-center select-none transition-shadow touch-none ${
+        isDragging ? 'cursor-grabbing z-50 scale-105' : 'cursor-grab hover:z-30 z-20'
+      } w-40 md:w-60`} // ← レスポンシブ幅指定 (スマホ:160px, PC:240px)
+      style={{ 
+        top, 
+        left: `${currentX}%`,
+        transform: 'translateX(-50%)', 
+        // width指定を削除しクラスで制御
+      }}
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
     >
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-xs font-mono text-slate-400 bg-slate-50 px-1 rounded">{event.date}</span>
-        {event.url && <ExternalLink size={12} className="text-blue-400" />}
+      <div className={`card-inner w-full bg-white rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative ${
+        isDragging 
+          ? 'border-blue-500 shadow-xl ring-2 ring-blue-200' 
+          : 'border-slate-300 hover:border-blue-400 shadow-md hover:shadow-lg' 
+      }`}>
+        <div className="flex justify-between items-start mb-1">
+          <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
+          <div className="flex gap-1">
+            {event.url && (
+              <a 
+                href={event.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-blue-400 hover:text-blue-600 p-0.5 rounded hover:bg-blue-50 transition-colors"
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+              >
+                <ExternalLink size={14} />
+              </a>
+            )}
+            <button 
+              onClick={(e) => { e.stopPropagation(); onEdit(); }}
+              className="text-slate-400 hover:text-slate-600 p-0.5 rounded hover:bg-slate-100 transition-colors"
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+            >
+              <Edit2 size={14} />
+            </button>
+          </div>
+        </div>
+        
+        {/* スマホで文字サイズを少し小さく、PCで大きく */}
+        <h3 className="font-bold text-slate-800 text-xs md:text-sm leading-tight mb-2 text-center whitespace-pre-wrap">{event.title || 'No Title'}</h3>
+        
+        {/* Handle for explicit drag suggestion */}
+        <div className="w-8 md:w-10 h-1 bg-slate-200 rounded-full mx-auto" />
       </div>
-      <h3 className="font-bold text-slate-800 text-sm leading-tight mb-1">{event.title || '(No Title)'}</h3>
-      <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed whitespace-pre-wrap">
-        {event.description}
-      </p>
-      
-      {/* Node connectors visualization (dots) */}
-      <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+
+      {/* Connectors (Visual dots) */}
+      <div className="w-3 h-3 bg-white border-2 border-slate-400 rounded-full absolute -top-1.5 shadow-sm" />
+      <div className="w-3 h-3 bg-white border-2 border-slate-400 rounded-full absolute -bottom-1.5 left-1/2 -translate-x-1/2 shadow-sm z-30 pointer-events-none" />
     </div>
   );
 };
@@ -398,35 +675,35 @@ const EventModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between p-4 border-b border-slate-200">
           <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
             <Edit2 size={18} />
             イベント編集
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 rounded-full p-1 hover:bg-slate-100">
             <X size={20} />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1 space-y-4">
+        <div className="p-6 overflow-y-auto flex-1 space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-500 mb-1">日付</label>
+              <label className="block text-xs font-bold text-slate-500 mb-1.5">日付</label>
               <input
                 type="date"
                 value={formData.date}
                 onChange={(e) => handleChange('date', e.target.value)}
-                className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                className="w-full p-2 border border-slate-200 bg-slate-50 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-500 mb-1">カテゴリ</label>
+              <label className="block text-xs font-bold text-slate-500 mb-1.5">カテゴリ</label>
               <select
                 value={formData.category}
                 onChange={(e) => handleChange('category', e.target.value as Category)}
-                className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                className="w-full p-2 border border-slate-200 bg-slate-50 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
               >
                 {CATEGORIES.map(c => (
                   <option key={c.key} value={c.key}>{c.label}</option>
@@ -436,69 +713,85 @@ const EventModal = ({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-500 mb-1">タイトル</label>
+            <label className="block text-xs font-bold text-slate-500 mb-1.5">タイトル</label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
               placeholder="イベント名を入力"
-              className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none font-bold text-slate-800"
+              className="w-full p-2 border border-slate-200 bg-slate-50 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-slate-800"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-500 mb-1">詳細 (Markdown風)</label>
+            <label className="block text-xs font-bold text-slate-500 mb-1.5">詳細 (Markdown風)</label>
             <textarea
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               placeholder="詳細な説明を入力..."
               rows={4}
-              className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none"
+              className="w-full p-2 border border-slate-200 bg-slate-50 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-500 mb-1">参考URL (任意)</label>
+            <label className="block text-xs font-bold text-slate-500 mb-1.5">参考URL</label>
             <div className="flex items-center gap-2">
               <input
                 type="url"
                 value={formData.url || ''}
                 onChange={(e) => handleChange('url', e.target.value)}
                 placeholder="https://..."
-                className="flex-1 p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                className="flex-1 p-2 border border-slate-200 bg-slate-50 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
               />
               {formData.url && (
-                <a href={formData.url} target="_blank" rel="noopener noreferrer" className="p-2 text-blue-600 hover:bg-blue-50 rounded">
+                <a href={formData.url} target="_blank" rel="noopener noreferrer" className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-transparent hover:border-blue-100">
                   <ExternalLink size={18} />
                 </a>
               )}
             </div>
           </div>
 
-          <div className="border-t border-slate-200 pt-4 mt-4">
+          <div className="border-t border-slate-100 pt-4">
+             {/* 横位置スライダー（微調整用） */}
+             <div className="mb-4">
+              <label className="block text-xs font-bold text-slate-500 mb-1.5 flex justify-between">
+                <span>横位置の微調整 (ドラッグでも可能)</span>
+                <span>{Math.round(formData.xOffset || 50)}%</span>
+              </label>
+              <input 
+                type="range" 
+                min="0" 
+                max="100" 
+                value={formData.xOffset || 50} 
+                onChange={(e) => handleChange('xOffset', parseFloat(e.target.value))}
+                className="w-full accent-blue-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
+
             <div className="flex items-center justify-between mb-2">
               <label className="block text-xs font-bold text-slate-500">接続 (Links)</label>
               <button 
                 type="button" 
                 onClick={handleAddLink}
-                className="text-xs flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium"
+                className="text-xs flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium bg-blue-50 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
               >
                 <Plus size={14} /> 追加
               </button>
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
               {formData.links.map((link, idx) => (
-                <div key={idx} className="flex gap-2 items-center bg-slate-50 p-2 rounded">
+                <div key={idx} className="flex gap-2 items-center bg-slate-50 p-2 rounded border border-slate-100">
                   <LinkIcon size={14} className="text-slate-400" />
                   <select
                     value={link.targetId}
                     onChange={(e) => handleLinkChange(idx, 'targetId', e.target.value)}
-                    className="flex-1 text-xs p-1 border border-slate-300 rounded"
+                    className="flex-1 text-xs p-1.5 border border-slate-200 rounded bg-white"
                   >
                     <option value="">接続先を選択...</option>
                     {allEvents
-                      .filter(e => e.id !== formData.id) // Cannot link to self
+                      .filter(e => e.id !== formData.id)
                       .map(e => (
                       <option key={e.id} value={e.id}>
                         {e.date} : {e.title}
@@ -509,42 +802,44 @@ const EventModal = ({
                     type="color" 
                     value={link.color}
                     onChange={(e) => handleLinkChange(idx, 'color', e.target.value)}
-                    className="w-8 h-6 p-0 border-0 rounded cursor-pointer"
+                    className="w-8 h-7 p-0 border-0 rounded cursor-pointer"
                   />
                   <button 
                     onClick={() => handleRemoveLink(idx)}
-                    className="text-slate-400 hover:text-red-500"
+                    className="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-slate-200"
                   >
                     <X size={14} />
                   </button>
                 </div>
               ))}
               {formData.links.length === 0 && (
-                <p className="text-xs text-slate-400 italic">接続されているイベントはありません。</p>
+                <div className="text-center py-4 bg-slate-50 rounded border border-dashed border-slate-200 text-xs text-slate-400">
+                  接続線はありません
+                </div>
               )}
             </div>
           </div>
 
         </div>
 
-        <div className="p-4 border-t border-slate-200 bg-slate-50 flex justify-between rounded-b-lg">
+        <div className="p-4 border-t border-slate-200 bg-slate-50 flex justify-between rounded-b-xl">
           <button
             onClick={() => onDelete(formData.id)}
-            className="flex items-center gap-1 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
+            className="flex items-center gap-1 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors font-medium"
           >
             <Trash2 size={16} />
             削除
           </button>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm text-slate-600 hover:bg-white border border-transparent hover:border-slate-300 rounded transition-colors"
+              className="px-4 py-2 text-sm text-slate-600 hover:bg-white border border-transparent hover:border-slate-300 rounded-lg transition-colors"
             >
               キャンセル
             </button>
             <button
               onClick={() => onSave(formData)}
-              className="px-4 py-2 text-sm bg-blue-600 text-white rounded font-medium hover:bg-blue-700 shadow-sm transition-colors"
+              className="px-6 py-2 text-sm bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-md hover:shadow-lg transition-all"
             >
               保存する
             </button>
