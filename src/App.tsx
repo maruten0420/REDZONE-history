@@ -53,10 +53,8 @@ export default function App() {
   const [hasLocalData, setHasLocalData] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
-  // アクティブ（最前面）なカードのIDを管理
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
-  // パス生成ヘルパー
   const getJsonPath = () => {
     const path = window.location.pathname;
     const repoName = 'REDZONE-history';
@@ -66,7 +64,6 @@ export default function App() {
     return '/timeline_data.json';
   };
 
-  // 初回ロード時の処理
   useEffect(() => {
     const initData = async () => {
       const saved = localStorage.getItem('timeline-data');
@@ -104,7 +101,6 @@ export default function App() {
     initData();
   }, []);
 
-  // データ変更時にローカルストレージにバックアップ
   useEffect(() => {
     if (!loading && events.length > 0) {
       localStorage.setItem('timeline-data', JSON.stringify(events));
@@ -117,8 +113,6 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<EventData | null>(null);
 
-  // --- Layout Calculations ---
-  
   const getDateY = (dateStr: string) => {
     const date = new Date(dateStr).getTime();
     const daysSinceStart = (date - START_DATE) / (1000 * 60 * 60 * 24);
@@ -133,7 +127,6 @@ export default function App() {
     events.filter(e => e.category === activeCategory),
   [events, activeCategory]);
 
-  // 初期スクロール位置の設定 (2017年へ)
   useEffect(() => {
     if (!loading && scrollContainerRef.current) {
       const targetDate = new Date('2017-01-01').getTime();
@@ -145,8 +138,6 @@ export default function App() {
       }, 500);
     }
   }, [loading]);
-
-  // --- Handlers ---
 
   const handleZoomIn = () => {
     setZoom(prev => Math.min(3.0, +(prev + 0.1).toFixed(1)));
@@ -289,7 +280,6 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden">
-      {/* Page Header */}
       <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
         <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
           <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">Chronicle Map</h1>
@@ -392,29 +382,33 @@ export default function App() {
           style={{ height: timelineHeight }}
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
-          <ConnectionLayer events={events} visibleEvents={visibleEvents} getDateY={getDateY} />
-
+          
+          {/* 修正: ConnectionLayerをカードと同じパディングコンテナ内に移動 */}
           <div className="absolute inset-0 pr-32 pl-4">
-            <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 p-2 text-center font-bold text-slate-600 shadow-sm">
-              {CATEGORIES.find(c => c.key === activeCategory)?.label}
+            <div className="relative w-full h-full">
+              
+              <ConnectionLayer events={events} visibleEvents={visibleEvents} getDateY={getDateY} />
+
+              <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 p-2 text-center font-bold text-slate-600 shadow-sm">
+                {CATEGORIES.find(c => c.key === activeCategory)?.label}
+              </div>
+              
+              {visibleEvents.map((event) => (
+                <DraggableEventCard
+                  key={event.id}
+                  event={event}
+                  top={getDateY(event.date)}
+                  onEdit={() => handleEditEvent(event)}
+                  onDragEnd={handleDragEnd}
+                  isActive={activeCardId === event.id}
+                  onActivate={() => setActiveCardId(event.id)}
+                />
+              ))}
             </div>
-            
-            {visibleEvents.map((event) => (
-              <DraggableEventCard
-                key={event.id}
-                event={event}
-                top={getDateY(event.date)}
-                onEdit={() => handleEditEvent(event)}
-                onDragEnd={handleDragEnd}
-                isActive={activeCardId === event.id}
-                onActivate={() => setActiveCardId(event.id)}
-              />
-            ))}
           </div>
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && editingEvent && (
         <EventModal
           event={editingEvent}
@@ -427,8 +421,6 @@ export default function App() {
     </div>
   );
 }
-
-// --- Sub Components ---
 
 const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear: number; endYear: number }) => {
   const years = [];
@@ -519,10 +511,10 @@ const ConnectionLayer = ({
     return () => observer.disconnect();
   }, [visibleEvents, width]);
 
+  // 修正: パディング内の相対座標なので単純計算に戻す
   const getX = (xOffset: number) => {
     if (width === 0) return 0;
-    const availableWidth = width - 128;
-    return 16 + (availableWidth * (xOffset / 100));
+    return width * (xOffset / 100);
   };
 
   const isVisible = (id: string) => visibleEvents.some(e => e.id === id);
@@ -604,18 +596,19 @@ const DraggableEventCard = ({
     if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('a')) return;
     e.stopPropagation();
     setIsLocked(prev => !prev);
-    onActivate(); // ダブルクリック/タップ時も最前面に
+    onActivate();
   };
 
   const handleStart = (clientX: number) => {
-    onActivate(); // ドラッグ開始時に最前面に
+    onActivate();
     if (isLocked) return;
 
     const cardElement = document.getElementById(`card-${event.id}`);
+    // 修正: 親コンテナのパディング計算を削除
     const parentColumn = cardElement?.parentElement;
     
     if (parentColumn) {
-      colWidthRef.current = parentColumn.clientWidth - 144;
+      colWidthRef.current = parentColumn.clientWidth;
     }
 
     setIsDragging(true);
@@ -624,7 +617,6 @@ const DraggableEventCard = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // ロック中でも最前面表示のために呼び出す
     if (isLocked) {
       onActivate();
       return;
@@ -635,7 +627,6 @@ const DraggableEventCard = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // ロック中でも最前面表示のために呼び出す
     if (isLocked) {
       onActivate();
       return;
@@ -683,11 +674,10 @@ const DraggableEventCard = ({
     };
   }, [isDragging, event.id, onDragEnd, currentX]);
 
-  // Z-index calculation logic
   const getZIndex = () => {
-    if (isDragging) return 'z-50'; // Dragging is highest priority
-    if (isActive) return 'z-40';   // Active (clicked) is next
-    return 'z-20 hover:z-30';      // Default
+    if (isDragging) return 'z-50';
+    if (isActive) return 'z-40';
+    return 'z-20 hover:z-30';
   };
 
   return (
