@@ -302,7 +302,7 @@ export default function App() {
   }
 
   const zoomOptions = [];
-  for (let i = 0.5; i <= 5.0; i += 0.1) {
+  for (let i = 0.5; i < 5.0; i += 0.1) {
     zoomOptions.push(parseFloat(i.toFixed(1)));
   }
 
