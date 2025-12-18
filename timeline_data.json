@@ -11,7 +11,8 @@
         "color": "#ff0000"
       }
     ],
-    "xOffset": 49.65399683600411
+    "xOffset": 49.65399683600411,
+    "borderColor": "default"
   },
   {
     "id": "2",
@@ -26,7 +27,8 @@
       }
     ],
     "url": "https://www.nicovideo.jp/watch/sm28843798",
-    "xOffset": 21.56112197943602
+    "xOffset": 21.56112197943602,
+    "borderColor": "default"
   },
   {
     "id": "3",
@@ -40,7 +42,8 @@
         "color": "#00b700"
       }
     ],
-    "xOffset": 86.41372115551802
+    "xOffset": 86.41372115551802,
+    "borderColor": "default"
   },
   {
     "id": "cfb29323-0849-4d6e-a1b6-ac81ff8c933a",
@@ -55,7 +58,8 @@
       }
     ],
     "url": "https://www.nicovideo.jp/watch/sm25349251",
-    "xOffset": 86.29069679714654
+    "xOffset": 86.29069679714654,
+    "borderColor": "default"
   },
   {
     "id": "d2d9ab08-cfa2-476f-8042-9fa4ea79b5b4",
@@ -70,7 +74,8 @@
       }
     ],
     "url": "https://www.nicovideo.jp/watch/sm30961528",
-    "xOffset": 71.22943998421772
+    "xOffset": 71.22943998421772,
+    "borderColor": "default"
   },
   {
     "id": "b06027a7-b56a-4068-ad13-9431016f56d3",
@@ -105,7 +110,8 @@
       }
     ],
     "url": "https://youtu.be/nTBtCBQZMVM?si=CpUV-Owh71_E9a_U",
-    "xOffset": 57.40157480314961
+    "xOffset": 57.40157480314961,
+    "borderColor": "default"
   },
   {
     "id": "af0c8970-3fb7-4580-8d61-c3e269e52727",
@@ -115,7 +121,8 @@
     "category": "technique",
     "links": [],
     "url": "https://youtu.be/BYNKF-j4iH0?si=CFOFPrcl3s8HDujp",
-    "xOffset": 16.800340103861977
+    "xOffset": 16.800340103861977,
+    "borderColor": "default"
   },
   {
     "id": "5ebd1acd-fab8-482c-ab25-17d5d3f6e9e3",
@@ -125,7 +132,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 94.24150739621868,
-    "url": "https://youtu.be/Ux23Jh-9GoA?si=opLtsXHt1kM6lxEH"
+    "url": "https://youtu.be/Ux23Jh-9GoA?si=opLtsXHt1kM6lxEH",
+    "borderColor": "default"
   },
   {
     "id": "399b347d-8323-4379-acbc-ddd46699f33a",
@@ -134,8 +142,9 @@
     "date": "2018-05-03",
     "category": "technique",
     "links": [],
-    "xOffset": 45.79347610714873,
-    "url": "https://youtu.be/Vat_H2YjabU?si=-WKsfxLfoLDyfpoH"
+    "xOffset": 44.308852565261134,
+    "url": "https://youtu.be/Vat_H2YjabU?si=-WKsfxLfoLDyfpoH",
+    "borderColor": "default"
   },
   {
     "id": "f51c05e2-0f56-4ffe-9eee-17d511a0b0f5",
@@ -150,7 +159,8 @@
       }
     ],
     "xOffset": 20.341786929630643,
-    "url": "https://youtu.be/UKk8RDT5_-8?si=4pW7zgzZWyto1h6v"
+    "url": "https://youtu.be/UKk8RDT5_-8?si=4pW7zgzZWyto1h6v",
+    "borderColor": "default"
   },
   {
     "id": "ad131774-20ff-48a9-b817-51ebdbf7da51",
@@ -160,7 +170,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 34.41397411530455,
-    "url": "https://youtu.be/NQlU3pV92Jo?si=7slqWn_xccBwgUUL"
+    "url": "https://youtu.be/NQlU3pV92Jo?si=7slqWn_xccBwgUUL",
+    "borderColor": "default"
   },
   {
     "id": "ef2fbcbe-ae25-4561-97b7-eedb52701a19",
@@ -170,7 +181,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 87.69716088328076,
-    "url": "https://youtu.be/epnJOTzysLg?si=gcE1n0-ujE-O0Vxy"
+    "url": "https://youtu.be/epnJOTzysLg?si=gcE1n0-ujE-O0Vxy",
+    "borderColor": "default"
   },
   {
     "id": "792fa64b-c3d3-4a54-9b62-16bae74c4681",
@@ -180,7 +192,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 20.816463399488317,
-    "url": "https://youtu.be/gW9Bsuytmes?si=3PuId4-DZjJ-uxAw"
+    "url": "https://youtu.be/gW9Bsuytmes?si=3PuId4-DZjJ-uxAw",
+    "borderColor": "default"
   },
   {
     "id": "1cd730fd-8986-4685-9d1d-aadb9a503831",
@@ -190,7 +203,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 51.19690253453715,
-    "url": "https://youtu.be/xj88dPmTsKc?si=JJZ0XJ1UnZMz65rj"
+    "url": "https://youtu.be/xj88dPmTsKc?si=JJZ0XJ1UnZMz65rj",
+    "borderColor": "default"
   },
   {
     "id": "2e978ab0-e1ac-4f64-a355-0a68f6ebbc05",
@@ -200,7 +214,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 39.30266235178941,
-    "url": "https://youtu.be/jLLVOQ63_lY?si=GvI2v_gCnAZXwutQ"
+    "url": "https://youtu.be/jLLVOQ63_lY?si=GvI2v_gCnAZXwutQ",
+    "borderColor": "default"
   },
   {
     "id": "992e4d4b-8b18-42d2-98f0-60bbf82fb802",
@@ -210,7 +225,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 86.49957848362887,
-    "url": "https://youtu.be/RnK8r5PapG8?si=gzCEgRgY2ggcXzAL"
+    "url": "https://youtu.be/RnK8r5PapG8?si=gzCEgRgY2ggcXzAL",
+    "borderColor": "default"
   },
   {
     "id": "d3f01704-5bfd-4e79-8ba2-6c5b00ebe2a5",
@@ -220,7 +236,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 73.46366186985247,
-    "url": "https://youtu.be/pgnaK-kr9cA?si=dJxx7jKBg1aSnuzK"
+    "url": "https://youtu.be/pgnaK-kr9cA?si=dJxx7jKBg1aSnuzK",
+    "borderColor": "default"
   },
   {
     "id": "179806bb-f67d-45eb-a033-974254a4478f",
@@ -230,7 +247,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 25.610858805612963,
-    "url": "https://youtu.be/PmBP8KAI1ts?si=3K0sSNHGaKidjjtY"
+    "url": "https://youtu.be/PmBP8KAI1ts?si=3K0sSNHGaKidjjtY",
+    "borderColor": "default"
   },
   {
     "id": "f00da6dd-4fd0-450d-bd82-5b49fcd5bcd2",
@@ -240,7 +258,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 28.55603448275862,
-    "url": "https://youtu.be/z4AnNEde3uU?si=dL5MCrlTti6823hH"
+    "url": "https://youtu.be/z4AnNEde3uU?si=dL5MCrlTti6823hH",
+    "borderColor": "default"
   },
   {
     "id": "81c681d6-d556-4aaf-9d84-aae660d2943b",
@@ -250,7 +269,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 26.34361530172414,
-    "url": "https://youtu.be/2PduYajJ3FU?si=cljl7G1-5sVxt3x3"
+    "url": "https://youtu.be/2PduYajJ3FU?si=cljl7G1-5sVxt3x3",
+    "borderColor": "default"
   },
   {
     "id": "150140b4-84be-43e9-aabf-bd7b553053f7",
@@ -260,7 +280,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 10.530817268531084,
-    "url": "https://youtu.be/mtd1E3EutJ8?si=jOw9CeiJaAecIFlU"
+    "url": "https://youtu.be/mtd1E3EutJ8?si=jOw9CeiJaAecIFlU",
+    "borderColor": "red"
   },
   {
     "id": "23f80c5e-73e7-4201-8462-c008765e13ea",
@@ -270,7 +291,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 18.995689655172413,
-    "url": "https://www.nicovideo.jp/watch/sm43553422"
+    "url": "https://www.nicovideo.jp/watch/sm43553422",
+    "borderColor": "default"
   },
   {
     "id": "859eb483-a487-464a-aa3c-9c6d0c8f14dc",
@@ -280,7 +302,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 35.969714453796726,
-    "url": "https://youtu.be/AEPMij4MpZE?si=xB_wEox2rGHt4NrJ"
+    "url": "https://youtu.be/AEPMij4MpZE?si=xB_wEox2rGHt4NrJ",
+    "borderColor": "default"
   },
   {
     "id": "e97bfbae-00c5-452e-a4e5-dc6dde0df357",
@@ -290,7 +313,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 40.40948275862069,
-    "url": "https://youtu.be/FGzJpdXTSDY?si=DWN4QPZj7uJFZ8XY"
+    "url": "https://youtu.be/FGzJpdXTSDY?si=DWN4QPZj7uJFZ8XY",
+    "borderColor": "default"
   },
   {
     "id": "58231d19-ed53-493a-8709-444e1b32036b",
@@ -308,7 +332,8 @@
         "color": "#00b700"
       }
     ],
-    "xOffset": 50
+    "xOffset": 50,
+    "borderColor": "default"
   },
   {
     "id": "b67c929b-d497-4e7b-8378-6d861347b36f",
@@ -318,7 +343,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 87.17672413793105,
-    "url": "https://youtu.be/VREhI3kOHkA?si=Yiw_XcIGZvEpnKlr"
+    "url": "https://youtu.be/VREhI3kOHkA?si=Yiw_XcIGZvEpnKlr",
+    "borderColor": "default"
   },
   {
     "id": "7a010229-1cfd-4c9e-ac2c-4d951516878a",
@@ -328,7 +354,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 27.47844827586207,
-    "url": "https://youtu.be/b6pGIZ9Z02E?si=QAEiHr960BRLwvLQ"
+    "url": "https://youtu.be/b6pGIZ9Z02E?si=QAEiHr960BRLwvLQ",
+    "borderColor": "default"
   },
   {
     "id": "b8218158-3ad6-4393-a702-e27341cfbc37",
@@ -338,7 +365,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 95.15086206896552,
-    "url": "https://youtu.be/6IqYVAWZ-x8?si=LaMQe40Ywv-Kl5lt"
+    "url": "https://youtu.be/6IqYVAWZ-x8?si=LaMQe40Ywv-Kl5lt",
+    "borderColor": "default"
   },
   {
     "id": "7d18cdfb-c520-4905-a0e8-13a12dda0032",
@@ -348,7 +376,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 76.29310344827587,
-    "url": "https://youtu.be/S59wzcABXx8?si=P2ptCKKIj9Vzlkcz"
+    "url": "https://youtu.be/S59wzcABXx8?si=P2ptCKKIj9Vzlkcz",
+    "borderColor": "default"
   },
   {
     "id": "f034ad24-1d10-434e-9ca7-a4d62731f046",
@@ -358,7 +387,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 64.6551724137931,
-    "url": "https://youtu.be/VC140_xt-r4?si=GIiIe9CkzUVtCGhc"
+    "url": "https://youtu.be/VC140_xt-r4?si=GIiIe9CkzUVtCGhc",
+    "borderColor": "blue"
   },
   {
     "id": "26845b6c-9573-41b5-b7d8-fa2323384b18",
@@ -368,7 +398,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 52.80172413793103,
-    "url": "https://youtu.be/WkcPo5IWHDY?si=tUGqb6MP-5gezk9w"
+    "url": "https://youtu.be/WkcPo5IWHDY?si=tUGqb6MP-5gezk9w",
+    "borderColor": "default"
   },
   {
     "id": "12c21802-ad32-4c05-b223-88b5a7548d62",
@@ -378,7 +409,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 8.836206896551728,
-    "url": "https://youtu.be/eJ5GKv595SI?si=KBMP-pQK1bYpNeMf"
+    "url": "https://youtu.be/eJ5GKv595SI?si=KBMP-pQK1bYpNeMf",
+    "borderColor": "red"
   },
   {
     "id": "fc5cf118-2d5f-4bd2-86e6-2b4e3d2cb7a3",
@@ -388,7 +420,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 25.10775862068965,
-    "url": "https://youtu.be/D23CN_5hKvg?si=qYG5uG6YxUBBuUQZ"
+    "url": "https://youtu.be/D23CN_5hKvg?si=qYG5uG6YxUBBuUQZ",
+    "borderColor": "default"
   },
   {
     "id": "e19fb685-c331-4a94-a422-f607e68655d5",
@@ -398,7 +431,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 75.64655172413794,
-    "url": "https://youtu.be/NdY75GcdZYo?si=BHBy3SBOUR9mf2fA"
+    "url": "https://youtu.be/NdY75GcdZYo?si=BHBy3SBOUR9mf2fA",
+    "borderColor": "default"
   },
   {
     "id": "0e682500-32fd-4da2-9dc0-1bc6ac40a570",
@@ -408,7 +442,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 14.547413793103448,
-    "url": "https://youtu.be/lIgAjk5HO9c?si=cLaiTTbmbvUgdmkj"
+    "url": "https://youtu.be/lIgAjk5HO9c?si=cLaiTTbmbvUgdmkj",
+    "borderColor": "default"
   },
   {
     "id": "1369c26f-8d9d-4ef1-9065-85783a350a28",
@@ -423,7 +458,8 @@
       }
     ],
     "xOffset": 28.879310344827584,
-    "url": "https://youtu.be/9zFktN4kFpw?si=leV6yLLV1h-fyLxf"
+    "url": "https://youtu.be/9zFktN4kFpw?si=leV6yLLV1h-fyLxf",
+    "borderColor": "default"
   },
   {
     "id": "429d1b49-501d-42cf-bb76-ba1d13dfe7d4",
@@ -433,7 +469,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 81.57327586206897,
-    "url": "https://youtu.be/xG0cawxwcDE?si=6nK_Y9SZf7nQfRTy"
+    "url": "https://youtu.be/xG0cawxwcDE?si=6nK_Y9SZf7nQfRTy",
+    "borderColor": "default"
   },
   {
     "id": "f2a1da1b-d78a-43ec-8402-0e919b49fbf2",
@@ -443,7 +480,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 17.24137931034483,
-    "url": "https://youtu.be/xsUJSsYvU1k?si=OYG9GEIRj1sr7VdA"
+    "url": "https://youtu.be/xsUJSsYvU1k?si=OYG9GEIRj1sr7VdA",
+    "borderColor": "default"
   },
   {
     "id": "2a3c8067-3c23-4be1-8e13-0cbe5f96c328",
@@ -458,7 +496,8 @@
       }
     ],
     "xOffset": 60.560344827586206,
-    "url": "https://youtu.be/12DJeHWccUo?si=PqsfbOJDoH4zrb4n"
+    "url": "https://youtu.be/12DJeHWccUo?si=PqsfbOJDoH4zrb4n",
+    "borderColor": "default"
   },
   {
     "id": "3bcc265b-d51b-4581-beed-bff0deadfcca",
@@ -473,7 +512,8 @@
       }
     ],
     "xOffset": 48.060344827586206,
-    "url": "https://youtu.be/l_TntCKqklU?si=MQYYNSxG0QuiaS56"
+    "url": "https://youtu.be/l_TntCKqklU?si=MQYYNSxG0QuiaS56",
+    "borderColor": "default"
   },
   {
     "id": "76aa5525-d3e6-46d2-8657-2c7e4ee03946",
@@ -483,7 +523,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 60.88362068965517,
-    "url": "https://youtu.be/Kmu9Mpz61wM?si=HMWX9k0oNfN6nbuh"
+    "url": "https://youtu.be/Kmu9Mpz61wM?si=HMWX9k0oNfN6nbuh",
+    "borderColor": "default"
   },
   {
     "id": "fef464b4-87ef-4d53-bd3f-afa078ac438d",
@@ -493,7 +534,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 49.24568965517241,
-    "url": "https://youtu.be/g1mwO14lbNY?si=VJp7aj57hmahOMcP"
+    "url": "https://youtu.be/g1mwO14lbNY?si=VJp7aj57hmahOMcP",
+    "borderColor": "default"
   },
   {
     "id": "2f86a540-1517-436f-af65-3f5737a64163",
@@ -503,7 +545,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 65.62499999999999,
-    "url": "https://youtu.be/BWvI-kJu15k?si=9QamhDNJYCHwkNtw"
+    "url": "https://youtu.be/BWvI-kJu15k?si=9QamhDNJYCHwkNtw",
+    "borderColor": "default"
   },
   {
     "id": "3dfb8f6e-3f1d-4a44-a4e0-f44bd11af61e",
@@ -513,7 +556,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 7.650862068965517,
-    "url": "https://youtu.be/Kk9AnPpgzBM?si=Qqy4EwPNUU03lwBy"
+    "url": "https://youtu.be/Kk9AnPpgzBM?si=Qqy4EwPNUU03lwBy",
+    "borderColor": "red"
   },
   {
     "id": "25e3c869-aca1-41b0-9b69-54410cbb7fc4",
@@ -523,7 +567,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 75,
-    "url": "https://youtu.be/mDKxJ-Xy8nk?si=A1R67HiTDwgzrZ9E"
+    "url": "https://youtu.be/mDKxJ-Xy8nk?si=A1R67HiTDwgzrZ9E",
+    "borderColor": "default"
   },
   {
     "id": "d323f1c1-0974-4d58-8f72-8d8634abd23e",
@@ -538,7 +583,8 @@
       }
     ],
     "xOffset": 56.89655172413793,
-    "url": "https://youtu.be/21NoPktVNkk?si=-CRSYr_zTR6OelNd"
+    "url": "https://youtu.be/21NoPktVNkk?si=-CRSYr_zTR6OelNd",
+    "borderColor": "default"
   },
   {
     "id": "559d3370-3b9c-42f1-bb5a-3a7a7223f4e0",
@@ -548,7 +594,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 15.84051724137931,
-    "url": "https://youtu.be/5wE56jasHyw?si=d6LZNfNfCeZU8czI"
+    "url": "https://youtu.be/5wE56jasHyw?si=d6LZNfNfCeZU8czI",
+    "borderColor": "default"
   },
   {
     "id": "7a1fd3ef-7743-4d9d-8dd2-1d2ec88a3ca3",
@@ -558,7 +605,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 32.866379310344826,
-    "url": "https://youtu.be/-L19mDuFpQQ?si=oXBpQR5d5AiLn3aj"
+    "url": "https://youtu.be/-L19mDuFpQQ?si=oXBpQR5d5AiLn3aj",
+    "borderColor": "default"
   },
   {
     "id": "617926b0-0518-4dd4-a115-08255f4c859a",
@@ -568,7 +616,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 19.719827586206897,
-    "url": "https://youtu.be/bZkacO5cr4A?si=t0gCtMeh7SO8-cHy"
+    "url": "https://youtu.be/bZkacO5cr4A?si=t0gCtMeh7SO8-cHy",
+    "borderColor": "default"
   },
   {
     "id": "4552897e-5511-46b5-9fb2-9a6735298a41",
@@ -578,7 +627,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 73.8146551724138,
-    "url": "https://youtu.be/MjLNEdwguV4?si=WT-WOiLsPnc1hHzt"
+    "url": "https://youtu.be/MjLNEdwguV4?si=WT-WOiLsPnc1hHzt",
+    "borderColor": "default"
   },
   {
     "id": "c1fc27f8-99b2-40b5-ae3a-929513991bd3",
@@ -588,7 +638,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 36.96120689655172,
-    "url": "https://youtu.be/4ddUY1YMa84?si=qcFLbtzKACLe_uVM"
+    "url": "https://youtu.be/4ddUY1YMa84?si=qcFLbtzKACLe_uVM",
+    "borderColor": "default"
   },
   {
     "id": "545acb0b-e347-4dcc-9dab-be51e08210fb",
@@ -598,7 +649,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 51.616379310344826,
-    "url": "https://youtu.be/5rrjgGMMkKk?si=fq66__AlN87stkj7"
+    "url": "https://youtu.be/5rrjgGMMkKk?si=fq66__AlN87stkj7",
+    "borderColor": "default"
   },
   {
     "id": "5b0f6bcf-056f-4f5f-b8fd-19ae898d3237",
@@ -608,7 +660,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 86.42241379310344,
-    "url": "https://youtu.be/FYFXEvjdoJI?si=PgIbGZrRZrvH7lC-"
+    "url": "https://youtu.be/FYFXEvjdoJI?si=PgIbGZrRZrvH7lC-",
+    "borderColor": "default"
   },
   {
     "id": "6563a6a5-2192-49d1-82fc-67e5f35a2d58",
@@ -617,7 +670,9 @@
     "date": "2021-01-10",
     "category": "technique",
     "links": [],
-    "xOffset": 10.991379310344826
+    "xOffset": 10.991379310344826,
+    "borderColor": "red",
+    "url": "https://youtu.be/cK_eN70LUmg?si=4-Ud2zqI7KAvHj05"
   },
   {
     "id": "6b4dd446-0454-4dfb-a75a-29766cef9d06",
@@ -627,7 +682,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 53.23275862068966,
-    "url": "https://youtu.be/9EDy3IdwI0U?si=o0GeU5JzrjTEIVKB"
+    "url": "https://youtu.be/9EDy3IdwI0U?si=o0GeU5JzrjTEIVKB",
+    "borderColor": "blue"
   },
   {
     "id": "c00309db-19a5-441f-99bb-5db17239ba40",
@@ -637,7 +693,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 35.12931034482759,
-    "url": "https://youtu.be/0PGDSVBqdXQ?si=k0ZjXl3Dka7S4B2j"
+    "url": "https://youtu.be/0PGDSVBqdXQ?si=k0ZjXl3Dka7S4B2j",
+    "borderColor": "default"
   },
   {
     "id": "6ea97e69-5b51-49d7-aa5e-839505ee8d0c",
@@ -647,7 +704,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 88.6853448275862,
-    "url": "https://youtu.be/gaaVs1ta_TQ?si=oANfoBjJmZlnQ6e3"
+    "url": "https://youtu.be/gaaVs1ta_TQ?si=oANfoBjJmZlnQ6e3",
+    "borderColor": "default"
   },
   {
     "id": "c2a2754c-6c23-48ff-97c4-b28374527bd0",
@@ -657,7 +715,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 93.64224137931035,
-    "url": "https://youtu.be/W-Asu7PaeBQ?si=OidBK5ZnsKs4yS5K"
+    "url": "https://youtu.be/W-Asu7PaeBQ?si=OidBK5ZnsKs4yS5K",
+    "borderColor": "default"
   },
   {
     "id": "2894dfde-c102-48dc-b564-c455bdad5731",
@@ -667,7 +726,8 @@
     "category": "technique",
     "links": [],
     "xOffset": 56.68103448275862,
-    "url": "https://youtu.be/Seje9VPpnEI?si=tKZPABJ7BT4XV7je"
+    "url": "https://youtu.be/Seje9VPpnEI?si=tKZPABJ7BT4XV7je",
+    "borderColor": "default"
   },
   {
     "id": "7a143d82-51de-4320-a597-e1038b0efdfa",
@@ -677,6 +737,7 @@
     "category": "technique",
     "links": [],
     "xOffset": 64.22413793103448,
-    "url": "https://youtu.be/-XW1wLeqYTQ?si=D8XEyRrocDOAjNKR"
+    "url": "https://youtu.be/-XW1wLeqYTQ?si=D8XEyRrocDOAjNKR",
+    "borderColor": "default"
   }
 ]
