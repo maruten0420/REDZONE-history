@@ -232,7 +232,7 @@
   },
   {
     "id": "992e4d4b-8b18-42d2-98f0-60bbf82fb802",
-    "title": "【合作単品】すーぱーレディアントテクニック",
+    "title": "すーぱーレディアントテクニック",
     "description": "",
     "date": "2023-06-24",
     "category": "technique",
@@ -243,7 +243,7 @@
   },
   {
     "id": "d3f01704-5bfd-4e79-8ba2-6c5b00ebe2a5",
-    "title": "すーぱーたまてでテクニック【単品】",
+    "title": "すーぱーたまてでテクニック",
     "description": "",
     "date": "2021-08-09",
     "category": "technique",
@@ -666,7 +666,7 @@
     "date": "2019-05-09",
     "category": "technique",
     "links": [],
-    "xOffset": 58.31803518530944,
+    "xOffset": 47.373958215976906,
     "url": "https://youtu.be/5rrjgGMMkKk?si=fq66__AlN87stkj7",
     "borderColor": "default"
   },
@@ -783,13 +783,13 @@
   {
     "id": "0b395499-f821-42ab-966c-51aa092f7b50",
     "title": "REDSCARLETWRIGGLED DARKDEADYOUKAIALICE ZONE",
-    "description": "「DOKI DOKI REDSCARLETWRIGGLEDDARKDEADYOUKAIALICE ZONE」の日時を仮採用",
-    "date": "2018-01-04",
+    "description": "ニコニコチャートを参照\nhttps://www.nicochart.jp/watch/sm32289493",
+    "date": "2017-11-19",
     "category": "technique",
     "links": [],
     "xOffset": 21.857120278172907,
-    "borderColor": "red",
-    "url": "https://youtu.be/8xMcE3AZh6g?si=m-kyLnmBX9c6ij2H"
+    "borderColor": "default",
+    "url": "https://youtu.be/kFBlrq-MpBU?si=wf2w8720mMHq2O_W"
   },
   {
     "id": "432c5f64-697c-4aff-8c64-8254c7b6ba2b",
@@ -876,5 +876,38 @@
     "xOffset": 92.10526315789474,
     "borderColor": "default",
     "url": "https://x.com/END_mnst/status/937655984842981376?s=20"
+  },
+  {
+    "id": "faca4f14-770c-40fb-acae-4abf34aecfc7",
+    "title": "RED_ZONEの風船に棒をぶっ刺すテクニック",
+    "description": "",
+    "date": "2017-07-03",
+    "category": "technique",
+    "links": [],
+    "xOffset": 43.50571256764883,
+    "borderColor": "default",
+    "url": "https://youtu.be/x0038v40wn0?si=ibcEMgfLzPo0qMZa"
+  },
+  {
+    "id": "babad02f-9f6d-4850-9678-3dcfc9ec108c",
+    "title": "RED_ZONEで仕掛け人も超ビックリ！！？",
+    "description": "",
+    "date": "2016-09-26",
+    "category": "technique",
+    "links": [],
+    "xOffset": 50,
+    "borderColor": "default",
+    "url": "https://youtu.be/qTVkZkqmCig?si=3_3hNZvYuJhr4nT0"
+  },
+  {
+    "id": "e641650d-5f38-4a29-8165-d15e8193e1e5",
+    "title": "マサイテクニック",
+    "description": "",
+    "date": "2017-04-26",
+    "category": "technique",
+    "links": [],
+    "xOffset": 50,
+    "borderColor": "default",
+    "url": "https://youtu.be/i2kmUmwfTS8?si=MapiGCPBZdDPZIkf"
   }
 ]
