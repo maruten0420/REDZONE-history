@@ -30,6 +30,7 @@ const END_YEAR = 2025;
 const START_DATE = new Date(`${START_YEAR}-01-01`).getTime();
 const END_DATE = new Date(`${END_YEAR}-12-31`).getTime();
 const TOTAL_DAYS = (END_DATE - START_DATE) / (1000 * 60 * 60 * 24);
+const HEADER_HEIGHT = 60; // ヘッダーの高さ（パディング含む）
 
 const CATEGORIES: { key: Category; label: string; color: string }[] = [
   { key: 'technique', label: 'テクニック', color: 'bg-blue-50 border-blue-200' },
@@ -52,6 +53,9 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [hasLocalData, setHasLocalData] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  // ズーム変更時のスクロール位置維持用Ref
+  const scrollTargetDaysRef = useRef<number | null>(null);
   
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
@@ -116,7 +120,7 @@ export default function App() {
   const getDateY = (dateStr: string) => {
     const date = new Date(dateStr).getTime();
     const daysSinceStart = (date - START_DATE) / (1000 * 60 * 60 * 24);
-    return Math.max(0, daysSinceStart * zoom) + 60;
+    return Math.max(0, daysSinceStart * zoom) + HEADER_HEIGHT;
   };
 
   const timelineHeight = useMemo(() => {
@@ -127,6 +131,7 @@ export default function App() {
     events.filter(e => e.category === activeCategory),
   [events, activeCategory]);
 
+  // 初期スクロール位置の設定 (2017年へ) - 初回ロード時のみ
   useEffect(() => {
     if (!loading && scrollContainerRef.current) {
       const targetDate = new Date('2017-01-01').getTime();
@@ -137,17 +142,47 @@ export default function App() {
         scrollContainerRef.current?.scrollTo({ top: top, behavior: 'smooth' });
       }, 500);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
+  // ズーム変更直後にスクロール位置を調整する処理
+  useLayoutEffect(() => {
+    if (scrollTargetDaysRef.current !== null && scrollContainerRef.current) {
+      const targetDays = scrollTargetDaysRef.current;
+      // 新しいズーム倍率でY座標を再計算
+      const newScrollTop = targetDays * zoom + HEADER_HEIGHT;
+      scrollContainerRef.current.scrollTop = newScrollTop;
+      
+      // 処理が終わったらリセット
+      scrollTargetDaysRef.current = null;
+    }
+  }, [zoom]);
+
+  // 現在のスクロール位置から「何日目を表示しているか」を保存する関数
+  const saveCurrentScrollPosition = () => {
+    if (scrollContainerRef.current) {
+      const scrollTop = scrollContainerRef.current.scrollTop;
+      // 現在のスクロール位置からヘッダー分を引き、現在の倍率で割って日数を算出
+      // これにより「相対的な位置（日数）」を保存できる
+      const currentDays = Math.max(0, (scrollTop - HEADER_HEIGHT) / zoom);
+      scrollTargetDaysRef.current = currentDays;
+    }
+  };
+
+  // --- Handlers ---
+
   const handleZoomIn = () => {
+    saveCurrentScrollPosition();
     setZoom(prev => Math.min(3.0, +(prev + 0.1).toFixed(1)));
   };
 
   const handleZoomOut = () => {
+    saveCurrentScrollPosition();
     setZoom(prev => Math.max(0.5, +(prev - 0.1).toFixed(1)));
   };
 
   const handleZoomSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    saveCurrentScrollPosition();
     setZoom(parseFloat(e.target.value));
   };
 
@@ -280,6 +315,7 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden">
+      {/* Page Header */}
       <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
         <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
           <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">Chronicle Map</h1>
@@ -383,7 +419,6 @@ export default function App() {
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           
-          {/* 修正: ConnectionLayerをカードと同じパディングコンテナ内に移動 */}
           <div className="absolute inset-0 pr-32 pl-4">
             <div className="relative w-full h-full">
               
@@ -422,6 +457,8 @@ export default function App() {
   );
 }
 
+// --- Sub Components ---
+
 const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear: number; endYear: number }) => {
   const years = [];
   for (let y = startYear; y <= endYear; y++) {
@@ -433,11 +470,11 @@ const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear:
       {years.map((year) => {
         const date = new Date(`${year}-01-01`).getTime();
         const days = (date - START_DATE) / (1000 * 60 * 60 * 24);
-        const top = Math.max(0, days * zoom) + 60;
+        const top = Math.max(0, days * zoom) + HEADER_HEIGHT;
 
         const nextDate = new Date(`${year + 1}-01-01`).getTime();
         const nextDays = (nextDate - START_DATE) / (1000 * 60 * 60 * 24);
-        const nextTop = Math.max(0, nextDays * zoom) + 60;
+        const nextTop = Math.max(0, nextDays * zoom) + HEADER_HEIGHT;
         
         const yearHeight = nextTop - top;
 
@@ -511,7 +548,6 @@ const ConnectionLayer = ({
     return () => observer.disconnect();
   }, [visibleEvents, width]);
 
-  // 修正: パディング内の相対座標なので単純計算に戻す
   const getX = (xOffset: number) => {
     if (width === 0) return 0;
     return width * (xOffset / 100);
@@ -604,11 +640,11 @@ const DraggableEventCard = ({
     if (isLocked) return;
 
     const cardElement = document.getElementById(`card-${event.id}`);
-    // 修正: 親コンテナのパディング計算を削除
     const parentColumn = cardElement?.parentElement;
     
     if (parentColumn) {
-      colWidthRef.current = parentColumn.clientWidth;
+      // 修正: ConnectionLayerと同じく、親コンテナの幅をそのまま使う
+      colWidthRef.current = parentColumn.clientWidth; 
     }
 
     setIsDragging(true);
@@ -882,6 +918,7 @@ const EventModal = ({
           </div>
 
           <div className="border-t border-slate-100 pt-4">
+             {/* 横位置スライダー（微調整用） */}
              <div className="mb-4">
               <label className="block text-xs font-bold text-slate-500 mb-1.5 flex justify-between">
                 <span>横位置の微調整 (ドラッグでも可能)</span>
