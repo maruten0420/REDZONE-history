@@ -9,9 +9,13 @@
       {
         "targetId": "58231d19-ed53-493a-8709-444e1b32036b",
         "color": "#ff0000"
+      },
+      {
+        "targetId": "e318ddcc-6729-4efe-b155-6937646e91ba",
+        "color": "#fefeb7"
       }
     ],
-    "xOffset": 49.65399683600411,
+    "xOffset": 50.92460881934567,
     "borderColor": "default"
   },
   {
@@ -134,7 +138,12 @@
     "description": "",
     "date": "2019-03-02",
     "category": "technique",
-    "links": [],
+    "links": [
+      {
+        "targetId": "e318ddcc-6729-4efe-b155-6937646e91ba",
+        "color": "#fffeb7"
+      }
+    ],
     "xOffset": 100,
     "url": "https://youtu.be/Ux23Jh-9GoA?si=opLtsXHt1kM6lxEH",
     "borderColor": "default"
@@ -146,7 +155,7 @@
     "date": "2018-05-03",
     "category": "technique",
     "links": [],
-    "xOffset": 38.19220960651292,
+    "xOffset": 44.4511000759297,
     "url": "https://youtu.be/Vat_H2YjabU?si=-WKsfxLfoLDyfpoH",
     "borderColor": "default"
   },
@@ -162,7 +171,7 @@
         "color": "#00b700"
       }
     ],
-    "xOffset": 4.551920341394032,
+    "xOffset": 6.397976924292722,
     "url": "https://youtu.be/UKk8RDT5_-8?si=4pW7zgzZWyto1h6v",
     "borderColor": "default"
   },
@@ -348,7 +357,7 @@
     "links": [
       {
         "targetId": "1bc02ae6-e673-4bed-9c57-d7a922907b74",
-        "color": "#001900"
+        "color": "#00ff00"
       }
     ],
     "xOffset": 88.19345661450924,
@@ -395,7 +404,7 @@
     "date": "2018-04-25",
     "category": "technique",
     "links": [],
-    "xOffset": 67.42532005689901,
+    "xOffset": 77.80938833570413,
     "url": "https://youtu.be/VC140_xt-r4?si=GIiIe9CkzUVtCGhc",
     "borderColor": "default"
   },
@@ -635,7 +644,7 @@
     "date": "2019-04-10",
     "category": "technique",
     "links": [],
-    "xOffset": 100,
+    "xOffset": 81.08108108108108,
     "url": "https://youtu.be/MjLNEdwguV4?si=WT-WOiLsPnc1hHzt",
     "borderColor": "default"
   },
@@ -657,7 +666,7 @@
     "date": "2019-05-09",
     "category": "technique",
     "links": [],
-    "xOffset": 73.11177629484003,
+    "xOffset": 58.31803518530944,
     "url": "https://youtu.be/5rrjgGMMkKk?si=fq66__AlN87stkj7",
     "borderColor": "default"
   },
@@ -686,11 +695,11 @@
   {
     "id": "6b4dd446-0454-4dfb-a75a-29766cef9d06",
     "title": "ひなこがマジでRED ZONE",
-    "description": "さらに元ネタがある気がする",
+    "description": "元ネタ: さとり様がマジでRED ZONE(URL，日時不明)",
     "date": "2018-02-04",
     "category": "technique",
     "links": [],
-    "xOffset": 35.30957227645068,
+    "xOffset": 51.5257884926669,
     "url": "https://youtu.be/9EDy3IdwI0U?si=o0GeU5JzrjTEIVKB",
     "borderColor": "blue"
   },
@@ -778,7 +787,7 @@
     "date": "2018-01-04",
     "category": "technique",
     "links": [],
-    "xOffset": 57.112375533428164,
+    "xOffset": 21.857120278172907,
     "borderColor": "red",
     "url": "https://youtu.be/8xMcE3AZh6g?si=m-kyLnmBX9c6ij2H"
   },
@@ -858,6 +867,10 @@
       {
         "targetId": "f034ad24-1d10-434e-9ca7-a4d62731f046",
         "color": "#b70000"
+      },
+      {
+        "targetId": "e318ddcc-6729-4efe-b155-6937646e91ba",
+        "color": "#fefeb7"
       }
     ],
     "xOffset": 92.10526315789474,
