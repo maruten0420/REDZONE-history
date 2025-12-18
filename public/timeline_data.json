@@ -27,7 +27,7 @@
       }
     ],
     "url": "https://www.nicovideo.jp/watch/sm28843798",
-    "xOffset": 21.56112197943602,
+    "xOffset": 5.913895805894056,
     "borderColor": "default"
   },
   {
@@ -39,6 +39,10 @@
     "links": [
       {
         "targetId": "d2d9ab08-cfa2-476f-8042-9fa4ea79b5b4",
+        "color": "#00b700"
+      },
+      {
+        "targetId": "c8e44b9a-1c33-4ee2-b576-a9e76151c19f",
         "color": "#00b700"
       }
     ],
@@ -74,7 +78,7 @@
       }
     ],
     "url": "https://www.nicovideo.jp/watch/sm30961528",
-    "xOffset": 71.22943998421772,
+    "xOffset": 98.3987145219133,
     "borderColor": "default"
   },
   {
@@ -142,7 +146,7 @@
     "date": "2018-05-03",
     "category": "technique",
     "links": [],
-    "xOffset": 36.62748698915872,
+    "xOffset": 38.19220960651292,
     "url": "https://youtu.be/Vat_H2YjabU?si=-WKsfxLfoLDyfpoH",
     "borderColor": "default"
   },
@@ -158,7 +162,7 @@
         "color": "#00b700"
       }
     ],
-    "xOffset": 0,
+    "xOffset": 4.551920341394032,
     "url": "https://youtu.be/UKk8RDT5_-8?si=4pW7zgzZWyto1h6v",
     "borderColor": "default"
   },
@@ -180,7 +184,7 @@
     "date": "2018-03-21",
     "category": "technique",
     "links": [],
-    "xOffset": 64.86486486486487,
+    "xOffset": 100,
     "url": "https://youtu.be/epnJOTzysLg?si=gcE1n0-ujE-O0Vxy",
     "borderColor": "default"
   },
@@ -202,7 +206,7 @@
     "date": "2021-01-11",
     "category": "technique",
     "links": [],
-    "xOffset": 51.19690253453715,
+    "xOffset": 41.66631931974341,
     "url": "https://youtu.be/xj88dPmTsKc?si=JJZ0XJ1UnZMz65rj",
     "borderColor": "default"
   },
@@ -301,7 +305,7 @@
     "date": "2019-03-20",
     "category": "technique",
     "links": [],
-    "xOffset": 40.569373738294175,
+    "xOffset": 29.01849217638691,
     "url": "https://youtu.be/AEPMij4MpZE?si=xB_wEox2rGHt4NrJ",
     "borderColor": "default"
   },
@@ -341,8 +345,13 @@
     "description": "正式名称は「あかぞねがっさくのたんぴん」だが便宜上こちらで記載",
     "date": "2020-05-13",
     "category": "technique",
-    "links": [],
-    "xOffset": 87.17672413793105,
+    "links": [
+      {
+        "targetId": "1bc02ae6-e673-4bed-9c57-d7a922907b74",
+        "color": "#001900"
+      }
+    ],
+    "xOffset": 88.19345661450924,
     "url": "https://youtu.be/VREhI3kOHkA?si=Yiw_XcIGZvEpnKlr",
     "borderColor": "default"
   },
@@ -364,7 +373,7 @@
     "date": "2017-07-24",
     "category": "technique",
     "links": [],
-    "xOffset": 95.15086206896552,
+    "xOffset": 100,
     "url": "https://youtu.be/6IqYVAWZ-x8?si=LaMQe40Ywv-Kl5lt",
     "borderColor": "default"
   },
@@ -382,13 +391,13 @@
   {
     "id": "f034ad24-1d10-434e-9ca7-a4d62731f046",
     "title": "RED GIMONE",
-    "description": "デンターの情報求む",
+    "description": "",
     "date": "2018-04-25",
     "category": "technique",
     "links": [],
-    "xOffset": 100,
+    "xOffset": 67.42532005689901,
     "url": "https://youtu.be/VC140_xt-r4?si=GIiIe9CkzUVtCGhc",
-    "borderColor": "blue"
+    "borderColor": "default"
   },
   {
     "id": "26845b6c-9573-41b5-b7d8-fa2323384b18",
@@ -441,7 +450,7 @@
     "date": "2019-05-22",
     "category": "technique",
     "links": [],
-    "xOffset": 14.547413793103448,
+    "xOffset": 27.59601706970128,
     "url": "https://youtu.be/lIgAjk5HO9c?si=cLaiTTbmbvUgdmkj",
     "borderColor": "default"
   },
@@ -479,7 +488,7 @@
     "date": "2020-06-05",
     "category": "technique",
     "links": [],
-    "xOffset": 17.24137931034483,
+    "xOffset": 8.137538627556777,
     "url": "https://youtu.be/xsUJSsYvU1k?si=OYG9GEIRj1sr7VdA",
     "borderColor": "default"
   },
@@ -551,8 +560,8 @@
   {
     "id": "3dfb8f6e-3f1d-4a44-a4e0-f44bd11af61e",
     "title": "《日時不詳》車テクニック",
-    "description": "暫定版として「電車テクニック-7日」",
-    "date": "2019-08-29",
+    "description": "https://x.com/hnt1705/status/1762072903888343128?s=20\nHinatenさんのツイートを参照，正しいかは要精査",
+    "date": "2019-03-02",
     "category": "technique",
     "links": [],
     "xOffset": 0,
@@ -626,7 +635,7 @@
     "date": "2019-04-10",
     "category": "technique",
     "links": [],
-    "xOffset": 79.94732100470416,
+    "xOffset": 100,
     "url": "https://youtu.be/MjLNEdwguV4?si=WT-WOiLsPnc1hHzt",
     "borderColor": "default"
   },
@@ -637,7 +646,7 @@
     "date": "2020-08-19",
     "category": "technique",
     "links": [],
-    "xOffset": 36.96120689655172,
+    "xOffset": 6.520239613479177,
     "url": "https://youtu.be/4ddUY1YMa84?si=qcFLbtzKACLe_uVM",
     "borderColor": "default"
   },
@@ -648,7 +657,7 @@
     "date": "2019-05-09",
     "category": "technique",
     "links": [],
-    "xOffset": 57.74904514263519,
+    "xOffset": 73.11177629484003,
     "url": "https://youtu.be/5rrjgGMMkKk?si=fq66__AlN87stkj7",
     "borderColor": "default"
   },
@@ -681,7 +690,7 @@
     "date": "2018-02-04",
     "category": "technique",
     "links": [],
-    "xOffset": 100,
+    "xOffset": 35.30957227645068,
     "url": "https://youtu.be/9EDy3IdwI0U?si=o0GeU5JzrjTEIVKB",
     "borderColor": "blue"
   },
@@ -692,7 +701,7 @@
     "date": "2019-07-14",
     "category": "technique",
     "links": [],
-    "xOffset": 26.895352366406236,
+    "xOffset": 17.50701666228106,
     "url": "https://youtu.be/0PGDSVBqdXQ?si=k0ZjXl3Dka7S4B2j",
     "borderColor": "default"
   },
@@ -736,8 +745,123 @@
     "date": "2020-06-07",
     "category": "technique",
     "links": [],
-    "xOffset": 64.22413793103448,
+    "xOffset": 65.78886054838867,
     "url": "https://youtu.be/-XW1wLeqYTQ?si=D8XEyRrocDOAjNKR",
     "borderColor": "default"
+  },
+  {
+    "id": "a6367416-f84f-4ade-8ab5-6effd24828cf",
+    "title": "RED_ZONEやります！",
+    "description": "",
+    "date": "2016-06-12",
+    "category": "technique",
+    "links": [],
+    "xOffset": 44.5945945945946,
+    "borderColor": "default",
+    "url": "https://youtu.be/paJffzxHc2Y?si=XhvLzy5Bb02qkXJl"
+  },
+  {
+    "id": "c8e44b9a-1c33-4ee2-b576-a9e76151c19f",
+    "title": "NAMBOKU ZONE【RED ZONE×東京メトロ南北線】",
+    "description": "",
+    "date": "2017-05-03",
+    "category": "technique",
+    "links": [],
+    "xOffset": 60.526315789473685,
+    "borderColor": "default",
+    "url": "https://youtu.be/66sR2uGUG1U?si=iEIjaHV5Tf6sxbO1"
+  },
+  {
+    "id": "0b395499-f821-42ab-966c-51aa092f7b50",
+    "title": "REDSCARLETWRIGGLED DARKDEADYOUKAIALICE ZONE",
+    "description": "「DOKI DOKI REDSCARLETWRIGGLEDDARKDEADYOUKAIALICE ZONE」の日時を仮採用",
+    "date": "2018-01-04",
+    "category": "technique",
+    "links": [],
+    "xOffset": 57.112375533428164,
+    "borderColor": "red",
+    "url": "https://youtu.be/8xMcE3AZh6g?si=m-kyLnmBX9c6ij2H"
+  },
+  {
+    "id": "432c5f64-697c-4aff-8c64-8254c7b6ba2b",
+    "title": "(⌒,_ゝ⌒) テクニック",
+    "description": "",
+    "date": "2019-03-23",
+    "category": "technique",
+    "links": [],
+    "xOffset": 57.823613086770976,
+    "borderColor": "default",
+    "url": "https://youtu.be/3hv0YPL_Ekc?si=qBzNccr4Y2FIa1KV"
+  },
+  {
+    "id": "e318ddcc-6729-4efe-b155-6937646e91ba",
+    "title": "致s致合作単品RED ZONE合作",
+    "description": "",
+    "date": "2020-04-14",
+    "category": "technique",
+    "links": [],
+    "xOffset": 6.756756756756758,
+    "borderColor": "default",
+    "url": "https://youtu.be/RV_8D1ECefg?si=pRlVtbYHbFddD3nb"
+  },
+  {
+    "id": "1bc02ae6-e673-4bed-9c57-d7a922907b74",
+    "title": " SHITEKINE100",
+    "description": "",
+    "date": "2020-06-22",
+    "category": "technique",
+    "links": [],
+    "xOffset": 100,
+    "borderColor": "default",
+    "url": "https://youtu.be/i--r7ISZf9U?si=nzbZdQr_W9fU_j0p"
+  },
+  {
+    "id": "71432ec9-e77c-457f-8cba-46c9dbe329c0",
+    "title": "Momochi-Tech",
+    "description": "正式タイトルは「あかぞねがっさくのたんぴん」",
+    "date": "2020-11-12",
+    "category": "technique",
+    "links": [],
+    "xOffset": 13.30014224751067,
+    "borderColor": "default",
+    "url": "https://youtu.be/t6Xfs5cf8KQ?si=7YTHXvD0KOfoHeJL"
+  },
+  {
+    "id": "afed40d0-5e06-4cf5-ab30-07ee0bc75285",
+    "title": " redZ",
+    "description": "リスペクト元がある可能性あり",
+    "date": "2019-04-19",
+    "category": "technique",
+    "links": [],
+    "xOffset": 0,
+    "borderColor": "blue",
+    "url": "https://youtu.be/cTYnpc5ejhk?si=rbh8tjdFNqK6RPYw"
+  },
+  {
+    "id": "07660294-d0e5-4573-a4ad-99ccd66fd410",
+    "title": "撤回しなさい！",
+    "description": "nesuさんのを採用，被り元あり",
+    "date": "2017-05-02",
+    "category": "technique",
+    "links": [],
+    "xOffset": 0,
+    "borderColor": "blue",
+    "url": "https://youtu.be/kGc5agkCEUY?si=g-W2_HUh9TN49mIp"
+  },
+  {
+    "id": "e968d1b7-979e-4c10-8bf1-9b604872a245",
+    "title": "REDENTOR ZONE",
+    "description": "",
+    "date": "2017-12-04",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "f034ad24-1d10-434e-9ca7-a4d62731f046",
+        "color": "#b70000"
+      }
+    ],
+    "xOffset": 92.10526315789474,
+    "borderColor": "default",
+    "url": "https://x.com/END_mnst/status/937655984842981376?s=20"
   }
 ]
