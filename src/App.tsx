@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
-import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown } from 'lucide-react';
+import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown, Lock, Unlock } from 'lucide-react';
 
 // --- Types ---
 
@@ -20,7 +20,7 @@ interface EventData {
   url?: string;
   links: LinkData[];
   xOffset: number; // 0 to 100 (percentage within column)
-  borderColor?: BorderColorType; // 新機能: 枠の色
+  borderColor?: BorderColorType;
 }
 
 // --- Constants & Helpers ---
@@ -51,6 +51,10 @@ export default function App() {
   const [events, setEvents] = useState<EventData[]>(DEFAULT_EVENTS);
   const [loading, setLoading] = useState(true);
   const [hasLocalData, setHasLocalData] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  // アクティブ（最前面）なカードのIDを管理
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   // パス生成ヘルパー
   const getJsonPath = () => {
@@ -78,7 +82,7 @@ export default function App() {
           const fixedData = data.map((item: any) => ({
             ...item, 
             xOffset: item.xOffset ?? 50,
-            borderColor: item.borderColor ?? 'default' // 既存データ用にデフォルト値を設定
+            borderColor: item.borderColor ?? 'default'
           }));
           setEvents(fixedData);
         } else {
@@ -108,7 +112,7 @@ export default function App() {
     }
   }, [events, loading]);
 
-  const [zoom, setZoom] = useState<number>(0.5);
+  const [zoom, setZoom] = useState<number>(1.0);
   const [activeCategory, setActiveCategory] = useState<Category>('technique');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<EventData | null>(null);
@@ -129,15 +133,27 @@ export default function App() {
     events.filter(e => e.category === activeCategory),
   [events, activeCategory]);
 
+  // 初期スクロール位置の設定 (2017年へ)
+  useEffect(() => {
+    if (!loading && scrollContainerRef.current) {
+      const targetDate = new Date('2017-01-01').getTime();
+      const days = (targetDate - START_DATE) / (1000 * 60 * 60 * 24);
+      const top = Math.max(0, days * zoom);
+      
+      setTimeout(() => {
+        scrollContainerRef.current?.scrollTo({ top: top, behavior: 'smooth' });
+      }, 500);
+    }
+  }, [loading]);
+
   // --- Handlers ---
 
-  // Zoom Controls
   const handleZoomIn = () => {
-    setZoom(prev => Math.min(2.5, +(prev + 0.1).toFixed(1)));
+    setZoom(prev => Math.min(3.0, +(prev + 0.1).toFixed(1)));
   };
 
   const handleZoomOut = () => {
-    setZoom(prev => Math.max(0.1, +(prev - 0.1).toFixed(1)));
+    setZoom(prev => Math.max(0.5, +(prev - 0.1).toFixed(1)));
   };
 
   const handleZoomSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -266,9 +282,8 @@ export default function App() {
     return <div className="h-screen flex items-center justify-center text-slate-500">Loading history...</div>;
   }
 
-  // Zoom options for dropdown
   const zoomOptions = [];
-  for (let i = 0.1; i <= 2.5; i += 0.1) {
+  for (let i = 0.5; i <= 3.0; i += 0.1) {
     zoomOptions.push(parseFloat(i.toFixed(1)));
   }
 
@@ -295,7 +310,6 @@ export default function App() {
             ))}
           </div>
 
-          {/* Zoom Controls (Button + Select Style) */}
           <div className="flex items-center bg-slate-100 rounded border border-slate-200">
             <button 
               onClick={handleZoomOut}
@@ -369,7 +383,10 @@ export default function App() {
       </header>
 
       {/* Main Timeline Area */}
-      <div className="flex-1 overflow-auto relative bg-slate-100 cursor-grab active:cursor-grabbing">
+      <div 
+        ref={scrollContainerRef}
+        className="flex-1 overflow-auto relative bg-slate-100"
+      >
         <div 
           className="relative w-full mx-auto bg-white shadow-xl origin-top min-h-full"
           style={{ height: timelineHeight }}
@@ -377,7 +394,7 @@ export default function App() {
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           <ConnectionLayer events={events} visibleEvents={visibleEvents} getDateY={getDateY} />
 
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 pr-32 pl-4">
             <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 p-2 text-center font-bold text-slate-600 shadow-sm">
               {CATEGORIES.find(c => c.key === activeCategory)?.label}
             </div>
@@ -389,6 +406,8 @@ export default function App() {
                 top={getDateY(event.date)}
                 onEdit={() => handleEditEvent(event)}
                 onDragEnd={handleDragEnd}
+                isActive={activeCardId === event.id}
+                onActivate={() => setActiveCardId(event.id)}
               />
             ))}
           </div>
@@ -502,7 +521,8 @@ const ConnectionLayer = ({
 
   const getX = (xOffset: number) => {
     if (width === 0) return 0;
-    return width * (xOffset / 100);
+    const availableWidth = width - 128;
+    return 16 + (availableWidth * (xOffset / 100));
   };
 
   const isVisible = (id: string) => visibleEvents.some(e => e.id === id);
@@ -555,19 +575,23 @@ const DraggableEventCard = ({
   top, 
   onEdit, 
   onDragEnd,
+  isActive,
+  onActivate,
 }: { 
   event: EventData; 
   top: number; 
   onEdit: () => void; 
   onDragEnd: (id: string, x: number) => void;
+  isActive: boolean;
+  onActivate: () => void;
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isLocked, setIsLocked] = useState(true);
   const [currentX, setCurrentX] = useState(event.xOffset);
   const startXRef = useRef<number>(0);
   const startOffsetRef = useRef<number>(0);
   const colWidthRef = useRef<number>(0);
 
-  // Determine styles based on border color setting
   const colorStyle = BORDER_OPTIONS.find(c => c.key === (event.borderColor || 'default')) || BORDER_OPTIONS[0];
 
   useEffect(() => {
@@ -576,12 +600,22 @@ const DraggableEventCard = ({
     }
   }, [event.xOffset, isDragging]);
 
+  const handleToggleLock = (e: React.MouseEvent | React.TouchEvent) => {
+    if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('a')) return;
+    e.stopPropagation();
+    setIsLocked(prev => !prev);
+    onActivate(); // ダブルクリック/タップ時も最前面に
+  };
+
   const handleStart = (clientX: number) => {
+    onActivate(); // ドラッグ開始時に最前面に
+    if (isLocked) return;
+
     const cardElement = document.getElementById(`card-${event.id}`);
     const parentColumn = cardElement?.parentElement;
     
     if (parentColumn) {
-      colWidthRef.current = parentColumn.clientWidth;
+      colWidthRef.current = parentColumn.clientWidth - 144;
     }
 
     setIsDragging(true);
@@ -590,12 +624,22 @@ const DraggableEventCard = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    // ロック中でも最前面表示のために呼び出す
+    if (isLocked) {
+      onActivate();
+      return;
+    }
     e.stopPropagation(); 
     e.preventDefault(); 
     handleStart(e.clientX);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    // ロック中でも最前面表示のために呼び出す
+    if (isLocked) {
+      onActivate();
+      return;
+    }
     e.stopPropagation();
     handleStart(e.touches[0].clientX);
   };
@@ -639,12 +683,18 @@ const DraggableEventCard = ({
     };
   }, [isDragging, event.id, onDragEnd, currentX]);
 
+  // Z-index calculation logic
+  const getZIndex = () => {
+    if (isDragging) return 'z-50'; // Dragging is highest priority
+    if (isActive) return 'z-40';   // Active (clicked) is next
+    return 'z-20 hover:z-30';      // Default
+  };
+
   return (
     <div
       id={`card-${event.id}`}
-      className={`absolute flex flex-col items-center select-none transition-shadow touch-none ${
-        isDragging ? 'cursor-grabbing z-50 scale-105' : 'cursor-grab hover:z-30 z-20'
-      } w-40 md:w-60`}
+      onDoubleClick={handleToggleLock}
+      className={`absolute flex flex-col items-center select-none transition-shadow touch-manipulation ${getZIndex()} ${!isLocked ? 'cursor-grab' : ''} w-40 md:w-60`}
       style={{ 
         top, 
         left: `${currentX}%`,
@@ -657,10 +707,19 @@ const DraggableEventCard = ({
         isDragging 
           ? 'shadow-xl' 
           : 'shadow-md hover:shadow-lg'
-      }`}>
+      } ${!isLocked ? 'ring-2 ring-yellow-400 ring-offset-2' : ''}`}>
+        
+        <div 
+          className="absolute -top-3 -right-3 bg-white border border-slate-200 rounded-full p-1.5 shadow-sm cursor-pointer hover:bg-slate-50 z-50"
+          onClick={handleToggleLock}
+          onTouchEnd={(e) => { e.stopPropagation(); handleToggleLock(e as any); }}
+        >
+          {isLocked ? <Lock size={12} className="text-slate-400" /> : <Unlock size={12} className="text-yellow-500" />}
+        </div>
+
         <div className="flex justify-between items-start mb-1.5">
           <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-white/50 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
-          <div className="flex gap-1">
+          <div className="flex gap-1 mr-2">
             {event.url && (
               <a 
                 href={event.url} 
@@ -686,7 +745,7 @@ const DraggableEventCard = ({
         
         <h3 className="font-bold text-slate-800 text-xs md:text-sm leading-tight mb-2 text-center whitespace-pre-wrap">{event.title || 'No Title'}</h3>
         
-        <div className="w-8 md:w-10 h-1 bg-slate-300/50 rounded-full mx-auto" />
+        {!isLocked && <div className="w-8 md:w-10 h-1 bg-yellow-400/50 rounded-full mx-auto" />}
       </div>
 
       <div className={`w-3 h-3 bg-white border-2 rounded-full absolute -top-1.5 shadow-sm ${colorStyle.class}`} />
@@ -746,7 +805,6 @@ const EventModal = ({
         </div>
 
         <div className="p-6 overflow-y-auto flex-1 space-y-5">
-          {/* 枠色選択 */}
           <div>
             <label className="block text-xs font-bold text-slate-500 mb-1.5">カード枠色</label>
             <div className="flex gap-2">
@@ -834,7 +892,6 @@ const EventModal = ({
           </div>
 
           <div className="border-t border-slate-100 pt-4">
-             {/* 横位置スライダー（微調整用） */}
              <div className="mb-4">
               <label className="block text-xs font-bold text-slate-500 mb-1.5 flex justify-between">
                 <span>横位置の微調整 (ドラッグでも可能)</span>
