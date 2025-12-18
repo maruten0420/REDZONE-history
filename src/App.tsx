@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
-import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown, Lock, Unlock } from 'lucide-react';
+import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown, Lock, Unlock, Info } from 'lucide-react';
 
 // --- Types ---
 
@@ -32,9 +32,9 @@ const END_DATE = new Date(`${END_YEAR}-12-31`).getTime();
 const TOTAL_DAYS = (END_DATE - START_DATE) / (1000 * 60 * 60 * 24);
 const HEADER_HEIGHT = 60; 
 
-// カード幅定数 (px) - CSSクラスと合わせる必要があります
-const CARD_WIDTH_MOBILE = 160; // w-40
-const CARD_WIDTH_PC = 240;     // md:w-60
+// カード幅定数 (px)
+const CARD_WIDTH_MOBILE = 160; 
+const CARD_WIDTH_PC = 240;     
 
 const CATEGORIES: { key: Category; label: string; color: string }[] = [
   { key: 'technique', label: 'テクニック', color: 'bg-blue-50 border-blue-200' },
@@ -60,6 +60,7 @@ export default function App() {
   
   const scrollTargetDaysRef = useRef<number | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const [hoveredEvent, setHoveredEvent] = useState<EventData | null>(null); // 詳細表示用
 
   const getJsonPath = () => {
     const path = window.location.pathname;
@@ -306,7 +307,24 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden">
+    <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden relative">
+      {/* Detail Overlay (Top) */}
+      {hoveredEvent && hoveredEvent.description && (
+        <div className="absolute top-16 left-0 right-0 z-50 p-4 pointer-events-none flex justify-center animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="bg-slate-800/90 text-white p-4 rounded-lg shadow-xl max-w-lg w-full backdrop-blur-sm border border-slate-700">
+            <div className="flex items-center gap-2 mb-1 border-b border-slate-600 pb-2">
+              <Info size={16} className="text-blue-300" />
+              <span className="font-bold text-sm">{hoveredEvent.title}</span>
+              <span className="text-xs text-slate-400 ml-auto font-mono">{hoveredEvent.date}</span>
+            </div>
+            <div className="text-sm whitespace-pre-wrap leading-relaxed">
+              {hoveredEvent.description}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Page Header */}
       <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
         <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
           <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">Chronicle Map</h1>
@@ -428,6 +446,9 @@ export default function App() {
                   onDragEnd={handleDragEnd}
                   isActive={activeCardId === event.id}
                   onActivate={() => setActiveCardId(event.id)}
+                  // ホバー/長押しイベントのハンドラを渡す
+                  onHoverStart={() => setHoveredEvent(event)}
+                  onHoverEnd={() => setHoveredEvent(null)}
                 />
               ))}
             </div>
@@ -601,6 +622,8 @@ const DraggableEventCard = ({
   onDragEnd,
   isActive,
   onActivate,
+  onHoverStart, // New prop
+  onHoverEnd,   // New prop
 }: { 
   event: EventData; 
   top: number; 
@@ -608,6 +631,8 @@ const DraggableEventCard = ({
   onDragEnd: (id: string, x: number) => void;
   isActive: boolean;
   onActivate: () => void;
+  onHoverStart: () => void;
+  onHoverEnd: () => void;
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isLocked, setIsLocked] = useState(true);
@@ -615,6 +640,9 @@ const DraggableEventCard = ({
   const startXRef = useRef<number>(0);
   const startOffsetRef = useRef<number>(0);
   const colWidthRef = useRef<number>(0);
+  
+  // 長押し判定用タイマーRef
+  const longPressTimerRef = useRef<number | null>(null);
 
   const colorStyle = BORDER_OPTIONS.find(c => c.key === (event.borderColor || 'default')) || BORDER_OPTIONS[0];
 
@@ -662,12 +690,35 @@ const DraggableEventCard = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    // 長押し判定開始
+    longPressTimerRef.current = window.setTimeout(() => {
+      onHoverStart();
+    }, 500); // 500ms長押しで詳細表示
+
     if (isLocked) {
       onActivate();
       return;
     }
     e.stopPropagation();
     handleStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    // タッチ終了時、タイマーをクリアして詳細非表示
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+    onHoverEnd();
+  };
+
+  const handleTouchMoveLocal = () => {
+    // 指が動いたら長押しキャンセル
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+    onHoverEnd(); // 動いたら消す
   };
 
   useEffect(() => {
@@ -742,9 +793,14 @@ const DraggableEventCard = ({
           ? 'shadow-xl' 
           : 'shadow-md hover:shadow-lg'
       } ${!isLocked ? 'ring-2 ring-yellow-400 ring-offset-2' : ''}`}
-        // マウスイベント・タッチイベントはここで受け取る
+        // マウスイベント (PC)
+        onMouseEnter={onHoverStart}
+        onMouseLeave={onHoverEnd}
         onMouseDown={handleMouseDown}
+        // タッチイベント (Mobile - 長押し対応)
         onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchMove={handleTouchMoveLocal}
       >
         
         <div 
@@ -930,7 +986,6 @@ const EventModal = ({
           </div>
 
           <div className="border-t border-slate-100 pt-4">
-             {/* 横位置スライダー（微調整用） */}
              <div className="mb-4">
               <label className="block text-xs font-bold text-slate-500 mb-1.5 flex justify-between">
                 <span>横位置の微調整 (ドラッグでも可能)</span>
