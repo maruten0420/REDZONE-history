@@ -45,7 +45,7 @@ const CATEGORIES: { key: Category; label: string; color: string }[] = [
 const BORDER_OPTIONS: { key: BorderColorType; label: string; class: string; bgClass: string }[] = [
   { key: 'default', label: '標準 (灰)', class: 'border-slate-300', bgClass: 'bg-white' },
   { key: 'red', label: '日時不詳 (赤)', class: 'border-red-500', bgClass: 'bg-red-50' },
-  { key: 'blue', label: '予備 (青)', class: 'border-blue-500', bgClass: 'bg-blue-50' },
+  { key: 'blue', label: '特筆事項あり (青)', class: 'border-blue-500', bgClass: 'bg-blue-50' },
 ];
 
 const DEFAULT_EVENTS: EventData[] = [];
@@ -166,7 +166,7 @@ export default function App() {
 
   const handleZoomIn = () => {
     saveCurrentScrollPosition();
-    setZoom(prev => Math.min(3.0, +(prev + 0.1).toFixed(1)));
+    setZoom(prev => Math.min(5.0, +(prev + 0.1).toFixed(1)));
   };
 
   const handleZoomOut = () => {
@@ -302,7 +302,7 @@ export default function App() {
   }
 
   const zoomOptions = [];
-  for (let i = 0.5; i <= 3.0; i += 0.1) {
+  for (let i = 0.5; i <= 5.0; i += 0.1) {
     zoomOptions.push(parseFloat(i.toFixed(1)));
   }
 
