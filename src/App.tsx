@@ -30,7 +30,11 @@ const END_YEAR = 2025;
 const START_DATE = new Date(`${START_YEAR}-01-01`).getTime();
 const END_DATE = new Date(`${END_YEAR}-12-31`).getTime();
 const TOTAL_DAYS = (END_DATE - START_DATE) / (1000 * 60 * 60 * 24);
-const HEADER_HEIGHT = 60; // ヘッダーの高さ（パディング含む）
+const HEADER_HEIGHT = 60; 
+
+// カード幅定数 (px) - CSSクラスと合わせる必要があります
+const CARD_WIDTH_MOBILE = 160; // w-40
+const CARD_WIDTH_PC = 240;     // md:w-60
 
 const CATEGORIES: { key: Category; label: string; color: string }[] = [
   { key: 'technique', label: 'テクニック', color: 'bg-blue-50 border-blue-200' },
@@ -54,9 +58,7 @@ export default function App() {
   const [hasLocalData, setHasLocalData] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
-  // ズーム変更時のスクロール位置維持用Ref
   const scrollTargetDaysRef = useRef<number | null>(null);
-  
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   const getJsonPath = () => {
@@ -131,7 +133,6 @@ export default function App() {
     events.filter(e => e.category === activeCategory),
   [events, activeCategory]);
 
-  // 初期スクロール位置の設定 (2017年へ) - 初回ロード時のみ
   useEffect(() => {
     if (!loading && scrollContainerRef.current) {
       const targetDate = new Date('2017-01-01').getTime();
@@ -145,31 +146,22 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  // ズーム変更直後にスクロール位置を調整する処理
   useLayoutEffect(() => {
     if (scrollTargetDaysRef.current !== null && scrollContainerRef.current) {
       const targetDays = scrollTargetDaysRef.current;
-      // 新しいズーム倍率でY座標を再計算
       const newScrollTop = targetDays * zoom + HEADER_HEIGHT;
       scrollContainerRef.current.scrollTop = newScrollTop;
-      
-      // 処理が終わったらリセット
       scrollTargetDaysRef.current = null;
     }
   }, [zoom]);
 
-  // 現在のスクロール位置から「何日目を表示しているか」を保存する関数
   const saveCurrentScrollPosition = () => {
     if (scrollContainerRef.current) {
       const scrollTop = scrollContainerRef.current.scrollTop;
-      // 現在のスクロール位置からヘッダー分を引き、現在の倍率で割って日数を算出
-      // これにより「相対的な位置（日数）」を保存できる
       const currentDays = Math.max(0, (scrollTop - HEADER_HEIGHT) / zoom);
       scrollTargetDaysRef.current = currentDays;
     }
   };
-
-  // --- Handlers ---
 
   const handleZoomIn = () => {
     saveCurrentScrollPosition();
@@ -315,7 +307,6 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden">
-      {/* Page Header */}
       <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
         <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
           <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">Chronicle Map</h1>
@@ -419,7 +410,7 @@ export default function App() {
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           
-          <div className="absolute inset-0 pr-32 pl-4">
+          <div className="absolute inset-0">
             <div className="relative w-full h-full">
               
               <ConnectionLayer events={events} visibleEvents={visibleEvents} getDateY={getDateY} />
@@ -456,8 +447,6 @@ export default function App() {
     </div>
   );
 }
-
-// --- Sub Components ---
 
 const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear: number; endYear: number }) => {
   const years = [];
@@ -548,9 +537,16 @@ const ConnectionLayer = ({
     return () => observer.disconnect();
   }, [visibleEvents, width]);
 
+  // デバイス幅を取得してカード幅を決定
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const cardWidth = isMobile ? CARD_WIDTH_MOBILE : CARD_WIDTH_PC;
+
+  // 0% -> 左端 (0px), 100% -> 右端 (ContainerWidth - CardWidth)
   const getX = (xOffset: number) => {
     if (width === 0) return 0;
-    return width * (xOffset / 100);
+    const availableWidth = width - cardWidth;
+    // カード中心の座標を返す
+    return (availableWidth * (xOffset / 100)) + (cardWidth / 2);
   };
 
   const isVisible = (id: string) => visibleEvents.some(e => e.id === id);
@@ -642,9 +638,12 @@ const DraggableEventCard = ({
     const cardElement = document.getElementById(`card-${event.id}`);
     const parentColumn = cardElement?.parentElement;
     
+    // カード幅の取得（レスポンシブ）
+    const cardWidth = cardElement?.offsetWidth || CARD_WIDTH_PC;
+
     if (parentColumn) {
-      // 修正: ConnectionLayerと同じく、親コンテナの幅をそのまま使う
-      colWidthRef.current = parentColumn.clientWidth; 
+      // 親の幅からカードの幅を引いたものが「移動可能距離」
+      colWidthRef.current = parentColumn.clientWidth - cardWidth;
     }
 
     setIsDragging(true);
@@ -723,17 +722,30 @@ const DraggableEventCard = ({
       className={`absolute flex flex-col items-center select-none transition-shadow touch-manipulation ${getZIndex()} ${!isLocked ? 'cursor-grab' : ''} w-40 md:w-60`}
       style={{ 
         top, 
-        left: `${currentX}%`,
-        transform: 'translateX(-50%)', 
+        // インラインスタイルからはleftを削除し、内部styleタグで制御
       }}
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
     >
+      {/* widthとleftをstyleタグで明示的に指定して計算を合わせる */}
+      <style>{`
+        #card-${event.id} {
+          left: calc((100% - 160px) * ${currentX / 100});
+        }
+        @media (min-width: 768px) {
+          #card-${event.id} {
+            left: calc((100% - 240px) * ${currentX / 100});
+          }
+        }
+      `}</style>
+
       <div className={`card-inner w-full rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative ${colorStyle.class} ${colorStyle.bgClass} ${
         isDragging 
           ? 'shadow-xl' 
           : 'shadow-md hover:shadow-lg'
-      } ${!isLocked ? 'ring-2 ring-yellow-400 ring-offset-2' : ''}`}>
+      } ${!isLocked ? 'ring-2 ring-yellow-400 ring-offset-2' : ''}`}
+        // マウスイベント・タッチイベントはここで受け取る
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+      >
         
         <div 
           className="absolute -top-3 -right-3 bg-white border border-slate-200 rounded-full p-1.5 shadow-sm cursor-pointer hover:bg-slate-50 z-50"
@@ -774,8 +786,8 @@ const DraggableEventCard = ({
         {!isLocked && <div className="w-8 md:w-10 h-1 bg-yellow-400/50 rounded-full mx-auto" />}
       </div>
 
-      <div className={`w-3 h-3 bg-white border-2 rounded-full absolute -top-1.5 shadow-sm ${colorStyle.class}`} />
-      <div className={`w-3 h-3 bg-white border-2 rounded-full absolute -bottom-1.5 left-1/2 -translate-x-1/2 shadow-sm z-30 pointer-events-none ${colorStyle.class}`} />
+      <div className={`w-3 h-3 bg-white border-2 rounded-full absolute -top-1.5 shadow-sm ${colorStyle.class}`} style={{left: '50%', transform: 'translateX(-50%)'}} />
+      <div className={`w-3 h-3 bg-white border-2 rounded-full absolute -bottom-1.5 left-1/2 -translate-x-1/2 shadow-sm z-30 pointer-events-none ${colorStyle.class}`} style={{left: '50%', transform: 'translateX(-50%)'}} />
     </div>
   );
 };
