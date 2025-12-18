@@ -5,8 +5,13 @@
     "description": "全ての始まりとされる出来事/主旋律・裏音",
     "date": "2009-01-03",
     "category": "technique",
-    "links": [],
-    "xOffset": 18.188479594624805
+    "links": [
+      {
+        "targetId": "58231d19-ed53-493a-8709-444e1b32036b",
+        "color": "#ff0000"
+      }
+    ],
+    "xOffset": 49.65399683600411
   },
   {
     "id": "2",
@@ -21,7 +26,7 @@
       }
     ],
     "url": "https://www.nicovideo.jp/watch/sm28843798",
-    "xOffset": 20.48353577253947
+    "xOffset": 21.56112197943602
   },
   {
     "id": "3",
@@ -50,7 +55,7 @@
       }
     ],
     "url": "https://www.nicovideo.jp/watch/sm25349251",
-    "xOffset": 80.14845541783619
+    "xOffset": 86.29069679714654
   },
   {
     "id": "d2d9ab08-cfa2-476f-8042-9fa4ea79b5b4",
@@ -58,9 +63,14 @@
     "description": "新福島",
     "date": "2017-04-01",
     "category": "technique",
-    "links": [],
+    "links": [
+      {
+        "targetId": "b8218158-3ad6-4393-a702-e27341cfbc37",
+        "color": "#ff0000"
+      }
+    ],
     "url": "https://www.nicovideo.jp/watch/sm30961528",
-    "xOffset": 85.66909515663151
+    "xOffset": 71.22943998421772
   },
   {
     "id": "b06027a7-b56a-4068-ad13-9431016f56d3",
@@ -80,6 +90,18 @@
       {
         "targetId": "d3f01704-5bfd-4e79-8ba2-6c5b00ebe2a5",
         "color": "#888888"
+      },
+      {
+        "targetId": "e97bfbae-00c5-452e-a4e5-dc6dde0df357",
+        "color": "#888888"
+      },
+      {
+        "targetId": "25e3c869-aca1-41b0-9b69-54410cbb7fc4",
+        "color": "#888888"
+      },
+      {
+        "targetId": "7a143d82-51de-4320-a597-e1038b0efdfa",
+        "color": "#888888"
       }
     ],
     "url": "https://youtu.be/nTBtCBQZMVM?si=CpUV-Owh71_E9a_U",
@@ -93,7 +115,7 @@
     "category": "technique",
     "links": [],
     "url": "https://youtu.be/BYNKF-j4iH0?si=CFOFPrcl3s8HDujp",
-    "xOffset": 25.744305621103354
+    "xOffset": 16.800340103861977
   },
   {
     "id": "5ebd1acd-fab8-482c-ab25-17d5d3f6e9e3",
@@ -102,7 +124,7 @@
     "date": "2019-03-02",
     "category": "technique",
     "links": [],
-    "xOffset": 62.66823153414972,
+    "xOffset": 94.24150739621868,
     "url": "https://youtu.be/Ux23Jh-9GoA?si=opLtsXHt1kM6lxEH"
   },
   {
@@ -112,7 +134,7 @@
     "date": "2018-05-03",
     "category": "technique",
     "links": [],
-    "xOffset": 36.09520024507976,
+    "xOffset": 45.79347610714873,
     "url": "https://youtu.be/Vat_H2YjabU?si=-WKsfxLfoLDyfpoH"
   },
   {
@@ -137,7 +159,7 @@
     "date": "2017-10-10",
     "category": "technique",
     "links": [],
-    "xOffset": 46.48293963254593,
+    "xOffset": 34.41397411530455,
     "url": "https://youtu.be/NQlU3pV92Jo?si=7slqWn_xccBwgUUL"
   },
   {
@@ -167,7 +189,7 @@
     "date": "2021-01-11",
     "category": "technique",
     "links": [],
-    "xOffset": 29.96845425867508,
+    "xOffset": 51.19690253453715,
     "url": "https://youtu.be/xj88dPmTsKc?si=JJZ0XJ1UnZMz65rj"
   },
   {
@@ -177,7 +199,7 @@
     "date": "2023-08-10",
     "category": "technique",
     "links": [],
-    "xOffset": 35.9621451104101,
+    "xOffset": 39.30266235178941,
     "url": "https://youtu.be/jLLVOQ63_lY?si=GvI2v_gCnAZXwutQ"
   },
   {
@@ -187,7 +209,7 @@
     "date": "2023-06-24",
     "category": "technique",
     "links": [],
-    "xOffset": 79.49526813880126,
+    "xOffset": 86.49957848362887,
     "url": "https://youtu.be/RnK8r5PapG8?si=gzCEgRgY2ggcXzAL"
   },
   {
@@ -197,7 +219,7 @@
     "date": "2021-08-09",
     "category": "technique",
     "links": [],
-    "xOffset": 51.0498687664042,
+    "xOffset": 73.46366186985247,
     "url": "https://youtu.be/pgnaK-kr9cA?si=dJxx7jKBg1aSnuzK"
   },
   {
@@ -207,7 +229,7 @@
     "date": "2025-02-11",
     "category": "technique",
     "links": [],
-    "xOffset": 92.74447949526814,
+    "xOffset": 25.610858805612963,
     "url": "https://youtu.be/PmBP8KAI1ts?si=3K0sSNHGaKidjjtY"
   },
   {
@@ -217,7 +239,7 @@
     "date": "2022-11-23",
     "category": "technique",
     "links": [],
-    "xOffset": 50,
+    "xOffset": 28.55603448275862,
     "url": "https://youtu.be/z4AnNEde3uU?si=dL5MCrlTti6823hH"
   },
   {
@@ -227,17 +249,17 @@
     "date": "2022-03-30",
     "category": "technique",
     "links": [],
-    "xOffset": 37.01171875,
+    "xOffset": 26.34361530172414,
     "url": "https://youtu.be/2PduYajJ3FU?si=cljl7G1-5sVxt3x3"
   },
   {
     "id": "150140b4-84be-43e9-aabf-bd7b553053f7",
     "title": "《日時不詳》弟者のSCARLET IT DIE",
-    "description": "正確な投稿日時不明, 日付はReUp",
-    "date": "2021-07-11",
+    "description": "正確な投稿日時不明, 暫定版として「SCARLET_DAJEB-7日」を採用",
+    "date": "2018-01-11",
     "category": "technique",
     "links": [],
-    "xOffset": 6.220472440944875,
+    "xOffset": 10.530817268531084,
     "url": "https://youtu.be/mtd1E3EutJ8?si=jOw9CeiJaAecIFlU"
   },
   {
@@ -247,7 +269,7 @@
     "date": "2024-03-21",
     "category": "technique",
     "links": [],
-    "xOffset": 76,
+    "xOffset": 18.995689655172413,
     "url": "https://www.nicovideo.jp/watch/sm43553422"
   },
   {
@@ -257,7 +279,404 @@
     "date": "2019-03-20",
     "category": "technique",
     "links": [],
-    "xOffset": 44.69816272965879,
+    "xOffset": 35.969714453796726,
     "url": "https://youtu.be/AEPMij4MpZE?si=xB_wEox2rGHt4NrJ"
+  },
+  {
+    "id": "e97bfbae-00c5-452e-a4e5-dc6dde0df357",
+    "title": " すーぱータイタツテクニック",
+    "description": "",
+    "date": "2020-05-10",
+    "category": "technique",
+    "links": [],
+    "xOffset": 40.40948275862069,
+    "url": "https://youtu.be/FGzJpdXTSDY?si=DWN4QPZj7uJFZ8XY"
+  },
+  {
+    "id": "58231d19-ed53-493a-8709-444e1b32036b",
+    "title": "冷やし土下座",
+    "description": "冷やし○○シリーズ",
+    "date": "2010-10-17",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "2",
+        "color": "#ff0000"
+      },
+      {
+        "targetId": "cfb29323-0849-4d6e-a1b6-ac81ff8c933a",
+        "color": "#00b700"
+      }
+    ],
+    "xOffset": 50
+  },
+  {
+    "id": "b67c929b-d497-4e7b-8378-6d861347b36f",
+    "title": "SHITE KINE",
+    "description": "正式名称は「あかぞねがっさくのたんぴん」だが便宜上こちらで記載",
+    "date": "2020-05-13",
+    "category": "technique",
+    "links": [],
+    "xOffset": 87.17672413793105,
+    "url": "https://youtu.be/VREhI3kOHkA?si=Yiw_XcIGZvEpnKlr"
+  },
+  {
+    "id": "7a010229-1cfd-4c9e-ac2c-4d951516878a",
+    "title": "YOUKAI FamiMa",
+    "description": "",
+    "date": "2017-07-08",
+    "category": "technique",
+    "links": [],
+    "xOffset": 27.47844827586207,
+    "url": "https://youtu.be/b6pGIZ9Z02E?si=QAEiHr960BRLwvLQ"
+  },
+  {
+    "id": "b8218158-3ad6-4393-a702-e27341cfbc37",
+    "title": "ISU ZONE",
+    "description": "",
+    "date": "2017-07-24",
+    "category": "technique",
+    "links": [],
+    "xOffset": 95.15086206896552,
+    "url": "https://youtu.be/6IqYVAWZ-x8?si=LaMQe40Ywv-Kl5lt"
+  },
+  {
+    "id": "7d18cdfb-c520-4905-a0e8-13a12dda0032",
+    "title": " RED ZONEを一瞬で作って簡単ガチバトル！！",
+    "description": "",
+    "date": "2017-08-14",
+    "category": "technique",
+    "links": [],
+    "xOffset": 76.29310344827587,
+    "url": "https://youtu.be/S59wzcABXx8?si=P2ptCKKIj9Vzlkcz"
+  },
+  {
+    "id": "f034ad24-1d10-434e-9ca7-a4d62731f046",
+    "title": "RED GIMONE",
+    "description": "デンターの情報求む",
+    "date": "2018-04-25",
+    "category": "technique",
+    "links": [],
+    "xOffset": 64.6551724137931,
+    "url": "https://youtu.be/VC140_xt-r4?si=GIiIe9CkzUVtCGhc"
+  },
+  {
+    "id": "26845b6c-9573-41b5-b7d8-fa2323384b18",
+    "title": "MASAI ZONE",
+    "description": "",
+    "date": "2017-09-17",
+    "category": "technique",
+    "links": [],
+    "xOffset": 52.80172413793103,
+    "url": "https://youtu.be/WkcPo5IWHDY?si=tUGqb6MP-5gezk9w"
+  },
+  {
+    "id": "12c21802-ad32-4c05-b223-88b5a7548d62",
+    "title": "《日時不詳》覚醒_ZONE",
+    "description": "現在は「見えないし触れないZONE-7日」を仮日時として採用",
+    "date": "2017-10-11",
+    "category": "technique",
+    "links": [],
+    "xOffset": 8.836206896551728,
+    "url": "https://youtu.be/eJ5GKv595SI?si=KBMP-pQK1bYpNeMf"
+  },
+  {
+    "id": "fc5cf118-2d5f-4bd2-86e6-2b4e3d2cb7a3",
+    "title": " 【ドッキリ】家の中全部ローションまみれでもRED ZONE行けるもん！！",
+    "description": "",
+    "date": "2018-08-26",
+    "category": "technique",
+    "links": [],
+    "xOffset": 25.10775862068965,
+    "url": "https://youtu.be/D23CN_5hKvg?si=qYG5uG6YxUBBuUQZ"
+  },
+  {
+    "id": "e19fb685-c331-4a94-a422-f607e68655d5",
+    "title": "【kouichitv】オロロロテクニック",
+    "description": "",
+    "date": "2018-09-27",
+    "category": "technique",
+    "links": [],
+    "xOffset": 75.64655172413794,
+    "url": "https://youtu.be/NdY75GcdZYo?si=BHBy3SBOUR9mf2fA"
+  },
+  {
+    "id": "0e682500-32fd-4da2-9dc0-1bc6ac40a570",
+    "title": "ウィンガーディアム・レビオサー",
+    "description": "",
+    "date": "2019-05-22",
+    "category": "technique",
+    "links": [],
+    "xOffset": 14.547413793103448,
+    "url": "https://youtu.be/lIgAjk5HO9c?si=cLaiTTbmbvUgdmkj"
+  },
+  {
+    "id": "1369c26f-8d9d-4ef1-9065-85783a350a28",
+    "title": "いろいろあるやぁないですか～(RED ZONE)",
+    "description": "",
+    "date": "2021-05-03",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "3bcc265b-d51b-4581-beed-bff0deadfcca",
+        "color": "#c80000"
+      }
+    ],
+    "xOffset": 28.879310344827584,
+    "url": "https://youtu.be/9zFktN4kFpw?si=leV6yLLV1h-fyLxf"
+  },
+  {
+    "id": "429d1b49-501d-42cf-bb76-ba1d13dfe7d4",
+    "title": "地球が爆発していくテクニック",
+    "description": "",
+    "date": "2019-08-10",
+    "category": "technique",
+    "links": [],
+    "xOffset": 81.57327586206897,
+    "url": "https://youtu.be/xG0cawxwcDE?si=6nK_Y9SZf7nQfRTy"
+  },
+  {
+    "id": "f2a1da1b-d78a-43ec-8402-0e919b49fbf2",
+    "title": "えっ",
+    "description": "",
+    "date": "2020-06-05",
+    "category": "technique",
+    "links": [],
+    "xOffset": 17.24137931034483,
+    "url": "https://youtu.be/xsUJSsYvU1k?si=OYG9GEIRj1sr7VdA"
+  },
+  {
+    "id": "2a3c8067-3c23-4be1-8e13-0cbe5f96c328",
+    "title": "AMONGUS",
+    "description": "",
+    "date": "2023-08-20",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "76aa5525-d3e6-46d2-8657-2c7e4ee03946",
+        "color": "#c80000"
+      }
+    ],
+    "xOffset": 60.560344827586206,
+    "url": "https://youtu.be/12DJeHWccUo?si=PqsfbOJDoH4zrb4n"
+  },
+  {
+    "id": "3bcc265b-d51b-4581-beed-bff0deadfcca",
+    "title": "Retrospecter ”あ！” Technique",
+    "description": "",
+    "date": "2021-07-12",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "2a3c8067-3c23-4be1-8e13-0cbe5f96c328",
+        "color": "#c80000"
+      }
+    ],
+    "xOffset": 48.060344827586206,
+    "url": "https://youtu.be/l_TntCKqklU?si=MQYYNSxG0QuiaS56"
+  },
+  {
+    "id": "76aa5525-d3e6-46d2-8657-2c7e4ee03946",
+    "title": "領域展開 無量空処",
+    "description": "",
+    "date": "2024-01-14",
+    "category": "technique",
+    "links": [],
+    "xOffset": 60.88362068965517,
+    "url": "https://youtu.be/Kmu9Mpz61wM?si=HMWX9k0oNfN6nbuh"
+  },
+  {
+    "id": "fef464b4-87ef-4d53-bd3f-afa078ac438d",
+    "title": "虎徹テクニック",
+    "description": "",
+    "date": "2018-11-01",
+    "category": "technique",
+    "links": [],
+    "xOffset": 49.24568965517241,
+    "url": "https://youtu.be/g1mwO14lbNY?si=VJp7aj57hmahOMcP"
+  },
+  {
+    "id": "2f86a540-1517-436f-af65-3f5737a64163",
+    "title": "ちーっす てくにっく",
+    "description": "",
+    "date": "2019-02-03",
+    "category": "technique",
+    "links": [],
+    "xOffset": 65.62499999999999,
+    "url": "https://youtu.be/BWvI-kJu15k?si=9QamhDNJYCHwkNtw"
+  },
+  {
+    "id": "3dfb8f6e-3f1d-4a44-a4e0-f44bd11af61e",
+    "title": "《日時不詳》車テクニック",
+    "description": "暫定版として「電車テクニック-7日」",
+    "date": "2019-08-29",
+    "category": "technique",
+    "links": [],
+    "xOffset": 7.650862068965517,
+    "url": "https://youtu.be/Kk9AnPpgzBM?si=Qqy4EwPNUU03lwBy"
+  },
+  {
+    "id": "25e3c869-aca1-41b0-9b69-54410cbb7fc4",
+    "title": "時間の終わりにのばまんテクニック",
+    "description": "",
+    "date": "2024-09-15",
+    "category": "technique",
+    "links": [],
+    "xOffset": 75,
+    "url": "https://youtu.be/mDKxJ-Xy8nk?si=A1R67HiTDwgzrZ9E"
+  },
+  {
+    "id": "d323f1c1-0974-4d58-8f72-8d8634abd23e",
+    "title": "時間の終わりにどこでもテクニック",
+    "description": "",
+    "date": "2022-03-22",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "25e3c869-aca1-41b0-9b69-54410cbb7fc4",
+        "color": "#454545"
+      }
+    ],
+    "xOffset": 56.89655172413793,
+    "url": "https://youtu.be/21NoPktVNkk?si=-CRSYr_zTR6OelNd"
+  },
+  {
+    "id": "559d3370-3b9c-42f1-bb5a-3a7a7223f4e0",
+    "title": "Hifumi Technique",
+    "description": "",
+    "date": "2023-08-04",
+    "category": "technique",
+    "links": [],
+    "xOffset": 15.84051724137931,
+    "url": "https://youtu.be/5wE56jasHyw?si=d6LZNfNfCeZU8czI"
+  },
+  {
+    "id": "7a1fd3ef-7743-4d9d-8dd2-1d2ec88a3ca3",
+    "title": " ホシノテクニック",
+    "description": "",
+    "date": "2023-12-09",
+    "category": "technique",
+    "links": [],
+    "xOffset": 32.866379310344826,
+    "url": "https://youtu.be/-L19mDuFpQQ?si=oXBpQR5d5AiLn3aj"
+  },
+  {
+    "id": "617926b0-0518-4dd4-a115-08255f4c859a",
+    "title": "テクニック単作シリーズ",
+    "description": "正式タイトルは「テクニック合作単品」",
+    "date": "2021-09-18",
+    "category": "technique",
+    "links": [],
+    "xOffset": 19.719827586206897,
+    "url": "https://youtu.be/bZkacO5cr4A?si=t0gCtMeh7SO8-cHy"
+  },
+  {
+    "id": "4552897e-5511-46b5-9fb2-9a6735298a41",
+    "title": "ゆっくりとテクニック",
+    "description": "",
+    "date": "2019-04-10",
+    "category": "technique",
+    "links": [],
+    "xOffset": 73.8146551724138,
+    "url": "https://youtu.be/MjLNEdwguV4?si=WT-WOiLsPnc1hHzt"
+  },
+  {
+    "id": "c1fc27f8-99b2-40b5-ae3a-929513991bd3",
+    "title": "協tyo性",
+    "description": "",
+    "date": "2020-08-19",
+    "category": "technique",
+    "links": [],
+    "xOffset": 36.96120689655172,
+    "url": "https://youtu.be/4ddUY1YMa84?si=qcFLbtzKACLe_uVM"
+  },
+  {
+    "id": "545acb0b-e347-4dcc-9dab-be51e08210fb",
+    "title": "妖怪悪魔",
+    "description": "",
+    "date": "2019-05-09",
+    "category": "technique",
+    "links": [],
+    "xOffset": 51.616379310344826,
+    "url": "https://youtu.be/5rrjgGMMkKk?si=fq66__AlN87stkj7"
+  },
+  {
+    "id": "5b0f6bcf-056f-4f5f-b8fd-19ae898d3237",
+    "title": "【超巨大】１０倍ハリセンでツッコンだらRED ZONEが生まれるはず！！【Remake】",
+    "description": "",
+    "date": "2020-09-14",
+    "category": "technique",
+    "links": [],
+    "xOffset": 86.42241379310344,
+    "url": "https://youtu.be/FYFXEvjdoJI?si=PgIbGZrRZrvH7lC-"
+  },
+  {
+    "id": "6563a6a5-2192-49d1-82fc-67e5f35a2d58",
+    "title": "《日時不詳》歩いてゆこうテクニック",
+    "description": "暫定版として「give it back-7日」を採用",
+    "date": "2021-01-10",
+    "category": "technique",
+    "links": [],
+    "xOffset": 10.991379310344826
+  },
+  {
+    "id": "6b4dd446-0454-4dfb-a75a-29766cef9d06",
+    "title": "ひなこがマジでRED ZONE",
+    "description": "さらに元ネタがある気がする",
+    "date": "2018-02-04",
+    "category": "technique",
+    "links": [],
+    "xOffset": 53.23275862068966,
+    "url": "https://youtu.be/9EDy3IdwI0U?si=o0GeU5JzrjTEIVKB"
+  },
+  {
+    "id": "c00309db-19a5-441f-99bb-5db17239ba40",
+    "title": "あぁ！RED_ZONEだ！",
+    "description": "",
+    "date": "2019-07-14",
+    "category": "technique",
+    "links": [],
+    "xOffset": 35.12931034482759,
+    "url": "https://youtu.be/0PGDSVBqdXQ?si=k0ZjXl3Dka7S4B2j"
+  },
+  {
+    "id": "6ea97e69-5b51-49d7-aa5e-839505ee8d0c",
+    "title": "受験終わりました",
+    "description": "",
+    "date": "2021-03-10",
+    "category": "technique",
+    "links": [],
+    "xOffset": 88.6853448275862,
+    "url": "https://youtu.be/gaaVs1ta_TQ?si=oANfoBjJmZlnQ6e3"
+  },
+  {
+    "id": "c2a2754c-6c23-48ff-97c4-b28374527bd0",
+    "title": "悠香テクニック",
+    "description": "正式タイトルは「あかぞねがっさくのたんぴん」",
+    "date": "2019-05-30",
+    "category": "technique",
+    "links": [],
+    "xOffset": 93.64224137931035,
+    "url": "https://youtu.be/W-Asu7PaeBQ?si=OidBK5ZnsKs4yS5K"
+  },
+  {
+    "id": "2894dfde-c102-48dc-b564-c455bdad5731",
+    "title": "Kamulice Zone",
+    "description": "",
+    "date": "2019-08-09",
+    "category": "technique",
+    "links": [],
+    "xOffset": 56.68103448275862,
+    "url": "https://youtu.be/Seje9VPpnEI?si=tKZPABJ7BT4XV7je"
+  },
+  {
+    "id": "7a143d82-51de-4320-a597-e1038b0efdfa",
+    "title": "恋アスのロケットテクニック",
+    "description": "",
+    "date": "2020-06-07",
+    "category": "technique",
+    "links": [],
+    "xOffset": 64.22413793103448,
+    "url": "https://youtu.be/-XW1wLeqYTQ?si=D8XEyRrocDOAjNKR"
   }
 ]
