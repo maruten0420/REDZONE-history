@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
-import { Plus, ZoomIn, ZoomOut, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock } from 'lucide-react';
+import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown } from 'lucide-react';
 
 // --- Types ---
 
 type Category = 'technique' | 'author' | 'other';
+type BorderColorType = 'default' | 'red' | 'blue';
 
 interface LinkData {
   targetId: string;
@@ -19,6 +20,7 @@ interface EventData {
   url?: string;
   links: LinkData[];
   xOffset: number; // 0 to 100 (percentage within column)
+  borderColor?: BorderColorType; // 新機能: 枠の色
 }
 
 // --- Constants & Helpers ---
@@ -35,6 +37,12 @@ const CATEGORIES: { key: Category; label: string; color: string }[] = [
   { key: 'other', label: 'その他', color: 'bg-gray-50 border-gray-200' },
 ];
 
+const BORDER_OPTIONS: { key: BorderColorType; label: string; class: string; bgClass: string }[] = [
+  { key: 'default', label: '標準 (灰)', class: 'border-slate-300', bgClass: 'bg-white' },
+  { key: 'red', label: '日時不詳 (赤)', class: 'border-red-500', bgClass: 'bg-red-50' },
+  { key: 'blue', label: '予備 (青)', class: 'border-blue-500', bgClass: 'bg-blue-50' },
+];
+
 const DEFAULT_EVENTS: EventData[] = [];
 
 // --- Components ---
@@ -44,17 +52,13 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [hasLocalData, setHasLocalData] = useState(false);
 
-  // パス生成ヘルパー（import.metaを使わない安全な実装に変更）
+  // パス生成ヘルパー
   const getJsonPath = () => {
-    // 現在のパスを見て、GitHub Pages上かローカルかを判断
     const path = window.location.pathname;
     const repoName = 'REDZONE-history';
-    
-    // パスにリポジトリ名が含まれていれば本番環境とみなす
     if (path.includes(`/${repoName}/`)) {
       return `/${repoName}/timeline_data.json`;
     }
-    // それ以外（ローカル開発など）はルートパス
     return '/timeline_data.json';
   };
 
@@ -73,7 +77,8 @@ export default function App() {
           const data = await response.json();
           const fixedData = data.map((item: any) => ({
             ...item, 
-            xOffset: item.xOffset ?? 50
+            xOffset: item.xOffset ?? 50,
+            borderColor: item.borderColor ?? 'default' // 既存データ用にデフォルト値を設定
           }));
           setEvents(fixedData);
         } else {
@@ -126,7 +131,16 @@ export default function App() {
 
   // --- Handlers ---
 
-  const handleZoomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Zoom Controls
+  const handleZoomIn = () => {
+    setZoom(prev => Math.min(2.5, +(prev + 0.1).toFixed(1)));
+  };
+
+  const handleZoomOut = () => {
+    setZoom(prev => Math.max(0.1, +(prev - 0.1).toFixed(1)));
+  };
+
+  const handleZoomSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setZoom(parseFloat(e.target.value));
   };
 
@@ -139,6 +153,7 @@ export default function App() {
       category: activeCategory,
       links: [],
       xOffset: 50,
+      borderColor: 'default'
     };
     setEditingEvent(newEvent);
     setIsModalOpen(true);
@@ -193,7 +208,11 @@ export default function App() {
       try {
         const json = JSON.parse(event.target?.result as string);
         if (Array.isArray(json)) {
-          const fixedData = json.map(item => ({...item, xOffset: item.xOffset ?? 50}));
+          const fixedData = json.map(item => ({
+            ...item, 
+            xOffset: item.xOffset ?? 50,
+            borderColor: item.borderColor ?? 'default'
+          }));
           setEvents(fixedData);
         } else {
           alert('Invalid JSON format');
@@ -218,7 +237,8 @@ export default function App() {
         const data = await response.json();
         const fixedData = data.map((item: any) => ({
           ...item, 
-          xOffset: item.xOffset ?? 50
+          xOffset: item.xOffset ?? 50,
+          borderColor: item.borderColor ?? 'default'
         }));
         setEvents(fixedData);
         localStorage.removeItem('timeline-data'); 
@@ -246,14 +266,20 @@ export default function App() {
     return <div className="h-screen flex items-center justify-center text-slate-500">Loading history...</div>;
   }
 
+  // Zoom options for dropdown
+  const zoomOptions = [];
+  for (let i = 0.1; i <= 2.5; i += 0.1) {
+    zoomOptions.push(parseFloat(i.toFixed(1)));
+  }
+
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden">
       {/* Page Header */}
-      <header className="flex-none border-b border-slate-200 bg-white p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-4">
-        <div className="flex items-center gap-6">
-          <h1 className="text-xl font-bold text-slate-700 tracking-tight hidden md:block">Chronicle Map</h1>
+      <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
+        <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
+          <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">Chronicle Map</h1>
           
-          <div className="flex bg-slate-100 rounded-lg p-1 border border-slate-200 overflow-x-auto max-w-full">
+          <div className="flex bg-slate-100 rounded-lg p-1 border border-slate-200 overflow-x-auto">
             {CATEGORIES.map(cat => (
               <button
                 key={cat.key}
@@ -269,24 +295,38 @@ export default function App() {
             ))}
           </div>
 
-          <div className="flex items-center gap-2 bg-slate-100 px-3 py-1 rounded border border-slate-200 hidden sm:flex">
-            <ZoomOut size={16} className="text-slate-500" />
-            <input
-              type="range"
-              min="0.1"
-              max="2.5"
-              step="0.1"
-              value={zoom}
-              onChange={handleZoomChange}
-              className="w-24 md:w-32 accent-blue-600 cursor-pointer"
-            />
-            <ZoomIn size={16} className="text-slate-500" />
-            <span className="text-xs text-slate-500 w-8 text-right hidden sm:inline-block">{zoom.toFixed(1)}x</span>
+          {/* Zoom Controls (Button + Select Style) */}
+          <div className="flex items-center bg-slate-100 rounded border border-slate-200">
+            <button 
+              onClick={handleZoomOut}
+              className="p-1.5 hover:bg-slate-200 text-slate-600 rounded-l transition-colors"
+              title="縮小"
+            >
+              <Minus size={14} />
+            </button>
+            <div className="relative border-l border-r border-slate-200 bg-white h-full flex items-center">
+              <select 
+                value={zoom} 
+                onChange={handleZoomSelect}
+                className="appearance-none bg-transparent pl-2 pr-6 py-1 text-xs font-mono text-center w-16 focus:outline-none cursor-pointer"
+              >
+                {zoomOptions.map(z => (
+                  <option key={z} value={z}>x{z.toFixed(1)}</option>
+                ))}
+              </select>
+              <ChevronDown size={10} className="absolute right-1 text-slate-400 pointer-events-none" />
+            </div>
+            <button 
+              onClick={handleZoomIn}
+              className="p-1.5 hover:bg-slate-200 text-slate-600 rounded-r transition-colors"
+              title="拡大"
+            >
+              <Plus size={14} />
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 ml-auto">
-          {/* リセットボタン */}
+        <div className="flex items-center gap-2 ml-auto w-full md:w-auto justify-end border-t md:border-t-0 pt-2 md:pt-0 border-slate-100">
           <button 
             onClick={handleResetToOfficial}
             className="flex items-center gap-1 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 rounded transition-colors"
@@ -295,7 +335,6 @@ export default function App() {
             <RotateCcw size={16} />
           </button>
 
-          {/* ローカル復元ボタン */}
           {hasLocalData && (
             <button 
               onClick={handleRestoreLocal}
@@ -335,28 +374,14 @@ export default function App() {
           className="relative w-full mx-auto bg-white shadow-xl origin-top min-h-full"
           style={{ height: timelineHeight }}
         >
-          {/* Background Grid & Years */}
-          <BackgroundGrid 
-            zoom={zoom} 
-            startYear={START_YEAR} 
-            endYear={END_YEAR} 
-          />
+          <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
+          <ConnectionLayer events={events} visibleEvents={visibleEvents} getDateY={getDateY} />
 
-          {/* Connection Lines Layer */}
-          <ConnectionLayer 
-            events={events} 
-            visibleEvents={visibleEvents} 
-            getDateY={getDateY} 
-          />
-
-          {/* Single Column Container */}
           <div className="absolute inset-0">
-            {/* Column Header */}
             <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 p-2 text-center font-bold text-slate-600 shadow-sm">
               {CATEGORIES.find(c => c.key === activeCategory)?.label}
             </div>
             
-            {/* Events */}
             {visibleEvents.map((event) => (
               <DraggableEventCard
                 key={event.id}
@@ -542,6 +567,9 @@ const DraggableEventCard = ({
   const startOffsetRef = useRef<number>(0);
   const colWidthRef = useRef<number>(0);
 
+  // Determine styles based on border color setting
+  const colorStyle = BORDER_OPTIONS.find(c => c.key === (event.borderColor || 'default')) || BORDER_OPTIONS[0];
+
   useEffect(() => {
     if (!isDragging) {
       setCurrentX(event.xOffset);
@@ -616,7 +644,7 @@ const DraggableEventCard = ({
       id={`card-${event.id}`}
       className={`absolute flex flex-col items-center select-none transition-shadow touch-none ${
         isDragging ? 'cursor-grabbing z-50 scale-105' : 'cursor-grab hover:z-30 z-20'
-      } w-40 md:w-60`} // ← レスポンシブ幅指定
+      } w-40 md:w-60`}
       style={{ 
         top, 
         left: `${currentX}%`,
@@ -625,13 +653,13 @@ const DraggableEventCard = ({
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
     >
-      <div className={`card-inner w-full bg-white rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative ${
+      <div className={`card-inner w-full rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative ${colorStyle.class} ${colorStyle.bgClass} ${
         isDragging 
-          ? 'border-blue-500 shadow-xl ring-2 ring-blue-200' 
-          : 'border-slate-300 hover:border-blue-400 shadow-md hover:shadow-lg'
+          ? 'shadow-xl' 
+          : 'shadow-md hover:shadow-lg'
       }`}>
         <div className="flex justify-between items-start mb-1.5">
-          <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
+          <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-white/50 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
           <div className="flex gap-1">
             {event.url && (
               <a 
@@ -658,11 +686,11 @@ const DraggableEventCard = ({
         
         <h3 className="font-bold text-slate-800 text-xs md:text-sm leading-tight mb-2 text-center whitespace-pre-wrap">{event.title || 'No Title'}</h3>
         
-        <div className="w-8 md:w-10 h-1 bg-slate-200 rounded-full mx-auto" />
+        <div className="w-8 md:w-10 h-1 bg-slate-300/50 rounded-full mx-auto" />
       </div>
 
-      <div className="w-3 h-3 bg-white border-2 border-slate-400 rounded-full absolute -top-1.5 shadow-sm" />
-      <div className="w-3 h-3 bg-white border-2 border-slate-400 rounded-full absolute -bottom-1.5 left-1/2 -translate-x-1/2 shadow-sm z-30 pointer-events-none" />
+      <div className={`w-3 h-3 bg-white border-2 rounded-full absolute -top-1.5 shadow-sm ${colorStyle.class}`} />
+      <div className={`w-3 h-3 bg-white border-2 rounded-full absolute -bottom-1.5 left-1/2 -translate-x-1/2 shadow-sm z-30 pointer-events-none ${colorStyle.class}`} />
     </div>
   );
 };
@@ -718,6 +746,29 @@ const EventModal = ({
         </div>
 
         <div className="p-6 overflow-y-auto flex-1 space-y-5">
+          {/* 枠色選択 */}
+          <div>
+            <label className="block text-xs font-bold text-slate-500 mb-1.5">カード枠色</label>
+            <div className="flex gap-2">
+              {BORDER_OPTIONS.map(opt => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => handleChange('borderColor', opt.key)}
+                  className={`flex-1 py-2 text-xs font-bold rounded-lg border-2 transition-all ${
+                    opt.bgClass
+                  } ${
+                    formData.borderColor === opt.key 
+                      ? `${opt.class} ring-2 ring-offset-1 ring-blue-400`
+                      : 'border-transparent hover:border-slate-200'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-500 mb-1.5">日付</label>
