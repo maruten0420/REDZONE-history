@@ -52,7 +52,6 @@ const BORDER_OPTIONS: { key: BorderColorType; label: string; class: string; bgCl
 const DEFAULT_EVENTS: EventData[] = [];
 
 // --- Global Styles for Card Positioning ---
-// JSでの計算を減らし、CSS変数とcalc()で確実に位置合わせを行うためのスタイル
 const CardStyles = () => (
   <style>{`
     .timeline-card {
@@ -84,6 +83,11 @@ export default function App() {
   const [hoveredEvent, setHoveredEvent] = useState<EventData | null>(null);
   const [highlightedConnection, setHighlightedConnection] = useState<{source: string, target: string} | null>(null);
   const [showTutorial, setShowTutorial] = useState(true);
+
+  // タイトルの設定 (React側でも念のため設定)
+  useEffect(() => {
+    document.title = "RED ZONE Chronicle Map";
+  }, []);
 
   const getJsonPath = () => {
     const path = window.location.pathname;
@@ -517,7 +521,7 @@ export default function App() {
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 pr-32 pl-4">
             <div className="relative w-full h-full">
               
               <ConnectionLayer 
@@ -805,7 +809,6 @@ const DraggableEventCard = ({
     const cardWidth = cardElement?.offsetWidth || CARD_WIDTH_PC;
 
     if (parentColumn) {
-      // 親の幅からカードの幅を引いたものが「移動可能距離」
       colWidthRef.current = parentColumn.clientWidth - cardWidth;
     }
 
@@ -990,6 +993,14 @@ const EventModal = ({
   onSave: (e: EventData) => void;
   onDelete: (id: string) => void;
 }) => {
+  // モーダル外部クリック時の処理
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    // 変更破棄の確認
+    if (confirm('編集を終了しますか？\n保存されていない変更は破棄されます。')) {
+      onClose();
+    }
+  };
+
   const [formData, setFormData] = useState<EventData>({ ...event });
 
   const handleChange = (field: keyof EventData, value: any) => {
@@ -1015,7 +1026,7 @@ const EventModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm" onClick={handleBackdropClick}>
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between p-4 border-b border-slate-200">
           <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
@@ -1115,7 +1126,6 @@ const EventModal = ({
           </div>
 
           <div className="border-t border-slate-100 pt-4">
-             {/* 横位置スライダー（微調整用） */}
              <div className="mb-4">
               <label className="block text-xs font-bold text-slate-500 mb-1.5 flex justify-between">
                 <span>横位置の微調整 (ドラッグでも可能)</span>
@@ -1146,10 +1156,11 @@ const EventModal = ({
               {formData.links.map((link, idx) => (
                 <div key={idx} className="flex gap-2 items-center bg-slate-50 p-2 rounded border border-slate-100">
                   <LinkIcon size={14} className="text-slate-400" />
+                  {/* プルダウンの幅を制限してUI崩れ防止 */}
                   <select
                     value={link.targetId}
                     onChange={(e) => handleLinkChange(idx, 'targetId', e.target.value)}
-                    className="flex-1 text-xs p-1.5 border border-slate-200 rounded bg-white"
+                    className="w-40 text-xs p-1.5 border border-slate-200 rounded bg-white truncate"
                   >
                     <option value="">接続先を選択...</option>
                     {allEvents
@@ -1160,15 +1171,16 @@ const EventModal = ({
                       </option>
                     ))}
                   </select>
+                  {/* 色選択と削除ボタンが縮小しないように shrink-0 を付与 */}
                   <input 
                     type="color" 
                     value={link.color}
                     onChange={(e) => handleLinkChange(idx, 'color', e.target.value)}
-                    className="w-8 h-7 p-0 border-0 rounded cursor-pointer"
+                    className="w-8 h-7 p-0 border-0 rounded cursor-pointer shrink-0"
                   />
                   <button 
                     onClick={() => handleRemoveLink(idx)}
-                    className="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-slate-200"
+                    className="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-slate-200 shrink-0"
                   >
                     <X size={14} />
                   </button>
