@@ -155,7 +155,7 @@
     "date": "2018-05-03",
     "category": "technique",
     "links": [],
-    "xOffset": 44.4511000759297,
+    "xOffset": 37.12377274860238,
     "url": "https://youtu.be/Vat_H2YjabU?si=-WKsfxLfoLDyfpoH",
     "borderColor": "default"
   },
@@ -232,7 +232,7 @@
   },
   {
     "id": "992e4d4b-8b18-42d2-98f0-60bbf82fb802",
-    "title": "すーぱーレディアントテクニック",
+    "title": "【合作単品】すーぱーレディアントテクニック",
     "description": "",
     "date": "2023-06-24",
     "category": "technique",
@@ -243,7 +243,7 @@
   },
   {
     "id": "d3f01704-5bfd-4e79-8ba2-6c5b00ebe2a5",
-    "title": "すーぱーたまてでテクニック",
+    "title": "すーぱーたまてでテクニック【単品】",
     "description": "",
     "date": "2021-08-09",
     "category": "technique",
@@ -393,7 +393,7 @@
     "date": "2017-08-14",
     "category": "technique",
     "links": [],
-    "xOffset": 76.29310344827587,
+    "xOffset": 78.87568603085846,
     "url": "https://youtu.be/S59wzcABXx8?si=P2ptCKKIj9Vzlkcz",
     "borderColor": "default"
   },
@@ -415,7 +415,7 @@
     "date": "2017-09-17",
     "category": "technique",
     "links": [],
-    "xOffset": 52.80172413793103,
+    "xOffset": 63.672595008801906,
     "url": "https://youtu.be/WkcPo5IWHDY?si=tUGqb6MP-5gezk9w",
     "borderColor": "default"
   },
@@ -475,7 +475,7 @@
         "color": "#c80000"
       }
     ],
-    "xOffset": 28.879310344827584,
+    "xOffset": 22.392823858341096,
     "url": "https://youtu.be/9zFktN4kFpw?si=leV6yLLV1h-fyLxf",
     "borderColor": "default"
   },
@@ -496,8 +496,13 @@
     "description": "",
     "date": "2020-06-05",
     "category": "technique",
-    "links": [],
-    "xOffset": 8.137538627556777,
+    "links": [
+      {
+        "targetId": "926a86e8-31b2-4702-9843-348e40b1a76c",
+        "color": "#ff6400"
+      }
+    ],
+    "xOffset": 22.43183292185107,
     "url": "https://youtu.be/xsUJSsYvU1k?si=OYG9GEIRj1sr7VdA",
     "borderColor": "default"
   },
@@ -529,7 +534,7 @@
         "color": "#c80000"
       }
     ],
-    "xOffset": 48.060344827586206,
+    "xOffset": 44.036320803562184,
     "url": "https://youtu.be/l_TntCKqklU?si=MQYYNSxG0QuiaS56",
     "borderColor": "default"
   },
@@ -666,7 +671,7 @@
     "date": "2019-05-09",
     "category": "technique",
     "links": [],
-    "xOffset": 47.373958215976906,
+    "xOffset": 58.31803518530944,
     "url": "https://youtu.be/5rrjgGMMkKk?si=fq66__AlN87stkj7",
     "borderColor": "default"
   },
@@ -695,7 +700,7 @@
   {
     "id": "6b4dd446-0454-4dfb-a75a-29766cef9d06",
     "title": "ひなこがマジでRED ZONE",
-    "description": "元ネタ: さとり様がマジでRED ZONE(URL，日時不明)",
+    "description": "「マジで」シリーズの元ネタがある可能性あり",
     "date": "2018-02-04",
     "category": "technique",
     "links": [],
@@ -783,13 +788,13 @@
   {
     "id": "0b395499-f821-42ab-966c-51aa092f7b50",
     "title": "REDSCARLETWRIGGLED DARKDEADYOUKAIALICE ZONE",
-    "description": "ニコニコチャートを参照\nhttps://www.nicochart.jp/watch/sm32289493",
-    "date": "2017-11-19",
+    "description": "「DOKI DOKI REDSCARLETWRIGGLEDDARKDEADYOUKAIALICE ZONE」の日時を仮採用",
+    "date": "2018-01-04",
     "category": "technique",
     "links": [],
     "xOffset": 21.857120278172907,
-    "borderColor": "default",
-    "url": "https://youtu.be/kFBlrq-MpBU?si=wf2w8720mMHq2O_W"
+    "borderColor": "red",
+    "url": "https://youtu.be/8xMcE3AZh6g?si=m-kyLnmBX9c6ij2H"
   },
   {
     "id": "432c5f64-697c-4aff-8c64-8254c7b6ba2b",
@@ -878,36 +883,112 @@
     "url": "https://x.com/END_mnst/status/937655984842981376?s=20"
   },
   {
-    "id": "faca4f14-770c-40fb-acae-4abf34aecfc7",
-    "title": "RED_ZONEの風船に棒をぶっ刺すテクニック",
-    "description": "",
-    "date": "2017-07-03",
+    "id": "50d0fd3a-ece7-4d51-a4d6-0d24c39014d3",
+    "title": "まずいテクニック",
+    "description": "削除済み・ニコニコチャートを参照",
+    "date": "2017-01-21",
     "category": "technique",
     "links": [],
-    "xOffset": 43.50571256764883,
+    "xOffset": 61.66429587482219,
     "borderColor": "default",
-    "url": "https://youtu.be/x0038v40wn0?si=ibcEMgfLzPo0qMZa"
+    "url": "https://www.nicovideo.jp/watch/sm30471747"
   },
   {
-    "id": "babad02f-9f6d-4850-9678-3dcfc9ec108c",
-    "title": "RED_ZONEで仕掛け人も超ビックリ！！？",
+    "id": "e5a7eeee-dbac-49f2-96c2-afd8151751eb",
+    "title": "エンゼルフレンチテクニック",
     "description": "",
-    "date": "2016-09-26",
+    "date": "2017-09-05",
     "category": "technique",
     "links": [],
-    "xOffset": 50,
+    "xOffset": 47.8978978978979,
     "borderColor": "default",
-    "url": "https://youtu.be/qTVkZkqmCig?si=3_3hNZvYuJhr4nT0"
+    "url": "https://youtu.be/Hi-F4lKq-yU?si=RRaPfjodhxEWLlnz"
   },
   {
-    "id": "e641650d-5f38-4a29-8165-d15e8193e1e5",
-    "title": "マサイテクニック",
+    "id": "a4998b43-1daf-4da3-989a-9f072c609b42",
+    "title": "ＲＥＤ　ＺＯＮＥ",
     "description": "",
-    "date": "2017-04-26",
+    "date": "2021-04-03",
     "category": "technique",
     "links": [],
-    "xOffset": 50,
+    "xOffset": 57.207207207207205,
     "borderColor": "default",
-    "url": "https://youtu.be/i2kmUmwfTS8?si=MapiGCPBZdDPZIkf"
+    "url": "https://youtu.be/o41yTsYyLSw?si=RJ2OZ9Xl1w1pkshl"
+  },
+  {
+    "id": "926a86e8-31b2-4702-9843-348e40b1a76c",
+    "title": "ふぇっ？",
+    "description": "",
+    "date": "2021-01-25",
+    "category": "technique",
+    "links": [],
+    "xOffset": 27.177177177177178,
+    "borderColor": "default",
+    "url": "https://youtu.be/Yr96kJaxVSE?si=NbnSYxV9Kn7Rg8Jq"
+  },
+  {
+    "id": "bf072fde-f16a-413f-aad4-0109a0d302a1",
+    "title": "Dnres eiezo",
+    "description": "",
+    "date": "2024-02-18",
+    "category": "technique",
+    "links": [],
+    "xOffset": 46.21621621621622,
+    "borderColor": "default",
+    "url": "https://youtu.be/iYh9yWeMwjE?si=Kofrt_Tm6BQrBzQS"
+  },
+  {
+    "id": "505dd54f-ded6-41cd-9bf0-b6cbf2ff393b",
+    "title": "(合作単品ら より)DEAD ANGEL",
+    "description": "",
+    "date": "2019-09-29",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "34758c47-9835-4fc7-bd2d-8f3544f42811",
+        "color": "#ff00ff"
+      }
+    ],
+    "xOffset": 77.2072072072072,
+    "borderColor": "default",
+    "url": "https://youtu.be/EW7ITsLvE_o?si=nDlpkqsOrXGlA5t0"
+  },
+  {
+    "id": "34758c47-9835-4fc7-bd2d-8f3544f42811",
+    "title": "Pristine MAR-maid Zinogre Zone",
+    "description": "",
+    "date": "2020-08-20",
+    "category": "technique",
+    "links": [],
+    "xOffset": 74.26426426426427,
+    "borderColor": "default",
+    "url": "https://youtu.be/0yYNoHK0H1w?si=12zJcoentl4fqb2R"
+  },
+  {
+    "id": "5cb8eb8e-a0dc-41e4-876b-b508c2a9f6bf",
+    "title": "シオリンのおしりん",
+    "description": "",
+    "date": "2020-12-28",
+    "category": "technique",
+    "links": [],
+    "xOffset": 100,
+    "borderColor": "default",
+    "url": "https://youtu.be/A_yarQEeGXE?si=RfC2_DKGQjfQbl0I"
+  },
+  {
+    "id": "2219c975-e4c2-4cfe-a1b5-cf5bde40fd67",
+    "title": "SATORI ZONE",
+    "description": "",
+    "date": "2017-05-22",
+    "category": "technique",
+    "links": [
+      {
+        "targetId": "6b4dd446-0454-4dfb-a75a-29766cef9d06",
+        "color": "#feb7b7"
+      }
+    ],
+    "xOffset": 43.333333333333336,
+    "borderColor": "default",
+    "url": "https://www.nicovideo.jp/watch/sm31258061"
   }
 ]
