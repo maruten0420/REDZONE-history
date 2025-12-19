@@ -805,10 +805,11 @@ const DraggableEventCard = ({
     const cardElement = document.getElementById(`card-${event.id}`);
     const parentColumn = cardElement?.parentElement;
     
-    // カード幅の取得
+    // カード幅の取得（レスポンシブ）
     const cardWidth = cardElement?.offsetWidth || CARD_WIDTH_PC;
 
     if (parentColumn) {
+      // 親の幅からカードの幅を引いたものが「移動可能距離」
       colWidthRef.current = parentColumn.clientWidth - cardWidth;
     }
 
@@ -994,7 +995,7 @@ const EventModal = ({
   onDelete: (id: string) => void;
 }) => {
   // モーダル外部クリック時の処理
-  const handleBackdropClick = (e: React.MouseEvent) => {
+  const handleBackdropClick = () => {
     // 変更破棄の確認
     if (confirm('編集を終了しますか？\n保存されていない変更は破棄されます。')) {
       onClose();
