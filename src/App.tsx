@@ -32,7 +32,7 @@ const END_DATE = new Date(`${END_YEAR}-12-31`).getTime();
 const TOTAL_DAYS = (END_DATE - START_DATE) / (1000 * 60 * 60 * 24);
 const HEADER_HEIGHT = 60; 
 
-// カード幅定数 (px)
+// カード幅定数 (px) - CSSのレスポンシブ幅と一致させる
 const CARD_WIDTH_MOBILE = 160; 
 const CARD_WIDTH_PC = 240;     
 
@@ -61,11 +61,7 @@ export default function App() {
   const scrollTargetDaysRef = useRef<number | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [hoveredEvent, setHoveredEvent] = useState<EventData | null>(null);
-  
-  // ハイライト制御用（ノードホバー時）
   const [highlightedConnection, setHighlightedConnection] = useState<{source: string, target: string} | null>(null);
-
-  // チュートリアル表示制御
   const [showTutorial, setShowTutorial] = useState(true);
 
   const getJsonPath = () => {
@@ -498,7 +494,8 @@ export default function App() {
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           
-          <div className="absolute inset-0 pr-32 pl-4">
+          {/* フル幅を使用、paddingなし */}
+          <div className="absolute inset-0">
             <div className="relative w-full h-full">
               
               <ConnectionLayer 
@@ -523,7 +520,6 @@ export default function App() {
                   onActivate={() => setActiveCardId(event.id)}
                   onHoverStart={() => setHoveredEvent(event)}
                   onHoverEnd={() => setHoveredEvent(null)}
-                  // ハイライトされた接続に関連するかどうか
                   isHighlighted={highlightedConnection ? (highlightedConnection.source === event.id || highlightedConnection.target === event.id) : false}
                 />
               ))}
@@ -544,8 +540,6 @@ export default function App() {
     </div>
   );
 }
-
-// --- Sub Components ---
 
 const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear: number; endYear: number }) => {
   const years = [];
@@ -597,7 +591,6 @@ const ConnectionLayer = ({
   const [width, setWidth] = useState(0);
   const [cardHeights, setCardHeights] = useState<Record<string, number>>({});
   
-  // 長押し判定用
   const longPressTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -641,10 +634,15 @@ const ConnectionLayer = ({
     return () => observer.disconnect();
   }, [visibleEvents, width]);
 
+  // デバイス幅を取得してカード幅を決定
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const cardWidth = isMobile ? CARD_WIDTH_MOBILE : CARD_WIDTH_PC;
+
+  // 定数を使用した計算: 0% -> 左端 (0px), 100% -> 右端 (Width - CardWidth)
   const getX = (xOffset: number) => {
     if (width === 0) return 0;
-    const availableWidth = width - 128;
-    return 16 + (availableWidth * (xOffset / 100));
+    const availableWidth = width - cardWidth;
+    return (availableWidth * (xOffset / 100)) + (cardWidth / 2);
   };
 
   const isVisible = (id: string) => visibleEvents.some(e => e.id === id);
@@ -659,7 +657,6 @@ const ConnectionLayer = ({
   };
 
   const handleTouchStartNode = (sourceId: string, targetId: string) => {
-    // 1秒長押しでハイライト
     longPressTimerRef.current = window.setTimeout(() => {
       handleStartHighlight(sourceId, targetId);
     }, 1000);
@@ -675,7 +672,6 @@ const ConnectionLayer = ({
 
   return (
     <svg ref={svgRef} className="absolute inset-0 w-full h-full z-10 overflow-visible pointer-events-none">
-      {/* pointer-events-none だと子がイベントを受け取れないので、path側で auto にする */}
       {visibleEvents.map(event => (
         event.links.map((link, i) => {
           if (!isVisible(link.targetId)) return null;
@@ -700,7 +696,7 @@ const ConnectionLayer = ({
 
           return (
             <g key={`${event.id}-${link.targetId}-${i}`} className="group">
-              {/* 当たり判定用の太く透明な線 (イベント受け取り用) */}
+              {/* 当たり判定用の太く透明な線 */}
               <path
                 d={d}
                 fill="none"
@@ -717,7 +713,7 @@ const ConnectionLayer = ({
                 d={d}
                 fill="none"
                 stroke={link.color || '#cbd5e1'}
-                strokeWidth="5" // 太くした
+                strokeWidth="5"
                 strokeOpacity="0.8"
                 strokeLinecap="round"
                 className="transition-all duration-300 group-hover:stroke-yellow-400 group-hover:stroke-opacity-100 group-hover:stroke-[6px]"
@@ -740,7 +736,7 @@ const DraggableEventCard = ({
   onActivate,
   onHoverStart, 
   onHoverEnd,
-  isHighlighted, // ハイライトフラグ
+  isHighlighted,
 }: { 
   event: EventData; 
   top: number; 
@@ -783,8 +779,11 @@ const DraggableEventCard = ({
     const cardElement = document.getElementById(`card-${event.id}`);
     const parentColumn = cardElement?.parentElement;
     
+    // カード幅の取得（レスポンシブ）
+    const cardWidth = cardElement?.offsetWidth || CARD_WIDTH_PC;
+
     if (parentColumn) {
-      colWidthRef.current = parentColumn.clientWidth;
+      colWidthRef.current = parentColumn.clientWidth - cardWidth;
     }
 
     setIsDragging(true);
@@ -887,13 +886,14 @@ const DraggableEventCard = ({
         // leftはstyleタグで制御
       }}
     >
+      {/* 定数を利用したスタイル定義 */}
       <style>{`
         #card-${event.id} {
-          left: calc((100% - 160px) * ${currentX / 100});
+          left: calc((100% - ${CARD_WIDTH_MOBILE}px) * ${currentX / 100});
         }
         @media (min-width: 768px) {
           #card-${event.id} {
-            left: calc((100% - 240px) * ${currentX / 100});
+            left: calc((100% - ${CARD_WIDTH_PC}px) * ${currentX / 100});
           }
         }
       `}</style>
