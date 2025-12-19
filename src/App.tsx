@@ -494,8 +494,7 @@ export default function App() {
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           
-          {/* フル幅を使用、paddingなし */}
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 pr-32 pl-4">
             <div className="relative w-full h-full">
               
               <ConnectionLayer 
@@ -925,31 +924,33 @@ const DraggableEventCard = ({
         <div className="flex justify-between items-start mb-1.5">
           <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-white/70 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
           
-          {/* 編集・リンクボタン（ロック解除時のみ表示） */}
-          {!isLocked && (
-            <div className="flex gap-1 mr-2 animate-in fade-in duration-200">
-              {event.url && (
-                <a 
-                  href={event.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-blue-400 hover:text-blue-600 p-0.5 rounded hover:bg-blue-50 transition-colors"
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onTouchStart={(e) => e.stopPropagation()}
-                >
-                  <ExternalLink size={14} />
-                </a>
-              )}
+          <div className="flex gap-1 mr-2">
+            {/* リンクボタン（常時表示） */}
+            {event.url && (
+              <a 
+                href={event.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-blue-400 hover:text-blue-600 p-0.5 rounded hover:bg-blue-50 transition-colors"
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+              >
+                <ExternalLink size={14} />
+              </a>
+            )}
+            
+            {/* 編集ボタン（ロック解除時のみ表示） */}
+            {!isLocked && (
               <button 
                 onClick={(e) => { e.stopPropagation(); onEdit(); }}
-                className="text-slate-400 hover:text-slate-600 p-0.5 rounded hover:bg-slate-100 transition-colors"
+                className="text-slate-400 hover:text-slate-600 p-0.5 rounded hover:bg-slate-100 transition-colors animate-in fade-in duration-200"
                 onMouseDown={(e) => e.stopPropagation()}
                 onTouchStart={(e) => e.stopPropagation()}
               >
                 <Edit2 size={14} />
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         
         <h3 className="font-bold text-slate-800 text-xs md:text-sm leading-tight mb-2 text-center whitespace-pre-wrap">{event.title || 'No Title'}</h3>
