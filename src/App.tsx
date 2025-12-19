@@ -189,7 +189,7 @@ export default function App() {
 
   const handleZoomIn = () => {
     saveCurrentScrollPosition();
-    setZoom(prev => Math.min(3.0, +(prev + 0.1).toFixed(1)));
+    setZoom(prev => Math.min(5.0, +(prev + 0.1).toFixed(1)));
   };
 
   const handleZoomOut = () => {
@@ -325,7 +325,7 @@ export default function App() {
   }
 
   const zoomOptions = [];
-  for (let i = 0.5; i <= 3.0; i += 0.1) {
+  for (let i = 0.5; i < 5.0; i += 0.1) {
     zoomOptions.push(parseFloat(i.toFixed(1)));
   }
 
