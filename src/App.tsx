@@ -408,7 +408,7 @@ export default function App() {
       {/* Page Header */}
       <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
         <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
-          <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">Chronicle Map</h1>
+          <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">RED ZONE Chronicle Map</h1>
           
           <div className="flex bg-slate-100 rounded-lg p-1 border border-slate-200 overflow-x-auto">
             {CATEGORIES.map(cat => (
