@@ -19,7 +19,7 @@ interface EventData {
   category: Category;
   url?: string;
   links: LinkData[];
-  xOffset: number; // 0 to 100 (percentage within column)
+  xOffset: number; // 0 to 100 (percentage)
   borderColor?: BorderColorType;
 }
 
@@ -58,7 +58,7 @@ const CardStyles = () => (
       /* デフォルト(スマホ) */
       --card-width: ${CARD_WIDTH_MOBILE}px;
       width: var(--card-width);
-      /* 0%なら左端(0px), 100%なら右端(100% - cardWidth) */
+      /* 左位置 = (親の幅100% - カード幅) * 割合(0.0~1.0) */
       left: calc((100% - var(--card-width)) * var(--x-ratio));
     }
     
@@ -85,37 +85,30 @@ export default function App() {
   
   // チュートリアル・バージョン管理
   const [showTutorial, setShowTutorial] = useState(false);
-  const [tutorialStep, setTutorialStep] = useState(0); // 0: ノード・カード, 1: 作成・編集
+  const [tutorialStep, setTutorialStep] = useState(0); 
   const [version, setVersion] = useState<string>('');
 
-  // タイトルの設定
   useEffect(() => {
     document.title = "RED ZONE Chronicle Map";
   }, []);
 
-  // パス解決ヘルパー
   const getResourcePath = (filename: string) => {
     const path = window.location.pathname;
     const repoName = 'REDZONE-history';
-    // ベースパスの特定
     const basePath = path.includes(`/${repoName}/`) ? `/${repoName}/` : '/';
     return `${basePath}${filename}`.replace('//', '/');
   };
 
-  // 初回ロード時の処理（データ読み込み & バージョン取得 & チュートリアル判定）
   useEffect(() => {
     const initApp = async () => {
-      // 1. チュートリアル既読チェック
       const hasSeenTutorial = localStorage.getItem('tutorial-seen');
       if (!hasSeenTutorial) {
         setShowTutorial(true);
       }
 
-      // 2. ローカルデータの存在確認
       const saved = localStorage.getItem('timeline-data');
       if (saved) setHasLocalData(true);
 
-      // 3. バージョン情報の取得
       try {
         const versionPath = getResourcePath('version.txt');
         const res = await fetch(versionPath);
@@ -127,7 +120,6 @@ export default function App() {
         console.warn("Version file not found");
       }
 
-      // 4. メインデータの取得
       try {
         const jsonPath = getResourcePath('timeline_data.json');
         console.log('Fetching JSON from:', jsonPath);
@@ -160,7 +152,6 @@ export default function App() {
     initApp();
   }, []);
 
-  // データ変更時にローカルストレージにバックアップ
   useEffect(() => {
     if (!loading && events.length > 0) {
       localStorage.setItem('timeline-data', JSON.stringify(events));
@@ -197,7 +188,6 @@ export default function App() {
         scrollContainerRef.current?.scrollTo({ top: top, behavior: 'smooth' });
       }, 500);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   useLayoutEffect(() => {
@@ -350,7 +340,6 @@ export default function App() {
     }
   };
 
-  // チュートリアル操作
   const closeTutorial = () => {
     setShowTutorial(false);
     localStorage.setItem('tutorial-seen', 'true');
@@ -373,7 +362,6 @@ export default function App() {
     <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden relative">
       <CardStyles />
 
-      {/* Tutorial Overlay */}
       {showTutorial && (
         <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={closeTutorial}>
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4 relative" onClick={e => e.stopPropagation()}>
@@ -387,11 +375,9 @@ export default function App() {
               </button>
             </div>
             
-            {/* Page 1: ノード・カード */}
             {tutorialStep === 0 && (
               <div className="space-y-4 animate-in slide-in-from-right duration-300">
                 <h3 className="font-bold text-slate-700 text-lg">ノード・カードについて</h3>
-                
                 <div className="space-y-3 text-sm text-slate-600">
                   <div className="flex items-start gap-3">
                     <div className="bg-blue-50 p-2 rounded-lg text-blue-600 shrink-0">
@@ -402,7 +388,6 @@ export default function App() {
                       カードは誤操作防止のため固定されています。ダブルクリック（スマホはダブルタップ）するとロックが外れ、横に動かしたり編集したりできます。
                     </div>
                   </div>
-                  
                   <div className="flex items-start gap-3">
                     <div className="bg-green-50 p-2 rounded-lg text-green-600 shrink-0">
                       <Info size={20} />
@@ -412,7 +397,6 @@ export default function App() {
                       カードをマウスオーバー（スマホは長押し）すると、画面上部に詳細説明が表示されます。
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
                     <div className="bg-purple-50 p-2 rounded-lg text-purple-600 shrink-0">
                       <LinkIcon size={20} />
@@ -426,11 +410,9 @@ export default function App() {
               </div>
             )}
 
-            {/* Page 2: 作成・編集 */}
             {tutorialStep === 1 && (
               <div className="space-y-4 animate-in slide-in-from-right duration-300">
                 <h3 className="font-bold text-slate-700 text-lg">作成・編集について</h3>
-
                 <div className="space-y-3 text-sm text-slate-600">
                   <div className="flex items-start gap-3">
                     <div className="bg-blue-50 p-2 rounded-lg text-blue-600 shrink-0">
@@ -441,7 +423,6 @@ export default function App() {
                       画面右上の「+新規作成」ボタンから新しいカードを追加できます。
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
                     <div className="bg-orange-50 p-2 rounded-lg text-orange-600 shrink-0">
                       <Edit2 size={20} />
@@ -456,7 +437,6 @@ export default function App() {
               </div>
             )}
 
-            {/* Navigation Buttons */}
             <div className="flex gap-2 pt-2">
               <button 
                 onClick={prevStep} 
@@ -496,7 +476,6 @@ export default function App() {
         </div>
       )}
 
-      {/* Detail Overlay (Top) */}
       {hoveredEvent && hoveredEvent.description && (
         <div className="absolute top-16 left-0 right-0 z-50 p-4 pointer-events-none flex justify-center animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="bg-slate-800/90 text-white p-4 rounded-lg shadow-xl max-w-lg w-full backdrop-blur-sm border border-slate-700">
@@ -512,7 +491,6 @@ export default function App() {
         </div>
       )}
 
-      {/* Page Header */}
       <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
         <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
           <div className="flex flex-col">
@@ -616,7 +594,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Timeline Area */}
       <div 
         ref={scrollContainerRef}
         className="flex-1 overflow-auto relative bg-slate-100"
@@ -627,7 +604,7 @@ export default function App() {
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           
-          <div className="absolute inset-0 pr-32 pl-4">
+          <div className="absolute inset-0">
             <div className="relative w-full h-full">
               
               <ConnectionLayer 
@@ -843,7 +820,7 @@ const ConnectionLayer = ({
                 strokeWidth="5"
                 strokeOpacity="0.8"
                 strokeLinecap="round"
-                className="transition-all duration-300 group-hover:stroke-yellow-400 group-hover:stroke-opacity-100 group-hover:stroke-[6px]"
+                className="group-hover:stroke-yellow-400 group-hover:stroke-opacity-100 group-hover:stroke-[6px]"
                 style={{ vectorEffect: 'non-scaling-stroke', pointerEvents: 'none' }}
               />
             </g>
@@ -1008,19 +985,10 @@ const DraggableEventCard = ({
       className={`absolute flex flex-col items-center select-none transition-shadow touch-manipulation timeline-card ${getZIndex()} ${!isLocked ? 'cursor-grab' : ''}`}
       style={{ 
         top, 
+        // leftはstyleタグで制御
+        ['--x-ratio' as any]: currentX / 100 
       }}
     >
-      <style>{`
-        #card-${event.id} {
-          left: calc((100% - ${CARD_WIDTH_MOBILE}px) * ${currentX / 100});
-        }
-        @media (min-width: ${BREAKPOINT}px) {
-          #card-${event.id} {
-            left: calc((100% - ${CARD_WIDTH_PC}px) * ${currentX / 100});
-          }
-        }
-      `}</style>
-
       <div className={`card-inner w-full rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative backdrop-blur-sm ${colorStyle.class} ${colorStyle.bgClass} ${
         isDragging 
           ? 'shadow-xl' 
