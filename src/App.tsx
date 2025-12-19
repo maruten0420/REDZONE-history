@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
-import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown, Lock, Unlock, Info, HelpCircle, Hand } from 'lucide-react';
+import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown, Lock, Unlock, Info, HelpCircle, Hand, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 
 // --- Types ---
 
@@ -19,7 +19,7 @@ interface EventData {
   category: Category;
   url?: string;
   links: LinkData[];
-  xOffset: number; // 0 to 100 (percentage)
+  xOffset: number; // 0 to 100 (percentage within column)
   borderColor?: BorderColorType;
 }
 
@@ -82,29 +82,54 @@ export default function App() {
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [hoveredEvent, setHoveredEvent] = useState<EventData | null>(null);
   const [highlightedConnection, setHighlightedConnection] = useState<{source: string, target: string} | null>(null);
-  const [showTutorial, setShowTutorial] = useState(true);
+  
+  // チュートリアル・バージョン管理
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0); // 0: ノード・カード, 1: 作成・編集
+  const [version, setVersion] = useState<string>('');
 
-  // タイトルの設定 (React側でも念のため設定)
+  // タイトルの設定
   useEffect(() => {
     document.title = "RED ZONE Chronicle Map";
   }, []);
 
-  const getJsonPath = () => {
+  // パス解決ヘルパー
+  const getResourcePath = (filename: string) => {
     const path = window.location.pathname;
     const repoName = 'REDZONE-history';
-    if (path.includes(`/${repoName}/`)) {
-      return `/${repoName}/timeline_data.json`;
-    }
-    return '/timeline_data.json';
+    // ベースパスの特定
+    const basePath = path.includes(`/${repoName}/`) ? `/${repoName}/` : '/';
+    return `${basePath}${filename}`.replace('//', '/');
   };
 
+  // 初回ロード時の処理（データ読み込み & バージョン取得 & チュートリアル判定）
   useEffect(() => {
-    const initData = async () => {
+    const initApp = async () => {
+      // 1. チュートリアル既読チェック
+      const hasSeenTutorial = localStorage.getItem('tutorial-seen');
+      if (!hasSeenTutorial) {
+        setShowTutorial(true);
+      }
+
+      // 2. ローカルデータの存在確認
       const saved = localStorage.getItem('timeline-data');
       if (saved) setHasLocalData(true);
 
+      // 3. バージョン情報の取得
       try {
-        const jsonPath = getJsonPath();
+        const versionPath = getResourcePath('version.txt');
+        const res = await fetch(versionPath);
+        if (res.ok) {
+          const text = await res.text();
+          setVersion(text.trim());
+        }
+      } catch (e) {
+        console.warn("Version file not found");
+      }
+
+      // 4. メインデータの取得
+      try {
+        const jsonPath = getResourcePath('timeline_data.json');
         console.log('Fetching JSON from:', jsonPath);
 
         const response = await fetch(jsonPath);
@@ -132,9 +157,10 @@ export default function App() {
       }
     };
 
-    initData();
+    initApp();
   }, []);
 
+  // データ変更時にローカルストレージにバックアップ
   useEffect(() => {
     if (!loading && events.length > 0) {
       localStorage.setItem('timeline-data', JSON.stringify(events));
@@ -292,7 +318,7 @@ export default function App() {
     
     setLoading(true);
     try {
-      const jsonPath = getJsonPath();
+      const jsonPath = getResourcePath('timeline_data.json');
       const response = await fetch(jsonPath);
       
       if (response.ok) {
@@ -324,6 +350,16 @@ export default function App() {
     }
   };
 
+  // チュートリアル操作
+  const closeTutorial = () => {
+    setShowTutorial(false);
+    localStorage.setItem('tutorial-seen', 'true');
+    setTutorialStep(0);
+  };
+
+  const nextStep = () => setTutorialStep(prev => Math.min(1, prev + 1));
+  const prevStep = () => setTutorialStep(prev => Math.max(0, prev - 1));
+
   if (loading) {
     return <div className="h-screen flex items-center justify-center text-slate-500">Loading history...</div>;
   }
@@ -339,56 +375,123 @@ export default function App() {
 
       {/* Tutorial Overlay */}
       {showTutorial && (
-        <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={() => setShowTutorial(false)}>
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={closeTutorial}>
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4 relative" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
                 <HelpCircle className="text-blue-500" />
-                操作ガイド
+                操作ガイド {tutorialStep + 1}/2
               </h2>
-              <button onClick={() => setShowTutorial(false)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={closeTutorial} className="text-slate-400 hover:text-slate-600">
                 <X size={24} />
               </button>
             </div>
             
-            <div className="space-y-3 text-sm text-slate-600">
-              <div className="flex items-start gap-3">
-                <div className="bg-blue-50 p-2 rounded-lg text-blue-600 shrink-0">
-                  <Hand size={20} />
-                </div>
-                <div>
-                  <span className="font-bold text-slate-800 block mb-0.5">ダブルタップで移動モード</span>
-                  カードは誤操作防止のため固定されています。ダブルクリック（スマホはダブルタップ）すると横に動かしたり編集したりできます。
+            {/* Page 1: ノード・カード */}
+            {tutorialStep === 0 && (
+              <div className="space-y-4 animate-in slide-in-from-right duration-300">
+                <h3 className="font-bold text-slate-700 text-lg">ノード・カードについて</h3>
+                
+                <div className="space-y-3 text-sm text-slate-600">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-blue-50 p-2 rounded-lg text-blue-600 shrink-0">
+                      <Hand size={20} />
+                    </div>
+                    <div>
+                      <span className="font-bold text-slate-800 block mb-0.5">ダブルタップで移動モード</span>
+                      カードは誤操作防止のため固定されています。ダブルクリック（スマホはダブルタップ）するとロックが外れ、横に動かしたり編集したりできます。
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="bg-green-50 p-2 rounded-lg text-green-600 shrink-0">
+                      <Info size={20} />
+                    </div>
+                    <div>
+                      <span className="font-bold text-slate-800 block mb-0.5">長押しで詳細表示</span>
+                      カードをマウスオーバー（スマホは長押し）すると、画面上部に詳細説明が表示されます。
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="bg-purple-50 p-2 rounded-lg text-purple-600 shrink-0">
+                      <LinkIcon size={20} />
+                    </div>
+                    <div>
+                      <span className="font-bold text-slate-800 block mb-0.5">ノードのハイライト</span>
+                      線をマウスオーバー（スマホは長押し）すると、つながっているカードが光ります。
+                    </div>
+                  </div>
                 </div>
               </div>
+            )}
+
+            {/* Page 2: 作成・編集 */}
+            {tutorialStep === 1 && (
+              <div className="space-y-4 animate-in slide-in-from-right duration-300">
+                <h3 className="font-bold text-slate-700 text-lg">作成・編集について</h3>
+
+                <div className="space-y-3 text-sm text-slate-600">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-blue-50 p-2 rounded-lg text-blue-600 shrink-0">
+                      <Plus size={20} />
+                    </div>
+                    <div>
+                      <span className="font-bold text-slate-800 block mb-0.5">新規作成</span>
+                      画面右上の「+新規作成」ボタンから新しいカードを追加できます。
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="bg-orange-50 p-2 rounded-lg text-orange-600 shrink-0">
+                      <Edit2 size={20} />
+                    </div>
+                    <div>
+                      <span className="font-bold text-slate-800 block mb-0.5">編集画面</span>
+                      カードのロックを解除（ダブルタップ）すると、鉛筆マークの編集ボタンが表示されます。
+                      編集画面の外側をクリックすると「終了しますか？」と確認が出るので安心です。
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation Buttons */}
+            <div className="flex gap-2 pt-2">
+              <button 
+                onClick={prevStep} 
+                disabled={tutorialStep === 0}
+                className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed text-slate-500"
+              >
+                <ChevronLeft size={20} />
+              </button>
               
-              <div className="flex items-start gap-3">
-                <div className="bg-green-50 p-2 rounded-lg text-green-600 shrink-0">
-                  <Info size={20} />
-                </div>
-                <div>
-                  <span className="font-bold text-slate-800 block mb-0.5">長押しで詳細表示</span>
-                  カードをマウスオーバー（スマホは長押し）すると、画面上部に詳細説明が表示されます。
-                </div>
+              <div className="flex-1 flex gap-2">
+                {tutorialStep === 0 ? (
+                  <button 
+                    onClick={nextStep}
+                    className="flex-1 py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-sm"
+                  >
+                    次へ
+                  </button>
+                ) : (
+                   <button 
+                    onClick={closeTutorial}
+                    className="flex-1 py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-sm"
+                  >
+                    閉じる
+                  </button>
+                )}
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="bg-purple-50 p-2 rounded-lg text-purple-600 shrink-0">
-                  <LinkIcon size={20} />
-                </div>
-                <div>
-                  <span className="font-bold text-slate-800 block mb-0.5">ノードのハイライト</span>
-                  線をマウスオーバー（スマホは長押し）すると、つながっているカードが光ります。
-                </div>
-              </div>
+               <button 
+                onClick={nextStep} 
+                disabled={tutorialStep === 1}
+                className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed text-slate-500"
+              >
+                <ChevronRight size={20} />
+              </button>
             </div>
-
-            <button 
-              onClick={() => setShowTutorial(false)}
-              className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-sm mt-2"
-            >
-              閉じる
-            </button>
           </div>
         </div>
       )}
@@ -412,7 +515,10 @@ export default function App() {
       {/* Page Header */}
       <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
         <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
-          <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">RED ZONE Chronicle Map</h1>
+          <div className="flex flex-col">
+            <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">RED ZONE Chronicle Map</h1>
+            {version && <span className="text-[10px] text-slate-400 hidden sm:block font-mono -mt-1">{version}</span>}
+          </div>
           
           <div className="flex bg-slate-100 rounded-lg p-1 border border-slate-200 overflow-x-auto">
             {CATEGORIES.map(cat => (
@@ -462,7 +568,7 @@ export default function App() {
 
         <div className="flex items-center gap-2 ml-auto w-full md:w-auto justify-end border-t md:border-t-0 pt-2 md:pt-0 border-slate-100">
           <button 
-            onClick={() => setShowTutorial(true)}
+            onClick={() => { setTutorialStep(0); setShowTutorial(true); }}
             className="flex items-center gap-1 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 rounded transition-colors"
             title="操作説明を表示"
           >
@@ -660,11 +766,9 @@ const ConnectionLayer = ({
     return () => observer.disconnect();
   }, [visibleEvents, width]);
 
-  // デバイス幅を取得してカード幅を決定
   const isMobile = typeof window !== 'undefined' && window.innerWidth < BREAKPOINT;
   const cardWidth = isMobile ? CARD_WIDTH_MOBILE : CARD_WIDTH_PC;
 
-  // 定数を使用した計算: 0% -> 左端 (0px), 100% -> 右端 (Width - CardWidth)
   const getX = (xOffset: number) => {
     if (width === 0) return 0;
     const availableWidth = width - cardWidth;
@@ -673,7 +777,6 @@ const ConnectionLayer = ({
 
   const isVisible = (id: string) => visibleEvents.some(e => e.id === id);
 
-  // ノード長押し/ホバー処理
   const handleStartHighlight = (sourceId: string, targetId: string) => {
     onHighlight({source: sourceId, target: targetId});
   };
@@ -722,7 +825,6 @@ const ConnectionLayer = ({
 
           return (
             <g key={`${event.id}-${link.targetId}-${i}`} className="group">
-              {/* 当たり判定用の太く透明な線 */}
               <path
                 d={d}
                 fill="none"
@@ -734,7 +836,6 @@ const ConnectionLayer = ({
                 onTouchStart={() => handleTouchStartNode(event.id, link.targetId)}
                 onTouchEnd={handleTouchEndNode}
               />
-              {/* 表示用の線 */}
               <path
                 d={d}
                 fill="none"
@@ -805,11 +906,9 @@ const DraggableEventCard = ({
     const cardElement = document.getElementById(`card-${event.id}`);
     const parentColumn = cardElement?.parentElement;
     
-    // カード幅の取得（レスポンシブ）
     const cardWidth = cardElement?.offsetWidth || CARD_WIDTH_PC;
 
     if (parentColumn) {
-      // 親の幅からカードの幅を引いたものが「移動可能距離」
       colWidthRef.current = parentColumn.clientWidth - cardWidth;
     }
 
@@ -829,7 +928,6 @@ const DraggableEventCard = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // 長押し判定 (詳細表示)
     longPressTimerRef.current = window.setTimeout(() => {
       onHoverStart();
     }, 500); 
@@ -910,10 +1008,19 @@ const DraggableEventCard = ({
       className={`absolute flex flex-col items-center select-none transition-shadow touch-manipulation timeline-card ${getZIndex()} ${!isLocked ? 'cursor-grab' : ''}`}
       style={{ 
         top, 
-        // leftはGlobalStylesで制御されるため、ここでは変数を渡すのみ
-        ['--x-ratio' as any]: currentX / 100 
       }}
     >
+      <style>{`
+        #card-${event.id} {
+          left: calc((100% - ${CARD_WIDTH_MOBILE}px) * ${currentX / 100});
+        }
+        @media (min-width: ${BREAKPOINT}px) {
+          #card-${event.id} {
+            left: calc((100% - ${CARD_WIDTH_PC}px) * ${currentX / 100});
+          }
+        }
+      `}</style>
+
       <div className={`card-inner w-full rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative backdrop-blur-sm ${colorStyle.class} ${colorStyle.bgClass} ${
         isDragging 
           ? 'shadow-xl' 
@@ -929,7 +1036,6 @@ const DraggableEventCard = ({
         onTouchMove={handleTouchMoveLocal}
       >
         
-        {/* ロックアイコン */}
         <div 
           className="absolute -top-3 -right-3 bg-white border border-slate-200 rounded-full p-1.5 shadow-sm cursor-pointer hover:bg-slate-50 z-50"
           onClick={handleToggleLock}
@@ -942,7 +1048,6 @@ const DraggableEventCard = ({
           <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-white/70 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
           
           <div className="flex gap-1 mr-2">
-            {/* リンクボタン（常時表示） */}
             {event.url && (
               <a 
                 href={event.url} 
@@ -956,7 +1061,6 @@ const DraggableEventCard = ({
               </a>
             )}
             
-            {/* 編集ボタン（ロック解除時のみ表示） */}
             {!isLocked && (
               <button 
                 onClick={(e) => { e.stopPropagation(); onEdit(); }}
@@ -994,9 +1098,7 @@ const EventModal = ({
   onSave: (e: EventData) => void;
   onDelete: (id: string) => void;
 }) => {
-  // モーダル外部クリック時の処理
   const handleBackdropClick = () => {
-    // 変更破棄の確認
     if (confirm('編集を終了しますか？\n保存されていない変更は破棄されます。')) {
       onClose();
     }
@@ -1157,7 +1259,6 @@ const EventModal = ({
               {formData.links.map((link, idx) => (
                 <div key={idx} className="flex gap-2 items-center bg-slate-50 p-2 rounded border border-slate-100">
                   <LinkIcon size={14} className="text-slate-400" />
-                  {/* プルダウンの幅を制限してUI崩れ防止 */}
                   <select
                     value={link.targetId}
                     onChange={(e) => handleLinkChange(idx, 'targetId', e.target.value)}
@@ -1172,7 +1273,6 @@ const EventModal = ({
                       </option>
                     ))}
                   </select>
-                  {/* 色選択と削除ボタンが縮小しないように shrink-0 を付与 */}
                   <input 
                     type="color" 
                     value={link.color}
