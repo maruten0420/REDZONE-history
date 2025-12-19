@@ -19,7 +19,7 @@ interface EventData {
   category: Category;
   url?: string;
   links: LinkData[];
-  xOffset: number; // 0 to 100 (percentage within column)
+  xOffset: number; // 0 to 100 (percentage)
   borderColor?: BorderColorType;
 }
 
@@ -32,9 +32,10 @@ const END_DATE = new Date(`${END_YEAR}-12-31`).getTime();
 const TOTAL_DAYS = (END_DATE - START_DATE) / (1000 * 60 * 60 * 24);
 const HEADER_HEIGHT = 60; 
 
-// カード幅定数 (px) - CSSのレスポンシブ幅と一致させる
+// カード幅設定 (CSSとJSで共有)
 const CARD_WIDTH_MOBILE = 160; 
 const CARD_WIDTH_PC = 240;     
+const BREAKPOINT = 768; // md breakpoint
 
 const CATEGORIES: { key: Category; label: string; color: string }[] = [
   { key: 'technique', label: 'テクニック', color: 'bg-blue-50 border-blue-200' },
@@ -49,6 +50,26 @@ const BORDER_OPTIONS: { key: BorderColorType; label: string; class: string; bgCl
 ];
 
 const DEFAULT_EVENTS: EventData[] = [];
+
+// --- Global Styles for Card Positioning ---
+// JSでの計算を減らし、CSS変数とcalc()で確実に位置合わせを行うためのスタイル
+const CardStyles = () => (
+  <style>{`
+    .timeline-card {
+      /* デフォルト(スマホ) */
+      --card-width: ${CARD_WIDTH_MOBILE}px;
+      width: var(--card-width);
+      /* 0%なら左端(0px), 100%なら右端(100% - cardWidth) */
+      left: calc((100% - var(--card-width)) * var(--x-ratio));
+    }
+    
+    @media (min-width: ${BREAKPOINT}px) {
+      .timeline-card {
+        --card-width: ${CARD_WIDTH_PC}px;
+      }
+    }
+  `}</style>
+);
 
 // --- Components ---
 
@@ -310,6 +331,8 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden relative">
+      <CardStyles />
+
       {/* Tutorial Overlay */}
       {showTutorial && (
         <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={() => setShowTutorial(false)}>
@@ -494,7 +517,7 @@ export default function App() {
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           
-          <div className="absolute inset-0 pr-32 pl-4">
+          <div className="absolute inset-0">
             <div className="relative w-full h-full">
               
               <ConnectionLayer 
@@ -634,7 +657,7 @@ const ConnectionLayer = ({
   }, [visibleEvents, width]);
 
   // デバイス幅を取得してカード幅を決定
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < BREAKPOINT;
   const cardWidth = isMobile ? CARD_WIDTH_MOBILE : CARD_WIDTH_PC;
 
   // 定数を使用した計算: 0% -> 左端 (0px), 100% -> 右端 (Width - CardWidth)
@@ -778,10 +801,11 @@ const DraggableEventCard = ({
     const cardElement = document.getElementById(`card-${event.id}`);
     const parentColumn = cardElement?.parentElement;
     
-    // カード幅の取得（レスポンシブ）
+    // カード幅の取得
     const cardWidth = cardElement?.offsetWidth || CARD_WIDTH_PC;
 
     if (parentColumn) {
+      // 親の幅からカードの幅を引いたものが「移動可能距離」
       colWidthRef.current = parentColumn.clientWidth - cardWidth;
     }
 
@@ -879,24 +903,13 @@ const DraggableEventCard = ({
     <div
       id={`card-${event.id}`}
       onDoubleClick={handleToggleLock}
-      className={`absolute flex flex-col items-center select-none transition-shadow touch-manipulation ${getZIndex()} ${!isLocked ? 'cursor-grab' : ''} w-40 md:w-60`}
+      className={`absolute flex flex-col items-center select-none transition-shadow touch-manipulation timeline-card ${getZIndex()} ${!isLocked ? 'cursor-grab' : ''}`}
       style={{ 
         top, 
-        // leftはstyleタグで制御
+        // leftはGlobalStylesで制御されるため、ここでは変数を渡すのみ
+        ['--x-ratio' as any]: currentX / 100 
       }}
     >
-      {/* 定数を利用したスタイル定義 */}
-      <style>{`
-        #card-${event.id} {
-          left: calc((100% - ${CARD_WIDTH_MOBILE}px) * ${currentX / 100});
-        }
-        @media (min-width: 768px) {
-          #card-${event.id} {
-            left: calc((100% - ${CARD_WIDTH_PC}px) * ${currentX / 100});
-          }
-        }
-      `}</style>
-
       <div className={`card-inner w-full rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative backdrop-blur-sm ${colorStyle.class} ${colorStyle.bgClass} ${
         isDragging 
           ? 'shadow-xl' 
@@ -912,7 +925,7 @@ const DraggableEventCard = ({
         onTouchMove={handleTouchMoveLocal}
       >
         
-        {/* ロックアイコン（常に表示） */}
+        {/* ロックアイコン */}
         <div 
           className="absolute -top-3 -right-3 bg-white border border-slate-200 rounded-full p-1.5 shadow-sm cursor-pointer hover:bg-slate-50 z-50"
           onClick={handleToggleLock}
@@ -1102,6 +1115,7 @@ const EventModal = ({
           </div>
 
           <div className="border-t border-slate-100 pt-4">
+             {/* 横位置スライダー（微調整用） */}
              <div className="mb-4">
               <label className="block text-xs font-bold text-slate-500 mb-1.5 flex justify-between">
                 <span>横位置の微調整 (ドラッグでも可能)</span>
