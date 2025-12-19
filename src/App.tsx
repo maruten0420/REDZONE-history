@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
-import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown, Lock, Unlock, Info } from 'lucide-react';
+import { Plus, Minus, Save, Upload, Link as LinkIcon, Trash2, ExternalLink, X, Edit2, RotateCcw, FileClock, ChevronDown, Lock, Unlock, Info, HelpCircle, Hand } from 'lucide-react';
 
 // --- Types ---
 
@@ -43,9 +43,9 @@ const CATEGORIES: { key: Category; label: string; color: string }[] = [
 ];
 
 const BORDER_OPTIONS: { key: BorderColorType; label: string; class: string; bgClass: string }[] = [
-  { key: 'default', label: '標準 (灰)', class: 'border-slate-300', bgClass: 'bg-white' },
-  { key: 'red', label: '日時不詳 (赤)', class: 'border-red-500', bgClass: 'bg-red-50' },
-  { key: 'blue', label: '特筆事項あり (青)', class: 'border-blue-500', bgClass: 'bg-blue-50' },
+  { key: 'default', label: '標準 (灰)', class: 'border-slate-300', bgClass: 'bg-white/85' },
+  { key: 'red', label: '日時不詳 (赤)', class: 'border-red-500', bgClass: 'bg-red-50/85' },
+  { key: 'blue', label: '予備 (青)', class: 'border-blue-500', bgClass: 'bg-blue-50/85' },
 ];
 
 const DEFAULT_EVENTS: EventData[] = [];
@@ -60,7 +60,13 @@ export default function App() {
   
   const scrollTargetDaysRef = useRef<number | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
-  const [hoveredEvent, setHoveredEvent] = useState<EventData | null>(null); // 詳細表示用
+  const [hoveredEvent, setHoveredEvent] = useState<EventData | null>(null);
+  
+  // ハイライト制御用（ノードホバー時）
+  const [highlightedConnection, setHighlightedConnection] = useState<{source: string, target: string} | null>(null);
+
+  // チュートリアル表示制御
+  const [showTutorial, setShowTutorial] = useState(true);
 
   const getJsonPath = () => {
     const path = window.location.pathname;
@@ -166,7 +172,7 @@ export default function App() {
 
   const handleZoomIn = () => {
     saveCurrentScrollPosition();
-    setZoom(prev => Math.min(5.0, +(prev + 0.1).toFixed(1)));
+    setZoom(prev => Math.min(3.0, +(prev + 0.1).toFixed(1)));
   };
 
   const handleZoomOut = () => {
@@ -302,12 +308,68 @@ export default function App() {
   }
 
   const zoomOptions = [];
-  for (let i = 0.5; i < 5.0; i += 0.1) {
+  for (let i = 0.5; i <= 3.0; i += 0.1) {
     zoomOptions.push(parseFloat(i.toFixed(1)));
   }
 
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden relative">
+      {/* Tutorial Overlay */}
+      {showTutorial && (
+        <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={() => setShowTutorial(false)}>
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <HelpCircle className="text-blue-500" />
+                操作ガイド
+              </h2>
+              <button onClick={() => setShowTutorial(false)} className="text-slate-400 hover:text-slate-600">
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="space-y-3 text-sm text-slate-600">
+              <div className="flex items-start gap-3">
+                <div className="bg-blue-50 p-2 rounded-lg text-blue-600 shrink-0">
+                  <Hand size={20} />
+                </div>
+                <div>
+                  <span className="font-bold text-slate-800 block mb-0.5">ダブルタップで移動モード</span>
+                  カードは誤操作防止のため固定されています。ダブルクリック（スマホはダブルタップ）すると横に動かしたり編集したりできます。
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="bg-green-50 p-2 rounded-lg text-green-600 shrink-0">
+                  <Info size={20} />
+                </div>
+                <div>
+                  <span className="font-bold text-slate-800 block mb-0.5">長押しで詳細表示</span>
+                  カードをマウスオーバー（スマホは長押し）すると、画面上部に詳細説明が表示されます。
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="bg-purple-50 p-2 rounded-lg text-purple-600 shrink-0">
+                  <LinkIcon size={20} />
+                </div>
+                <div>
+                  <span className="font-bold text-slate-800 block mb-0.5">ノードのハイライト</span>
+                  線をマウスオーバー（スマホは長押し）すると、つながっているカードが光ります。
+                </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setShowTutorial(false)}
+              className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-sm mt-2"
+            >
+              閉じる
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Detail Overlay (Top) */}
       {hoveredEvent && hoveredEvent.description && (
         <div className="absolute top-16 left-0 right-0 z-50 p-4 pointer-events-none flex justify-center animate-in fade-in slide-in-from-top-2 duration-200">
@@ -327,7 +389,7 @@ export default function App() {
       {/* Page Header */}
       <header className="flex-none border-b border-slate-200 bg-white p-2 md:p-4 flex flex-wrap items-center justify-between shadow-sm z-40 relative gap-2 md:gap-4">
         <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto justify-between md:justify-start">
-          <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">RED ZONE Chronicle Map</h1>
+          <h1 className="text-lg md:text-xl font-bold text-slate-700 tracking-tight hidden sm:block">Chronicle Map</h1>
           
           <div className="flex bg-slate-100 rounded-lg p-1 border border-slate-200 overflow-x-auto">
             {CATEGORIES.map(cat => (
@@ -376,6 +438,14 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-2 ml-auto w-full md:w-auto justify-end border-t md:border-t-0 pt-2 md:pt-0 border-slate-100">
+          <button 
+            onClick={() => setShowTutorial(true)}
+            className="flex items-center gap-1 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 rounded transition-colors"
+            title="操作説明を表示"
+          >
+            <HelpCircle size={16} />
+          </button>
+
           <button 
             onClick={handleResetToOfficial}
             className="flex items-center gap-1 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 rounded transition-colors"
@@ -428,10 +498,15 @@ export default function App() {
         >
           <BackgroundGrid zoom={zoom} startYear={START_YEAR} endYear={END_YEAR} />
           
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 pr-32 pl-4">
             <div className="relative w-full h-full">
               
-              <ConnectionLayer events={events} visibleEvents={visibleEvents} getDateY={getDateY} />
+              <ConnectionLayer 
+                events={events} 
+                visibleEvents={visibleEvents} 
+                getDateY={getDateY} 
+                onHighlight={setHighlightedConnection}
+              />
 
               <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 p-2 text-center font-bold text-slate-600 shadow-sm">
                 {CATEGORIES.find(c => c.key === activeCategory)?.label}
@@ -446,9 +521,10 @@ export default function App() {
                   onDragEnd={handleDragEnd}
                   isActive={activeCardId === event.id}
                   onActivate={() => setActiveCardId(event.id)}
-                  // ホバー/長押しイベントのハンドラを渡す
                   onHoverStart={() => setHoveredEvent(event)}
                   onHoverEnd={() => setHoveredEvent(null)}
+                  // ハイライトされた接続に関連するかどうか
+                  isHighlighted={highlightedConnection ? (highlightedConnection.source === event.id || highlightedConnection.target === event.id) : false}
                 />
               ))}
             </div>
@@ -468,6 +544,8 @@ export default function App() {
     </div>
   );
 }
+
+// --- Sub Components ---
 
 const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear: number; endYear: number }) => {
   const years = [];
@@ -507,15 +585,20 @@ const BackgroundGrid = ({ zoom, startYear, endYear }: { zoom: number; startYear:
 const ConnectionLayer = ({ 
   events, 
   visibleEvents,
-  getDateY 
+  getDateY,
+  onHighlight
 }: { 
   events: EventData[]; 
   visibleEvents: EventData[];
-  getDateY: (d: string) => number 
+  getDateY: (d: string) => number;
+  onHighlight: (data: {source: string, target: string} | null) => void;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [width, setWidth] = useState(0);
   const [cardHeights, setCardHeights] = useState<Record<string, number>>({});
+  
+  // 長押し判定用
+  const longPressTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -558,22 +641,41 @@ const ConnectionLayer = ({
     return () => observer.disconnect();
   }, [visibleEvents, width]);
 
-  // デバイス幅を取得してカード幅を決定
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const cardWidth = isMobile ? CARD_WIDTH_MOBILE : CARD_WIDTH_PC;
-
-  // 0% -> 左端 (0px), 100% -> 右端 (ContainerWidth - CardWidth)
   const getX = (xOffset: number) => {
     if (width === 0) return 0;
-    const availableWidth = width - cardWidth;
-    // カード中心の座標を返す
-    return (availableWidth * (xOffset / 100)) + (cardWidth / 2);
+    const availableWidth = width - 128;
+    return 16 + (availableWidth * (xOffset / 100));
   };
 
   const isVisible = (id: string) => visibleEvents.some(e => e.id === id);
 
+  // ノード長押し/ホバー処理
+  const handleStartHighlight = (sourceId: string, targetId: string) => {
+    onHighlight({source: sourceId, target: targetId});
+  };
+
+  const handleEndHighlight = () => {
+    onHighlight(null);
+  };
+
+  const handleTouchStartNode = (sourceId: string, targetId: string) => {
+    // 1秒長押しでハイライト
+    longPressTimerRef.current = window.setTimeout(() => {
+      handleStartHighlight(sourceId, targetId);
+    }, 1000);
+  };
+
+  const handleTouchEndNode = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+    handleEndHighlight();
+  };
+
   return (
-    <svg ref={svgRef} className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
+    <svg ref={svgRef} className="absolute inset-0 w-full h-full z-10 overflow-visible pointer-events-none">
+      {/* pointer-events-none だと子がイベントを受け取れないので、path側で auto にする */}
       {visibleEvents.map(event => (
         event.links.map((link, i) => {
           if (!isVisible(link.targetId)) return null;
@@ -597,15 +699,29 @@ const ConnectionLayer = ({
           const d = `M ${x1} ${y1} C ${x1} ${cp1y}, ${x2} ${cp2y}, ${x2} ${y2}`;
 
           return (
-            <g key={`${event.id}-${link.targetId}-${i}`}>
+            <g key={`${event.id}-${link.targetId}-${i}`} className="group">
+              {/* 当たり判定用の太く透明な線 (イベント受け取り用) */}
+              <path
+                d={d}
+                fill="none"
+                stroke="transparent"
+                strokeWidth="20"
+                style={{ vectorEffect: 'non-scaling-stroke', pointerEvents: 'stroke' }}
+                onMouseEnter={() => handleStartHighlight(event.id, link.targetId)}
+                onMouseLeave={handleEndHighlight}
+                onTouchStart={() => handleTouchStartNode(event.id, link.targetId)}
+                onTouchEnd={handleTouchEndNode}
+              />
+              {/* 表示用の線 */}
               <path
                 d={d}
                 fill="none"
                 stroke={link.color || '#cbd5e1'}
-                strokeWidth="3"
+                strokeWidth="5" // 太くした
                 strokeOpacity="0.8"
                 strokeLinecap="round"
-                style={{ vectorEffect: 'non-scaling-stroke' }}
+                className="transition-all duration-300 group-hover:stroke-yellow-400 group-hover:stroke-opacity-100 group-hover:stroke-[6px]"
+                style={{ vectorEffect: 'non-scaling-stroke', pointerEvents: 'none' }}
               />
             </g>
           );
@@ -622,8 +738,9 @@ const DraggableEventCard = ({
   onDragEnd,
   isActive,
   onActivate,
-  onHoverStart, // New prop
-  onHoverEnd,   // New prop
+  onHoverStart, 
+  onHoverEnd,
+  isHighlighted, // ハイライトフラグ
 }: { 
   event: EventData; 
   top: number; 
@@ -633,6 +750,7 @@ const DraggableEventCard = ({
   onActivate: () => void;
   onHoverStart: () => void;
   onHoverEnd: () => void;
+  isHighlighted: boolean;
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isLocked, setIsLocked] = useState(true);
@@ -641,7 +759,6 @@ const DraggableEventCard = ({
   const startOffsetRef = useRef<number>(0);
   const colWidthRef = useRef<number>(0);
   
-  // 長押し判定用タイマーRef
   const longPressTimerRef = useRef<number | null>(null);
 
   const colorStyle = BORDER_OPTIONS.find(c => c.key === (event.borderColor || 'default')) || BORDER_OPTIONS[0];
@@ -666,12 +783,8 @@ const DraggableEventCard = ({
     const cardElement = document.getElementById(`card-${event.id}`);
     const parentColumn = cardElement?.parentElement;
     
-    // カード幅の取得（レスポンシブ）
-    const cardWidth = cardElement?.offsetWidth || CARD_WIDTH_PC;
-
     if (parentColumn) {
-      // 親の幅からカードの幅を引いたものが「移動可能距離」
-      colWidthRef.current = parentColumn.clientWidth - cardWidth;
+      colWidthRef.current = parentColumn.clientWidth;
     }
 
     setIsDragging(true);
@@ -690,10 +803,10 @@ const DraggableEventCard = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // 長押し判定開始
+    // 長押し判定 (詳細表示)
     longPressTimerRef.current = window.setTimeout(() => {
       onHoverStart();
-    }, 500); // 500ms長押しで詳細表示
+    }, 500); 
 
     if (isLocked) {
       onActivate();
@@ -704,7 +817,6 @@ const DraggableEventCard = ({
   };
 
   const handleTouchEnd = () => {
-    // タッチ終了時、タイマーをクリアして詳細非表示
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
@@ -713,12 +825,11 @@ const DraggableEventCard = ({
   };
 
   const handleTouchMoveLocal = () => {
-    // 指が動いたら長押しキャンセル
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
     }
-    onHoverEnd(); // 動いたら消す
+    onHoverEnd();
   };
 
   useEffect(() => {
@@ -773,10 +884,9 @@ const DraggableEventCard = ({
       className={`absolute flex flex-col items-center select-none transition-shadow touch-manipulation ${getZIndex()} ${!isLocked ? 'cursor-grab' : ''} w-40 md:w-60`}
       style={{ 
         top, 
-        // インラインスタイルからはleftを削除し、内部styleタグで制御
+        // leftはstyleタグで制御
       }}
     >
-      {/* widthとleftをstyleタグで明示的に指定して計算を合わせる */}
       <style>{`
         #card-${event.id} {
           left: calc((100% - 160px) * ${currentX / 100});
@@ -788,21 +898,22 @@ const DraggableEventCard = ({
         }
       `}</style>
 
-      <div className={`card-inner w-full rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative ${colorStyle.class} ${colorStyle.bgClass} ${
+      <div className={`card-inner w-full rounded-xl border-2 p-2 md:p-3 transition-all min-h-[50px] relative backdrop-blur-sm ${colorStyle.class} ${colorStyle.bgClass} ${
         isDragging 
           ? 'shadow-xl' 
           : 'shadow-md hover:shadow-lg'
-      } ${!isLocked ? 'ring-2 ring-yellow-400 ring-offset-2' : ''}`}
-        // マウスイベント (PC)
+      } ${!isLocked ? 'ring-2 ring-yellow-400 ring-offset-2' : ''} ${
+        isHighlighted ? 'ring-4 ring-yellow-300 ring-offset-2 scale-105 transition-transform' : ''
+      }`}
         onMouseEnter={onHoverStart}
         onMouseLeave={onHoverEnd}
         onMouseDown={handleMouseDown}
-        // タッチイベント (Mobile - 長押し対応)
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchMove={handleTouchMoveLocal}
       >
         
+        {/* ロックアイコン（常に表示） */}
         <div 
           className="absolute -top-3 -right-3 bg-white border border-slate-200 rounded-full p-1.5 shadow-sm cursor-pointer hover:bg-slate-50 z-50"
           onClick={handleToggleLock}
@@ -812,29 +923,33 @@ const DraggableEventCard = ({
         </div>
 
         <div className="flex justify-between items-start mb-1.5">
-          <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-white/50 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
-          <div className="flex gap-1 mr-2">
-            {event.url && (
-              <a 
-                href={event.url} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-blue-400 hover:text-blue-600 p-0.5 rounded hover:bg-blue-50 transition-colors"
+          <span className="text-[9px] md:text-[10px] font-mono text-slate-500 bg-white/70 px-1.5 py-0.5 rounded border border-slate-200">{event.date}</span>
+          
+          {/* 編集・リンクボタン（ロック解除時のみ表示） */}
+          {!isLocked && (
+            <div className="flex gap-1 mr-2 animate-in fade-in duration-200">
+              {event.url && (
+                <a 
+                  href={event.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-blue-400 hover:text-blue-600 p-0.5 rounded hover:bg-blue-50 transition-colors"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
+                >
+                  <ExternalLink size={14} />
+                </a>
+              )}
+              <button 
+                onClick={(e) => { e.stopPropagation(); onEdit(); }}
+                className="text-slate-400 hover:text-slate-600 p-0.5 rounded hover:bg-slate-100 transition-colors"
                 onMouseDown={(e) => e.stopPropagation()}
                 onTouchStart={(e) => e.stopPropagation()}
               >
-                <ExternalLink size={14} />
-              </a>
-            )}
-            <button 
-              onClick={(e) => { e.stopPropagation(); onEdit(); }}
-              className="text-slate-400 hover:text-slate-600 p-0.5 rounded hover:bg-slate-100 transition-colors"
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-            >
-              <Edit2 size={14} />
-            </button>
-          </div>
+                <Edit2 size={14} />
+              </button>
+            </div>
+          )}
         </div>
         
         <h3 className="font-bold text-slate-800 text-xs md:text-sm leading-tight mb-2 text-center whitespace-pre-wrap">{event.title || 'No Title'}</h3>
