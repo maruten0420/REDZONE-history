@@ -1284,8 +1284,13 @@
     "description": "",
     "date": "2019-03-24",
     "category": "technique",
-    "links": [],
-    "xOffset": 54.62462462462463,
+    "links": [
+      {
+        "targetId": "9e04b1a7-1243-49c7-a4b7-2cb556a7c2b6",
+        "color": "#ffb7b7"
+      }
+    ],
+    "xOffset": 51.56156156156156,
     "borderColor": "default",
     "url": "https://youtu.be/ik3ISLaRWYA?si=Sw1QofHOEdVYckBC"
   },
@@ -1301,7 +1306,7 @@
         "color": "#ffb7b7"
       }
     ],
-    "xOffset": 59.489489489489486,
+    "xOffset": 59.549549549549546,
     "borderColor": "default",
     "url": "https://youtu.be/VhNcovuh21c?si=3QdrUdyiRFM95yH_"
   },
@@ -1315,5 +1320,16 @@
     "xOffset": 44.62462462462462,
     "borderColor": "default",
     "url": "https://youtu.be/VghmCytwjdg?si=7eWV70R9DCH05_lr"
+  },
+  {
+    "id": "9e04b1a7-1243-49c7-a4b7-2cb556a7c2b6",
+    "title": "いいですか？・改",
+    "description": "",
+    "date": "2019-08-27",
+    "category": "technique",
+    "links": [],
+    "xOffset": 50,
+    "borderColor": "default",
+    "url": "https://youtu.be/l8oIOEU9Adw?si=sdaDCsYiYJBjU3xJ"
   }
 ]
