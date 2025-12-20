@@ -2,7 +2,7 @@
   {
     "id": "1",
     "title": "HON ZONE",
-    "description": "全ての始まり/主旋律・裏音",
+    "description": "石川テクニック/主旋律・裏音/現在削除済み",
     "date": "2009-01-03",
     "category": "technique",
     "links": [
@@ -52,7 +52,8 @@
       }
     ],
     "xOffset": 86.41372115551802,
-    "borderColor": "default"
+    "borderColor": "default",
+    "url": "https://youtu.be/ZRWc-zum-vg?si=LiyrutK3fozwCCVA"
   },
   {
     "id": "cfb29323-0849-4d6e-a1b6-ac81ff8c933a",
@@ -366,7 +367,7 @@
   {
     "id": "58231d19-ed53-493a-8709-444e1b32036b",
     "title": "冷やし土下座",
-    "description": "冷やし○○シリーズ",
+    "description": "冷やし○○シリーズ/現在削除済",
     "date": "2010-10-17",
     "category": "technique",
     "links": [
@@ -380,7 +381,8 @@
       }
     ],
     "xOffset": 50,
-    "borderColor": "default"
+    "borderColor": "default",
+    "url": "https://www.nicovideo.jp/watch/sm12453537"
   },
   {
     "id": "b67c929b-d497-4e7b-8378-6d861347b36f",
@@ -427,7 +429,7 @@
     "date": "2017-08-14",
     "category": "technique",
     "links": [],
-    "xOffset": 84.34115149632393,
+    "xOffset": 86.68349383866628,
     "url": "https://youtu.be/S59wzcABXx8?si=P2ptCKKIj9Vzlkcz",
     "borderColor": "default"
   },
@@ -923,7 +925,7 @@
     "date": "2017-09-05",
     "category": "technique",
     "links": [],
-    "xOffset": 47.8978978978979,
+    "xOffset": 53.18318318318318,
     "borderColor": "default",
     "url": "https://youtu.be/Hi-F4lKq-yU?si=RRaPfjodhxEWLlnz"
   },
@@ -1170,7 +1172,7 @@
   {
     "id": "451a4008-cb87-41d4-a372-bd24c4dda75d",
     "title": "WRIGGLED CHAYAMACHI【茶屋町駅】",
-    "description": "",
+    "description": "現在削除済み",
     "date": "2017-07-12",
     "category": "technique",
     "links": [],
