@@ -871,7 +871,12 @@
     "description": "リスペクト元がある可能性あり",
     "date": "2019-04-19",
     "category": "technique",
-    "links": [],
+    "links": [
+      {
+        "targetId": "d8962433-4f6a-4e64-88d5-0b1643db6c18",
+        "color": "#00b7ff"
+      }
+    ],
     "xOffset": 0,
     "borderColor": "blue",
     "url": "https://youtu.be/cTYnpc5ejhk?si=rbh8tjdFNqK6RPYw"
@@ -1331,5 +1336,71 @@
     "xOffset": 50,
     "borderColor": "default",
     "url": "https://youtu.be/l8oIOEU9Adw?si=sdaDCsYiYJBjU3xJ"
+  },
+  {
+    "id": "d8962433-4f6a-4e64-88d5-0b1643db6c18",
+    "title": "犬テクニック",
+    "description": "",
+    "date": "2024-12-31",
+    "category": "technique",
+    "links": [],
+    "xOffset": 4.774774774774771,
+    "borderColor": "default",
+    "url": "https://youtu.be/sEOQDwEELbY?si=Qfp5JMkG9_jiicly"
+  },
+  {
+    "id": "e684c7b7-cc11-45cf-be05-e61c01c040b6",
+    "title": "上条前後流RED ZONE作り方(GarageBand版)",
+    "description": "",
+    "date": "2018-07-18",
+    "category": "technique",
+    "links": [],
+    "xOffset": 60.750750750750754,
+    "borderColor": "default",
+    "url": "https://youtu.be/d6x8C_GGJuM?si=yyaZ3-0uq0RciH5R"
+  },
+  {
+    "id": "9fa2a315-6774-4033-856d-41fec2fa7236",
+    "title": "JiyuRak.でMAGIC ZONE",
+    "description": "",
+    "date": "2024-05-12",
+    "category": "technique",
+    "links": [],
+    "xOffset": 60.510510510510514,
+    "borderColor": "default",
+    "url": "https://youtu.be/NGPwOt4lvEU?si=EP970ClVTxFkPCVZ"
+  },
+  {
+    "id": "2f5daf03-82ff-4f60-a418-ea5d5cbb9673",
+    "title": "ドーン！！！テクニック",
+    "description": "正式タイトル「あかぞねがっさくのたんぴん」",
+    "date": "2018-11-22",
+    "category": "technique",
+    "links": [],
+    "xOffset": 91.50150150150151,
+    "borderColor": "default",
+    "url": "https://youtu.be/Nk_fdBEIcvc?si=P8_trbBTRe__6Q3s"
+  },
+  {
+    "id": "2f2c335b-46a9-4c88-8679-ae445a2d944f",
+    "title": "【代理投稿】Harry Potter",
+    "description": "",
+    "date": "2024-09-29",
+    "category": "technique",
+    "links": [],
+    "xOffset": 17.807807807807805,
+    "borderColor": "default",
+    "url": "https://youtu.be/8dLsXEKZLbc?si=cnqZCJwkH-H-V8QJ"
+  },
+  {
+    "id": "d911117d-45aa-4db6-ace1-36ac545358a4",
+    "title": "Moriya Hutao Zone",
+    "description": "",
+    "date": "2024-07-01",
+    "category": "technique",
+    "links": [],
+    "xOffset": 93.18318318318319,
+    "borderColor": "default",
+    "url": "https://youtu.be/n0OffwAFysA?si=ZT7rpzrYBrycTCS9"
   }
 ]
