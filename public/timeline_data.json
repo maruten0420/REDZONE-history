@@ -725,12 +725,12 @@
   {
     "id": "6563a6a5-2192-49d1-82fc-67e5f35a2d58",
     "title": "《日時不詳》歩いてゆこうテクニック",
-    "description": "暫定版として「give it back-7日」を採用",
-    "date": "2021-01-10",
+    "description": "https://web.archive.org/web/20200720195522/https://www.youtube.com/watch?v=slna4tbBwrc",
+    "date": "2020-03-25",
     "category": "technique",
     "links": [],
     "xOffset": 0,
-    "borderColor": "red",
+    "borderColor": "default",
     "url": "https://youtu.be/cK_eN70LUmg?si=4-Ud2zqI7KAvHj05"
   },
   {
@@ -839,7 +839,7 @@
     "date": "2020-04-14",
     "category": "technique",
     "links": [],
-    "xOffset": 6.756756756756758,
+    "xOffset": 12.042042042042043,
     "borderColor": "default",
     "url": "https://youtu.be/RV_8D1ECefg?si=pRlVtbYHbFddD3nb"
   },
